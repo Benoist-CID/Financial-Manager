@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Financial Manager</string>
+
+    <!-- Home screen -->
+    <string name="add_input">Add Input</string>
+    <string name="create_input">Create Input</string>
+
+    <!-- Add input screen -->
+    <string name="description">Description</string>
+    <string name="amount">Amount</string>
+</resources>
