@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import fr.laforge.benoist.financialmanager.ui.addinput.AddInputScreen
 import fr.laforge.benoist.financialmanager.ui.home.HomeScreen
 import fr.laforge.benoist.financialmanager.ui.theme.FinancialManagerTheme
+import fr.laforge.benoist.financialmanager.ui.transaction.TransactionDetails
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +36,10 @@ class MainActivity : ComponentActivity() {
 
                         composable(FinancialManagerScreen.AddInput.name) {
                             AddInputScreen(navController = navController)
+                        }
+
+                        composable(FinancialManagerScreen.TransactionDetails.name) {
+                            TransactionDetails(navController = navController)
                         }
                     }
                 }
@@ -61,5 +66,6 @@ fun GreetingPreview() {
 
 enum class FinancialManagerScreen() {
     Home,
-    AddInput
+    AddInput,
+    TransactionDetails
 }

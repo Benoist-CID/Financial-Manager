@@ -31,15 +31,15 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun FinancialInputRow(
     transaction: Transaction,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClicked: (Transaction) -> Unit = {}
 ) {
-    val context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(4.dp)
             .clickable {
-                Toast.makeText(context, "CLicked", Toast.LENGTH_LONG).show()
+                onClicked(transaction)
             }
     ) {
         Row(

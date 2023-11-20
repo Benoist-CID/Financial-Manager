@@ -55,7 +55,9 @@ fun HomeScreen(
 
             LazyColumn {
                 items(transactions.value) { input ->
-                    FinancialInputRow(input)
+                    FinancialInputRow(input) {
+                        //navController.navigate(FinancialManagerScreen.TransactionDetails.name)
+                    }
                 }
             }
         }
