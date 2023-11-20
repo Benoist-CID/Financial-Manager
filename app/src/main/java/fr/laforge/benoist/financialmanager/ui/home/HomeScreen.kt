@@ -13,13 +13,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
-import fr.laforge.benoist.financialmanager.ui.component.FinancialInputRow
+import fr.laforge.benoist.financialmanager.ui.component.TransactionRow
+import timber.log.Timber
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,8 +31,10 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     vm: HomeScreenViewModel = HomeScreenViewModel()
 ) {
-    val amount = vm.availableAmount.collectAsState()
-    val transactions = vm.allTransactions.collectAsState()
+    val amount by vm.availableAmount.collectAsState(0.0F)
+    val transactions by vm.allTransactions.collectAsState(emptyList())
+
+    Timber.i("HomeScreen drawn")
 
     Scaffold(
         floatingActionButton = {
@@ -49,14 +53,14 @@ fun HomeScreen(
 
         Column {
             Text(
-                text = "${amount.value}€",
+                text = "${amount}€",
                 fontSize = 30.sp
             )
 
             LazyColumn {
-                items(transactions.value) { input ->
-                    FinancialInputRow(input) {
-                        //navController.navigate(FinancialManagerScreen.TransactionDetails.name)
+                items(transactions) { input ->
+                    TransactionRow(input) {
+                        navController.navigate(FinancialManagerScreen.TransactionDetails.name)
                     }
                 }
             }

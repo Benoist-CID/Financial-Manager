@@ -7,6 +7,7 @@ import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.model.InputType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 
 class AndroidFinancialRepository(database: AppDatabase) : FinancialRepository {
     private val financialDao = database.getFinancialInputDao()
@@ -16,6 +17,7 @@ class AndroidFinancialRepository(database: AppDatabase) : FinancialRepository {
     }
 
     override fun getAll(): Flow<List<Transaction>> {
+        Timber.d("getAll")
         return financialDao.getAll().map {
             it.map { input ->
                 input.toModel()

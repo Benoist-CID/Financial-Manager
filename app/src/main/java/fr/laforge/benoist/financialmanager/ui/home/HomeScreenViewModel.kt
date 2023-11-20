@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.util.sum
 import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.repository.FinancialRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -13,20 +14,11 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class HomeScreenViewModel : ViewModel(), KoinComponent {
-
     private val repository: FinancialRepository by inject()
 
-    val availableAmount : StateFlow<Float> = repository.getAll().map {
+    val availableAmount : Flow<Float> = repository.getAll().map {
         it.sum()
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = 0.0F
-    )
+    }
 
-    val allTransactions : StateFlow<List<Transaction>> = repository.getAll().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = listOf()
-    )
+    val allTransactions : Flow<List<Transaction>> = repository.getAll()
 }

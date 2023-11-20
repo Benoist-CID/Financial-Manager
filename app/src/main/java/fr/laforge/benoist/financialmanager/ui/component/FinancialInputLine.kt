@@ -1,6 +1,5 @@
 package fr.laforge.benoist.financialmanager.ui.component
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,13 +21,13 @@ import fr.laforge.benoist.financialmanager.util.getAmountColor
 import fr.laforge.benoist.financialmanager.util.getAmountFontWeight
 import fr.laforge.benoist.financialmanager.util.getAmountTextStyle
 import fr.laforge.benoist.financialmanager.util.getFinancialInputText
-import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.model.InputType
+import fr.laforge.benoist.model.Transaction
 import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun FinancialInputRow(
+fun TransactionRow(
     transaction: Transaction,
     modifier: Modifier = Modifier,
     onClicked: (Transaction) -> Unit = {}
@@ -93,7 +91,7 @@ fun FinancialInputRowPreview() {
 
     LazyColumn {
         items(transactions) { input ->
-            FinancialInputRow(input)
+            TransactionRow(input)
         }
     }
 }
