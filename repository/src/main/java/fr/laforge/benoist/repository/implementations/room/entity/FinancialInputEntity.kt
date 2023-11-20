@@ -17,6 +17,7 @@ data class FinancialInputEntity(
 ) {
     fun toModel(): Transaction {
         return Transaction(
+            uid = uid,
             dateTime = dateTime,
             amount = amount,
             type = type,
@@ -27,6 +28,7 @@ data class FinancialInputEntity(
 
 fun fromModel(transaction: Transaction): FinancialInputEntity {
     return FinancialInputEntity(
+        uid = transaction.uid,
         dateTime = transaction.dateTime,
         amount = transaction.amount,
         type = transaction.type,

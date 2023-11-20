@@ -12,7 +12,7 @@ import timber.log.Timber
 class AndroidFinancialRepository(database: AppDatabase) : FinancialRepository {
     private val financialDao = database.getFinancialInputDao()
 
-    override fun createFinancialInput(transaction: Transaction) {
+    override fun createTransaction(transaction: Transaction) {
         financialDao.insertAll(fromModel(transaction = transaction))
     }
 
@@ -39,5 +39,9 @@ class AndroidFinancialRepository(database: AppDatabase) : FinancialRepository {
                 it.toModel()
             }
         }
+    }
+
+    override fun deleteTransaction(transaction: Transaction) {
+        financialDao.delete(fromModel(transaction))
     }
 }

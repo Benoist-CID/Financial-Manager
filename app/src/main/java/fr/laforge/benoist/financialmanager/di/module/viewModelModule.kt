@@ -1,6 +1,6 @@
 package fr.laforge.benoist.financialmanager.di.module
 
-import fr.laforge.benoist.financialmanager.ui.addinput.AddInputViewModel
+import fr.laforge.benoist.financialmanager.views.addinput.AddInputViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

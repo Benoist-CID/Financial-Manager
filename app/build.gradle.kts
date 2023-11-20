@@ -58,7 +58,6 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.5")
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation(project(mapOf("path" to ":model")))
@@ -67,6 +66,7 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
     // Dependency injection
     implementation("io.insert-koin:koin-android:3.3.3")
+    implementation("androidx.compose.material3:material3:1.1.2")
     testImplementation("junit:junit:4.13.2")
     // for JVM:
     testImplementation("org.amshove.kluent:kluent:1.73")

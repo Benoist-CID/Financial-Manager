@@ -1,4 +1,4 @@
-package fr.laforge.benoist.financialmanager.ui.addinput
+package fr.laforge.benoist.financialmanager.views.addinput
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -63,7 +63,7 @@ class AddInputViewModel : ViewModel(), KoinComponent {
     fun createFinancialInput() {
         viewModelScope.launch {
             withContext(Dispatchers.IO + Job()) {
-                repository.createFinancialInput(
+                repository.createTransaction(
                     transaction = Transaction(
                         description = description,
                         amount = amount,

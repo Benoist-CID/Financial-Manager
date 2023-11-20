@@ -4,6 +4,10 @@
     <!-- Home screen -->
     <string name="add_input">Add Input</string>
     <string name="create_input">Create Input</string>
+    <string name="do_you_want_to_delete">Do you want to delete?</string>
+    <string name="delete_warning_message">Once deleted, it is not possible to undelete, think of it carefully.</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Add input screen -->
     <string name="description">Description</string>

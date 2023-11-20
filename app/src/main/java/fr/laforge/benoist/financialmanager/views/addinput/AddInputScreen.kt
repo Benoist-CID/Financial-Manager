@@ -1,4 +1,4 @@
-package fr.laforge.benoist.financialmanager.ui.addinput
+package fr.laforge.benoist.financialmanager.views.addinput
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package fr.laforge.benoist.financialmanager.ui.addinput
+package fr.laforge.benoist.financialmanager.views.addinput
 
 import fr.laforge.benoist.model.InputType
 

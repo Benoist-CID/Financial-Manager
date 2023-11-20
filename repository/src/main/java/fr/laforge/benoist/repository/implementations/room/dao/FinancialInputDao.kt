@@ -1,6 +1,7 @@
 package fr.laforge.benoist.repository.implementations.room.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import fr.laforge.benoist.model.InputType
@@ -17,4 +18,7 @@ interface FinancialInputDao {
 
     @Query("SELECT * FROM FinancialInputEntity WHERE type=:inputType")
     fun getByInputType(inputType: InputType): Flow<List<FinancialInputEntity>>
+
+    @Delete
+    fun delete(vararg financialInputs: FinancialInputEntity)
 }

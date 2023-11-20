@@ -32,7 +32,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
             description = "Description"
         )
 
-        repository.createFinancialInput(transaction = toBeInserted)
+        repository.createTransaction(transaction = toBeInserted)
 
         runBlocking() {
             repository.getAllIncomes().first().size.shouldBeEqualTo(1)
@@ -51,7 +51,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
             description = "Description"
         )
 
-        repository.createFinancialInput(transaction = toBeInserted)
+        repository.createTransaction(transaction = toBeInserted)
         runBlocking {
             repository.getAllExpenses().first().size.shouldBeEqualTo(1)
             repository.getAllExpenses().first()[0].shouldBeEqualTo(toBeInserted)
@@ -68,7 +68,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
             description = "Description"
         )
 
-        repository.createFinancialInput(transaction = toBeInserted)
+        repository.createTransaction(transaction = toBeInserted)
 
         val toBeInserted2 = Transaction(
             dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
@@ -77,7 +77,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
             description = "Description"
         )
 
-        repository.createFinancialInput(transaction = toBeInserted2)
+        repository.createTransaction(transaction = toBeInserted2)
 
         runBlocking {
             val flow = repository.getAll()
@@ -85,6 +85,31 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
             flow.first().size.shouldBeEqualTo(2)
             flow.first()[0].shouldBeEqualTo(toBeInserted)
             flow.first()[1].shouldBeEqualTo(toBeInserted2)
+        }
+    }
+
+    @Test
+    fun deleteTest() {
+        repository = AndroidFinancialRepository(database = db)
+
+        val toBeInserted = Transaction(
+            dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
+            amount = 1.0F,
+            type = InputType.Income,
+            description = "Description"
+        )
+
+        repository.createTransaction(transaction = toBeInserted)
+        repository.createTransaction(transaction = toBeInserted)
+        repository.createTransaction(transaction = toBeInserted)
+
+        runBlocking {
+            repository.getAll().first().size.shouldBeEqualTo(3)
+            val transactionToBeDeleted = repository.getAll().first()[1]
+            repository.deleteTransaction(transaction = transactionToBeDeleted)
+            repository.getAll().first().size.shouldBeEqualTo(2)
+            repository.getAll().first()[0].uid.shouldBeEqualTo(1)
+            repository.getAll().first()[1].uid.shouldBeEqualTo(3)
         }
     }
 }
