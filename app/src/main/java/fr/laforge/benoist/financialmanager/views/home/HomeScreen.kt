@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.DismissState
 import androidx.compose.material3.DismissValue
@@ -38,6 +39,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
@@ -77,10 +79,12 @@ fun HomeScreen(
     ) {
 
         Column {
-            Text(
-                text = "${amount}€",
-                fontSize = 30.sp
-            )
+            Card {
+                Text(
+                    text = "${amount}€",
+                    fontSize = 30.sp
+                )
+            }
 
             LazyColumn {
                 items(transactions) { transaction ->
@@ -169,4 +173,10 @@ fun HomeScreen(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreview() {
+
 }

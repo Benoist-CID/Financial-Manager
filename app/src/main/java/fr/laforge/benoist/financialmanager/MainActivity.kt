@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import fr.laforge.benoist.financialmanager.views.addinput.AddInputScreen
+import fr.laforge.benoist.financialmanager.views.addinput.AddTransactionScreen
 import fr.laforge.benoist.financialmanager.views.home.HomeScreen
 import fr.laforge.benoist.financialmanager.ui.theme.FinancialManagerTheme
 import fr.laforge.benoist.financialmanager.views.transaction.TransactionDetails
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(FinancialManagerScreen.AddInput.name) {
-                            AddInputScreen(navController = navController)
+                            AddTransactionScreen(navController = navController)
                         }
 
                         composable(FinancialManagerScreen.TransactionDetails.name) {
