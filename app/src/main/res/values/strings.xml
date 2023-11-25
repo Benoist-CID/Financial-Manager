@@ -8,6 +8,7 @@
     <string name="delete_warning_message">Once deleted, it is not possible to undelete, think of it carefully.</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="situation_on">Situation on</string>
 
     <!-- Add input screen -->
     <string name="description">Description</string>

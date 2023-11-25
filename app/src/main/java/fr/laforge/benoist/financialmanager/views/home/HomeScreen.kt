@@ -79,12 +79,7 @@ fun HomeScreen(
     ) {
 
         Column {
-            Card {
-                Text(
-                    text = "${amount}€",
-                    fontSize = 30.sp
-                )
-            }
+            SituationCard(amount = amount)
 
             LazyColumn {
                 items(transactions) { transaction ->

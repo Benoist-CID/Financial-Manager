@@ -8,9 +8,9 @@ import fr.laforge.benoist.model.InputType
 
 fun Transaction.getAmountColor(): Color {
     return if (type == InputType.Income) {
-        Color(0xFF22471d)
+        Color(0xff22471d)
     } else {
-        Color.Black
+        Color(0xff5e0505)
     }
 }
 
@@ -18,21 +18,21 @@ fun Transaction.getAmountFontWeight(): FontWeight {
     return if (type == InputType.Income) {
         FontWeight.Bold
     } else {
-        FontWeight.Normal
+        FontWeight.Bold
     }
 }
 
 fun Transaction.getAmountTextStyle(): TextStyle {
     return if (type == InputType.Income) {
-        TextStyle(background = Color(0xFFb1e6aa))
+        TextStyle(background = Color(0xffb1e6aa))
     } else {
-        TextStyle()
+        TextStyle(background = Color(0xaafc6d6d))
     }
 }
 
 fun Transaction.getFinancialInputText(): String {
     return if (type == InputType.Income) {
-        "$amount €"
+        "+$amount €"
     } else {
         "-$amount €"
     }
