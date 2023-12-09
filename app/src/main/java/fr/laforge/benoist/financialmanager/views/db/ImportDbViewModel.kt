@@ -1,15 +1,12 @@
 package fr.laforge.benoist.financialmanager.views.db
 
-import android.content.Context
-import android.os.Environment
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.credenceid.util.FileUtil
+import fr.laforge.benoist.financialmanager.util.transactionFromCsv
 import fr.laforge.benoist.model.Transaction
-import fr.laforge.benoist.model.transactionFromCsv
 import fr.laforge.benoist.repository.FinancialRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

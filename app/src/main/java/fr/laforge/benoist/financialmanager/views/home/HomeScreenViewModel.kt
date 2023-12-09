@@ -2,10 +2,9 @@ package fr.laforge.benoist.financialmanager.views.home
 
 import android.content.Context
 import android.content.Intent
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.credenceid.util.FileUtil
+import fr.laforge.benoist.financialmanager.util.exportToCsvFormat
 import fr.laforge.benoist.financialmanager.util.getFirstDayOfMonth
 import fr.laforge.benoist.financialmanager.util.getLastDayOfMonth
 import fr.laforge.benoist.financialmanager.util.sum
@@ -50,37 +49,21 @@ class HomeScreenViewModel : ViewModel(), KoinComponent {
     fun saveDb(context: Context) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val fileUtil = FileUtil()
                 repository.getAll().first { transactions ->
                     val sb = StringBuilder()
                     transactions.forEach {
                         sb.append(it.exportToCsvFormat() + "\n")
                     }
-//                    fileUtil.write(File(Environment.getExternalStorageDirectory(), "Documents/Save.txt"), sb.toString())
 
                     val sharingIntent = Intent(Intent.ACTION_SEND)
-
-                    // type of the content to be shared
-
                     // type of the content to be shared
                     sharingIntent.type = "text/plain"
-
-                    // Body of the content
-
                     // Body of the content
                     val shareBody = sb.toString()
-
                     // subject of the content. you can share anything
-
-                    // subject of the content. you can share anything
-                    val shareSubject = "Your Subject Here"
-
-                    // passing body of the content
-
+                    val shareSubject = "DB snapshot ${LocalDateTime.now()}"
                     // passing body of the content
                     sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
-
-                    // passing subject of the content
 
                     // passing subject of the content
                     sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject)
