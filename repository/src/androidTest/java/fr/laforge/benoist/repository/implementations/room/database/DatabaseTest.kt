@@ -35,7 +35,7 @@ class DatabaseTest : BaseRoomTest() {
 
         val financialInputs = financialInputDao.getAll()
 
-        runBlocking() {
+        runBlocking {
             financialInputs.first().size.shouldBeEqualTo(1)
             financialInputs.first()[0].apply {
                 amount.shouldBeEqualTo(1.0F)
@@ -177,9 +177,9 @@ class DatabaseTest : BaseRoomTest() {
             ).first()
 
             entities.size.shouldBeEqualTo(3)
-            entities[0].dateTime.shouldBeEqualTo(transactions[0].dateTime)
+            entities[0].dateTime.shouldBeEqualTo(transactions[3].dateTime)
             entities[1].dateTime.shouldBeEqualTo(transactions[2].dateTime)
-            entities[2].dateTime.shouldBeEqualTo(transactions[3].dateTime)
+            entities[2].dateTime.shouldBeEqualTo(transactions[0].dateTime)
         }
     }
 }

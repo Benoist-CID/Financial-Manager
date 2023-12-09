@@ -49,43 +49,23 @@ class CreateTransactionUseCaseTest {
         transactions.`should be equal to`(
             listOf(
                 Transaction(
-                    dateTime = testDate,
+                    dateTime = testDate.plusMonths(11),
                     type = TransactionType.Expense,
                     amount = 150F,
                     description = "A periodic transaction"
                 ),
                 Transaction(
-                    dateTime = testDate.plusMonths(1),
+                    dateTime = testDate.plusMonths(10),
                     type = TransactionType.Expense,
                     amount = 150F,
                     description = "A periodic transaction"
-                ),
-                Transaction(
-                    dateTime = testDate.plusMonths(2),
+                ),Transaction(
+                    dateTime = testDate.plusMonths(9),
                     type = TransactionType.Expense,
                     amount = 150F,
                     description = "A periodic transaction"
-                ),
-                Transaction(
-                    dateTime = testDate.plusMonths(3),
-                    type = TransactionType.Expense,
-                    amount = 150F,
-                    description = "A periodic transaction"
-                ),
-                Transaction(
-                    dateTime = testDate.plusMonths(4),
-                    type = TransactionType.Expense,
-                    amount = 150F,
-                    description = "A periodic transaction"
-                ),
-                Transaction(
-                    dateTime = testDate.plusMonths(5),
-                    type = TransactionType.Expense,
-                    amount = 150F,
-                    description = "A periodic transaction"
-                ),
-                Transaction(
-                    dateTime = testDate.plusMonths(6),
+                ), Transaction(
+                    dateTime = testDate.plusMonths(8),
                     type = TransactionType.Expense,
                     amount = 150F,
                     description = "A periodic transaction"
@@ -97,23 +77,43 @@ class CreateTransactionUseCaseTest {
                     description = "A periodic transaction"
                 ),
                 Transaction(
-                    dateTime = testDate.plusMonths(8),
-                    type = TransactionType.Expense,
-                    amount = 150F,
-                    description = "A periodic transaction"
-                ),Transaction(
-                    dateTime = testDate.plusMonths(9),
+                    dateTime = testDate.plusMonths(6),
                     type = TransactionType.Expense,
                     amount = 150F,
                     description = "A periodic transaction"
                 ),
                 Transaction(
-                    dateTime = testDate.plusMonths(10),
+                    dateTime = testDate.plusMonths(5),
                     type = TransactionType.Expense,
                     amount = 150F,
                     description = "A periodic transaction"
-                ),Transaction(
-                    dateTime = testDate.plusMonths(11),
+                ),
+                Transaction(
+                    dateTime = testDate.plusMonths(4),
+                    type = TransactionType.Expense,
+                    amount = 150F,
+                    description = "A periodic transaction"
+                ),
+                Transaction(
+                    dateTime = testDate.plusMonths(3),
+                    type = TransactionType.Expense,
+                    amount = 150F,
+                    description = "A periodic transaction"
+                ),
+                Transaction(
+                    dateTime = testDate.plusMonths(2),
+                    type = TransactionType.Expense,
+                    amount = 150F,
+                    description = "A periodic transaction"
+                ),
+                Transaction(
+                    dateTime = testDate.plusMonths(1),
+                    type = TransactionType.Expense,
+                    amount = 150F,
+                    description = "A periodic transaction"
+                ),
+                Transaction(
+                    dateTime = testDate,
                     type = TransactionType.Expense,
                     amount = 150F,
                     description = "A periodic transaction"
