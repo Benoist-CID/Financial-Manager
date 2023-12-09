@@ -1,7 +1,9 @@
 package fr.laforge.benoist.repository
 
+import androidx.room.Query
 import fr.laforge.benoist.model.Transaction
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDateTime
 
 interface FinancialRepository {
     /**
@@ -13,6 +15,16 @@ interface FinancialRepository {
      * Returns all FinancialInput
      */
     fun getAll(): Flow<List<Transaction>>
+
+    /**
+     * Returns all FinancialInput
+     */
+    fun getAllInDateRange(startDate: LocalDateTime, endDate: LocalDateTime): Flow<List<Transaction>>
+
+    /**
+     * Gets a Transaction by its unique ID
+     */
+    fun get(uid: Int): Flow<Transaction>
 
     /**
      * Returns all FinancialInput with type FinancialType.Expense

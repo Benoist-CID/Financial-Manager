@@ -5,12 +5,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import fr.laforge.benoist.financialmanager.views.addinput.AddTransactionViewModel
+import fr.laforge.benoist.financialmanager.views.db.ImportDbViewModel
+import fr.laforge.benoist.financialmanager.views.transaction.add.AddTransactionViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             AddTransactionViewModel()
+        }
+
+        initializer {
+            ImportDbViewModel()
         }
     }
 }
