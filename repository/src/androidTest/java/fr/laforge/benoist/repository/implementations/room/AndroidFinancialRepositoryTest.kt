@@ -3,7 +3,7 @@ package fr.laforge.benoist.repository.implementations.room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import fr.laforge.benoist.repository.FinancialRepository
 import fr.laforge.benoist.model.Transaction
-import fr.laforge.benoist.model.InputType
+import fr.laforge.benoist.model.TransactionType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBeEqualTo
@@ -26,9 +26,10 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
         repository = AndroidFinancialRepository(database = db)
 
         val toBeInserted = Transaction(
+            uid= 1,
             dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
             amount = 1.0F,
-            type = InputType.Income,
+            type = TransactionType.Income,
             description = "Description"
         )
 
@@ -45,9 +46,10 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
         repository = AndroidFinancialRepository(database = db)
 
         val toBeInserted = Transaction(
+            uid=1,
             dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
             amount = 1.0F,
-            type = InputType.Expense,
+            type = TransactionType.Expense,
             description = "Description"
         )
 
@@ -63,17 +65,19 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
         repository = AndroidFinancialRepository(database = db)
 
         val toBeInserted = Transaction(
+            uid=1,
             dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
-            amount = 1.0F, type = InputType.Expense,
+            amount = 1.0F, type = TransactionType.Expense,
             description = "Description"
         )
 
         repository.createTransaction(transaction = toBeInserted)
 
         val toBeInserted2 = Transaction(
+            uid=2,
             dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
             amount = 1.0F,
-            type = InputType.Income,
+            type = TransactionType.Income,
             description = "Description"
         )
 
@@ -95,7 +99,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
         val toBeInserted = Transaction(
             dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
             amount = 1.0F,
-            type = InputType.Income,
+            type = TransactionType.Income,
             description = "Description"
         )
 

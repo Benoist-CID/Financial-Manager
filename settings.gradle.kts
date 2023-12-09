@@ -17,3 +17,4 @@ rootProject.name = "Financial Manager"
 include(":app")
 include(":repository")
 include(":model")
+include(":util")

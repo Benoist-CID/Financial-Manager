@@ -1,7 +1,7 @@
 package fr.laforge.benoist.financialmanager.util
 
 import fr.laforge.benoist.model.Transaction
-import fr.laforge.benoist.model.InputType
+import fr.laforge.benoist.model.TransactionType
 
 /**
  * Computes tha total amount of a List<FinancialInput>
@@ -13,8 +13,8 @@ fun List<Transaction>.sum(): Float {
 
     this.forEach { input ->
         when (input.type) {
-            InputType.Income -> sum += input.amount
-            InputType.Expense -> sum -= input.amount
+            TransactionType.Income -> sum += input.amount
+            TransactionType.Expense -> sum -= input.amount
         }
     }
 

@@ -23,8 +23,9 @@ import fr.laforge.benoist.financialmanager.util.getAmountColor
 import fr.laforge.benoist.financialmanager.util.getAmountFontWeight
 import fr.laforge.benoist.financialmanager.util.getAmountTextStyle
 import fr.laforge.benoist.financialmanager.util.getFinancialInputText
-import fr.laforge.benoist.model.InputType
+import fr.laforge.benoist.model.TransactionType
 import fr.laforge.benoist.model.Transaction
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
@@ -69,7 +70,12 @@ fun TransactionRow(
                 .padding(8.dp)
         ) {
             val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
-            Text(text = transaction.dateTime.format(formatter))
+            val date = if (transaction.isPeriodic) {
+                transaction.dateTime.withMonth(LocalDateTime.now().monthValue)
+            } else {
+                transaction.dateTime
+            }.format(formatter)
+            Text(text = date)
 
             Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null)
         }
@@ -83,11 +89,11 @@ fun TransactionRow(
 fun FinancialInputRowPreview() {
     val transactions = mutableListOf(
             Transaction(
-                description = "An income", type = InputType.Income, amount = 10.0F
+                description = "An income", type = TransactionType.Income, amount = 10.0F
             ),
 
             Transaction(
-                description = "An expense", type = InputType.Expense, amount = 10.0F
+                description = "An expense", type = TransactionType.Expense, amount = 10.0F
             )
     )
 

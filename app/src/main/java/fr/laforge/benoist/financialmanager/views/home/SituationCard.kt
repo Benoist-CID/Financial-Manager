@@ -11,28 +11,33 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import fr.laforge.benoist.financialmanager.R
+import fr.laforge.benoist.financialmanager.util.getNumberOfRemainingDaysInMonth
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
 fun SituationCard(
     amount: Float,
     modifier: Modifier = Modifier,
-    date: LocalDate = LocalDate.now()
+    date: LocalDateTime = LocalDateTime.now()
 ) {
-    Card {
-        Column(
-            modifier = modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("$amount €")
-            val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "$amount €", fontSize = 20.sp)
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
-            Text(
-                text = "${LocalContext.current.getString(R.string.situation_on)} ${date.format(formatter)}",
-                fontSize = 10.sp
-            )
-        }
+        Text(
+            text = "${LocalContext.current.getString(R.string.situation_on)} ${date.format(formatter)}",
+            fontSize = 10.sp
+        )
+
+        Text(
+            text = "${date.getNumberOfRemainingDaysInMonth()} days left - ${(amount / date.getNumberOfRemainingDaysInMonth()).toInt()}€ per day",
+            fontSize = 17.sp
+        )
     }
 }
 

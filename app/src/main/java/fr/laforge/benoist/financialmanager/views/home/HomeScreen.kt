@@ -14,10 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissState
 import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -25,10 +22,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,17 +32,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
-import fr.laforge.benoist.financialmanager.di.module.repositoryModule
 import fr.laforge.benoist.financialmanager.ui.component.ShowDialog
+import fr.laforge.benoist.financialmanager.ui.component.TopBar
 import fr.laforge.benoist.financialmanager.ui.component.TransactionRow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -63,7 +57,10 @@ fun HomeScreen(
     val amount by vm.availableAmount.collectAsState(0.0F)
     val transactions by vm.allTransactions.collectAsState(emptyList())
 
+    val context = LocalContext.current
+
     Scaffold(
+        topBar = { TopBar(navController = navController, onSave = { vm.saveDb(context) }, onLoad = { navController.navigate(FinancialManagerScreen.ImportDb.name) }) },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = { Text(text = stringResource(id = R.string.add_input)) },
@@ -78,7 +75,7 @@ fun HomeScreen(
         },
     ) {
 
-        Column {
+        Column(modifier.padding(top = it.calculateTopPadding() + 16.dp, bottom = it.calculateBottomPadding() + 16.dp)) {
             SituationCard(amount = amount)
 
             LazyColumn {
@@ -160,7 +157,9 @@ fun HomeScreen(
                             // list item
                             TransactionRow(transaction) { transaction ->
                                 Timber.i("Transaction #${transaction.uid}")
-                                navController.navigate(FinancialManagerScreen.TransactionDetails.name)
+                                navController.navigate(
+                                    FinancialManagerScreen.TransactionDetails.name + "/${transaction.uid}"
+                                )
                             }
                         }
                     )

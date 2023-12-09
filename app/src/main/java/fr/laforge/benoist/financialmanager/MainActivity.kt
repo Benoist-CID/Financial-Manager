@@ -10,13 +10,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import fr.laforge.benoist.financialmanager.views.addinput.AddTransactionScreen
+import androidx.navigation.navArgument
+import fr.laforge.benoist.financialmanager.views.transaction.add.AddTransactionScreen
 import fr.laforge.benoist.financialmanager.views.home.HomeScreen
 import fr.laforge.benoist.financialmanager.ui.theme.FinancialManagerTheme
-import fr.laforge.benoist.financialmanager.views.transaction.TransactionDetails
+import fr.laforge.benoist.financialmanager.views.db.ImportDbScreen
+import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetails
+import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetailsViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +42,19 @@ class MainActivity : ComponentActivity() {
                             AddTransactionScreen(navController = navController)
                         }
 
-                        composable(FinancialManagerScreen.TransactionDetails.name) {
-                            TransactionDetails(navController = navController)
+                        composable(
+                            FinancialManagerScreen.TransactionDetails.name + "/{transactionId}",
+                            arguments = listOf(navArgument("transactionId") { type = NavType.IntType })
+                        ) { backStackEntry ->
+                            val vm = TransactionDetailsViewModel(transactionId = backStackEntry.arguments?.getInt("transactionId")!!)
+                            TransactionDetails(
+                                navController = navController,
+                                vm = vm
+                            )
+                        }
+
+                        composable(FinancialManagerScreen.ImportDb.name) {
+                            ImportDbScreen(navController = navController)
                         }
                     }
                 }
@@ -64,8 +79,9 @@ fun GreetingPreview() {
     }
 }
 
-enum class FinancialManagerScreen() {
+enum class FinancialManagerScreen {
     Home,
     AddInput,
-    TransactionDetails
+    TransactionDetails,
+    ImportDb
 }
