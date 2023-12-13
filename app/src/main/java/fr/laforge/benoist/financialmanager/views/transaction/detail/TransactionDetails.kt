@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import fr.laforge.benoist.model.Transaction
 
 @Composable
@@ -22,5 +23,5 @@ fun TransactionDetails(
 @Composable
 @Preview(showBackground = true)
 fun TransactionDetailsPreview() {
-    //TransactionDetails(navController = rememberNavController(), transactionId = 1)
+//    TransactionDetails(navController = rememberNavController())
 }

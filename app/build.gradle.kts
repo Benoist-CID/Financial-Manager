@@ -70,6 +70,7 @@ dependencies {
     // Dependency injection
     implementation("io.insert-koin:koin-android:3.3.3")
     implementation("androidx.compose.material3:material3:1.1.2")
+    implementation(project(mapOf("path" to ":preferences")))
     testImplementation("junit:junit:4.13.2")
     // for JVM:
     testImplementation("org.amshove.kluent:kluent:1.73")
@@ -77,6 +78,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("org.amshove.kluent:kluent-android:1.73")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

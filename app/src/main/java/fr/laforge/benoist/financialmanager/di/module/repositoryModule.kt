@@ -9,10 +9,10 @@ import org.koin.dsl.module
 val repositoryModule by lazy {
     module {
         single { Room.databaseBuilder(
-                    get(),
-                    AppDatabase::class.java, "database-name"
-                ).build()
-            }
+                get(),
+                AppDatabase::class.java, "database-name"
+            ).build()
+        }
         single<FinancialRepository> { AndroidFinancialRepository(get()) }
     }
 }

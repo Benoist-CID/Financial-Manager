@@ -12,10 +12,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import fr.laforge.benoist.financialmanager.AppViewModelProvider
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
@@ -68,4 +70,10 @@ fun LoginScreen(
             }
         )
     }
+}
+
+@Composable
+@Preview
+fun LoginScreenPreview() {
+    LoginScreen(navController = rememberNavController())
 }
