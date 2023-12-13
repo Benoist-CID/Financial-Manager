@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import fr.laforge.benoist.financialmanager.views.db.ImportDbViewModel
+import fr.laforge.benoist.financialmanager.views.login.LoginViewModel
 import fr.laforge.benoist.financialmanager.views.transaction.add.AddTransactionViewModel
 
 object AppViewModelProvider {
@@ -16,6 +17,10 @@ object AppViewModelProvider {
 
         initializer {
             ImportDbViewModel()
+        }
+
+        initializer {
+            LoginViewModel()
         }
     }
 }

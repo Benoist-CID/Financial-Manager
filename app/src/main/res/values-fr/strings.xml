@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Financial Manager</string>
+    <string name="app_name">Gestion Financière</string>
 
     <!-- Login screen -->
-    <string name="biometric_title">Biometrics</string>
-    <string name="biometric_subtitle">Use fingerprint to connect</string>
-    <string name="biometric_negative">Cancel</string>
+    <string name="biometric_title">Biométrie</string>
+    <string name="biometric_subtitle">Utilisez la biométrie pour vous connecter</string>
+    <string name="biometric_negative">Annuler</string>
 
     <!-- Home screen -->
     <string name="add_input">Add Input</string>

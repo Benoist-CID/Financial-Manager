@@ -1,7 +1,6 @@
 package fr.laforge.benoist.financialmanager
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -10,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,12 +19,14 @@ import fr.laforge.benoist.financialmanager.views.transaction.add.AddTransactionS
 import fr.laforge.benoist.financialmanager.views.home.HomeScreen
 import fr.laforge.benoist.financialmanager.ui.theme.FinancialManagerTheme
 import fr.laforge.benoist.financialmanager.views.db.ImportDbScreen
+import fr.laforge.benoist.financialmanager.views.login.LoginScreen
 import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetails
 import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetailsViewModel
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             FinancialManagerTheme {
                 // A surface container using the 'background' color from the theme
@@ -33,7 +35,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = FinancialManagerScreen.Home.name) {
+                    NavHost(navController = navController, startDestination = FinancialManagerScreen.Login.name) {
+                        composable(FinancialManagerScreen.Login.name) {
+                            LoginScreen(navController = navController)
+                        }
+
                         composable(FinancialManagerScreen.Home.name) {
                             HomeScreen(navController = navController)
                         }
@@ -80,6 +86,7 @@ fun GreetingPreview() {
 }
 
 enum class FinancialManagerScreen {
+    Login,
     Home,
     AddInput,
     TransactionDetails,
