@@ -43,8 +43,11 @@ import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.ui.component.ShowDialog
 import fr.laforge.benoist.financialmanager.ui.component.TopBar
 import fr.laforge.benoist.financialmanager.ui.component.TransactionRow
+import fr.laforge.benoist.financialmanager.util.displayDate
+import fr.laforge.benoist.financialmanager.util.toDate
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.LocalDateTime
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,13 +57,14 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     vm: HomeScreenViewModel = HomeScreenViewModel()
 ) {
-    val amount by vm.availableAmount.collectAsState(0.0F)
-    val transactions by vm.allTransactions.collectAsState(emptyList())
+    val amount by vm.availableAmount.collectAsState(initial = 0F)
+    val periodicAmount by vm.periodicAmount.collectAsState(initial = 0F)
+    val transactions by vm.allTransactions.collectAsState(initial = emptyList())
 
     val context = LocalContext.current
 
     Scaffold(
-        topBar = { TopBar(navController = navController, onSave = { vm.saveDb(context) }, onLoad = { navController.navigate(FinancialManagerScreen.ImportDb.name) }) },
+        topBar = { TopBar(navController = navController, title = displayDate(LocalDateTime.now().toDate()), onSave = { vm.saveDb(context) }, onLoad = { navController.navigate(FinancialManagerScreen.ImportDb.name) }) },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = { Text(text = stringResource(id = R.string.add_input)) },
@@ -76,7 +80,7 @@ fun HomeScreen(
     ) {
 
         Column(modifier.padding(top = it.calculateTopPadding() + 16.dp, bottom = it.calculateBottomPadding() + 16.dp)) {
-            SituationCard(amount = amount)
+            SituationCard(amount, -periodicAmount)
 
             LazyColumn {
                 items(transactions) { transaction ->

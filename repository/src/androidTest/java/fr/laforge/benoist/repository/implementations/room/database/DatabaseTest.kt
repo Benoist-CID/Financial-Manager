@@ -182,4 +182,59 @@ class DatabaseTest : BaseRoomTest() {
             entities[2].dateTime.shouldBeEqualTo(transactions[0].dateTime)
         }
     }
+
+    @Test
+    fun getAllPeriodicTest() {
+        val transactions = listOf(
+            TransactionEntity(
+                type = TransactionType.Expense,
+                amount = 1F,
+                description = "A periodic transaction",
+                isPeriodic = true,
+                period = TransactionPeriod.Monthly
+            ),
+            TransactionEntity(
+                type = TransactionType.Expense,
+                amount = 150F,
+                description = "A non periodic transaction",
+                isPeriodic = false,
+                period = TransactionPeriod.None
+            ),
+            TransactionEntity(
+                type = TransactionType.Expense,
+                amount = 150F,
+                description = "A non periodic transaction",
+                isPeriodic = false,
+                period = TransactionPeriod.None
+            ),
+            TransactionEntity(
+                type = TransactionType.Expense,
+                amount = 2F,
+                description = "A periodic transaction",
+                isPeriodic = true,
+                period = TransactionPeriod.None
+            ),
+            TransactionEntity(
+                type = TransactionType.Income,
+                amount = 3F,
+                description = "A periodic transaction",
+                isPeriodic = true,
+                period = TransactionPeriod.None
+            )
+        )
+
+        transactions.forEach {
+            financialInputDao.insertAll(it)
+        }
+
+        runBlocking {
+            val entities = financialInputDao.getAllPeriodic().first()
+
+            entities.size.shouldBeEqualTo(2)
+            entities[0].isPeriodic.shouldBeEqualTo(true)
+            entities[0].amount.shouldBeEqualTo(1F)
+            entities[1].isPeriodic.shouldBeEqualTo(true)
+            entities[1].amount.shouldBeEqualTo(2F)
+        }
+    }
 }

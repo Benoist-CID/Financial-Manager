@@ -19,17 +19,21 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import timber.log.Timber
 import java.time.LocalDateTime
 
 
 class HomeScreenViewModel : ViewModel(), KoinComponent {
     private val repository: FinancialRepository by inject()
-    private val context: Context by inject()
 
     val availableAmount : Flow<Float> = repository.getAllInDateRange(
         startDate = LocalDateTime.now().getFirstDayOfMonth(),
         endDate = LocalDateTime.now().getLastDayOfMonth()
     ).map {
+        it.sum()
+    }
+
+    val periodicAmount: Flow<Float> = repository.getAllPeriodicTransactions().map{
         it.sum()
     }
 

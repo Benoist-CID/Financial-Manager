@@ -93,6 +93,58 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
     }
 
     @Test
+    fun getAllPeriodicTest() {
+        repository = AndroidFinancialRepository(database = db)
+
+        val toBeInserted = Transaction(
+            uid=1,
+            dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
+            amount = 1.0F, type = TransactionType.Expense,
+            description = "Description"
+        )
+
+        repository.createTransaction(transaction = toBeInserted)
+
+        val toBeInserted2 = Transaction(
+            uid=2,
+            dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
+            amount = 1.0F,
+            type = TransactionType.Income,
+            description = "Description"
+        )
+
+        repository.createTransaction(transaction = toBeInserted2)
+
+        val toBeInserted3 = Transaction(
+            uid=3,
+            dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
+            amount = 1.0F, type = TransactionType.Expense,
+            description = "Description 3",
+            isPeriodic = true
+        )
+
+        repository.createTransaction(transaction = toBeInserted3)
+
+        val toBeInserted4 = Transaction(
+            uid=4,
+            dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
+            amount = 1.0F,
+            type = TransactionType.Income,
+            description = "Description 4",
+            isPeriodic = true
+        )
+
+        repository.createTransaction(transaction = toBeInserted4)
+
+        runBlocking {
+            val flow = repository.getAllPeriodicTransactions()
+
+            flow.first().size.shouldBeEqualTo(1)
+            flow.first()[0].shouldBeEqualTo(toBeInserted3)
+        }
+    }
+
+    @Test
     fun deleteTest() {
         repository = AndroidFinancialRepository(database = db)
 

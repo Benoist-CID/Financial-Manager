@@ -25,15 +25,6 @@ fun TopBar(navController: NavController, title: String = "", onSave: () -> Unit,
             text = title,
             fontSize = 24.sp,
             color = MaterialTheme.colorScheme.onPrimary) },
-        navigationIcon = {
-            IconButton(onClick = { navController.navigateUp() }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-        },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
         actions = {
             IconButton(onClick = { onSave() }) {

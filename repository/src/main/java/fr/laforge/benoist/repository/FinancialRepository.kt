@@ -42,4 +42,10 @@ interface FinancialRepository {
      * @param transaction Transaction to delete
      */
     fun deleteTransaction(transaction: Transaction)
+
+    /**
+     * Returns all periodic transactions
+     */
+    fun getAllPeriodicTransactions(): Flow<List<Transaction>>
+
 }
