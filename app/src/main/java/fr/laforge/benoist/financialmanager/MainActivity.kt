@@ -7,9 +7,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,12 +26,16 @@ import fr.laforge.benoist.financialmanager.views.db.ImportDbScreen
 import fr.laforge.benoist.financialmanager.views.login.LoginScreen
 import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetails
 import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetailsViewModel
+import timber.log.Timber
 
 class MainActivity : FragmentActivity() {
+    private val vm = MainActivityViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
+            lifecycle.addObserver(vm)
+
             FinancialManagerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -35,11 +43,11 @@ class MainActivity : FragmentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
+                    vm.setNavController(navController)
                     NavHost(navController = navController, startDestination = FinancialManagerScreen.Login.name) {
                         composable(FinancialManagerScreen.Login.name) {
                             LoginScreen(navController = navController)
                         }
-
                         composable(FinancialManagerScreen.Home.name) {
                             HomeScreen(navController = navController)
                         }
@@ -52,7 +60,9 @@ class MainActivity : FragmentActivity() {
                             FinancialManagerScreen.TransactionDetails.name + "/{transactionId}",
                             arguments = listOf(navArgument("transactionId") { type = NavType.IntType })
                         ) { backStackEntry ->
-                            val vm = TransactionDetailsViewModel(transactionId = backStackEntry.arguments?.getInt("transactionId")!!)
+                            val vm = TransactionDetailsViewModel(
+                                transactionId = backStackEntry.arguments?.getInt("transactionId")!!
+                            )
                             TransactionDetails(
                                 navController = navController,
                                 vm = vm
@@ -63,6 +73,7 @@ class MainActivity : FragmentActivity() {
                             ImportDbScreen(navController = navController)
                         }
                     }
+
                 }
             }
         }

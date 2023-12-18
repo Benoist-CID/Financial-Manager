@@ -55,7 +55,7 @@ fun AddTransactionScreen(
                 },
                 onClick = {
                     vm.createTransaction()
-                    navController.navigate(FinancialManagerScreen.Home.name)
+                    navController.popBackStack(FinancialManagerScreen.Home.name, false)
                 }
             )
         },
