@@ -48,6 +48,7 @@ class DatabaseTest : BaseRoomTest() {
     @Test
     fun getTransactionByIdTest() {
         val toBeInserted1 = TransactionEntity(
+            dateTime = LocalDateTime.parse("2023-12-23T11:34:00"),
             amount = 1.0F,
             description = "Description",
             type = TransactionType.Income,
@@ -56,6 +57,7 @@ class DatabaseTest : BaseRoomTest() {
         )
 
         val toBeInserted2 = TransactionEntity(
+            dateTime = LocalDateTime.parse("2023-12-24T11:34:00"),
             amount = 1.0F,
             description = "Description",
             type = TransactionType.Expense,
@@ -95,6 +97,7 @@ class DatabaseTest : BaseRoomTest() {
     @Test
     fun getByInputTypeTest() {
         val toBeInserted1 = TransactionEntity(
+            dateTime = LocalDateTime.parse("2023-12-23T11:34:00"),
             amount = 1.0F,
             description = "Description",
             type = TransactionType.Income,
@@ -103,6 +106,7 @@ class DatabaseTest : BaseRoomTest() {
         )
 
         val toBeInserted2 = TransactionEntity(
+            dateTime = LocalDateTime.parse("2023-12-24T11:34:00"),
             amount = 1.0F,
             description = "Description",
             type = TransactionType.Expense,
@@ -113,17 +117,17 @@ class DatabaseTest : BaseRoomTest() {
         financialInputDao.insertAll(toBeInserted1, toBeInserted2)
         runBlocking {
             financialInputDao.getByInputType(inputType = TransactionType.Income).first().size.shouldBeEqualTo(1)
+            val read2 = financialInputDao.getByInputType(inputType = TransactionType.Expense).first()[0]
+            read2.type.shouldBeEqualTo(toBeInserted2.type)
+            read2.dateTime.shouldBeEqualTo(toBeInserted2.dateTime)
+            read2.amount.shouldBeEqualTo(toBeInserted2.amount)
+            read2.description.shouldBeEqualTo(toBeInserted2.description)
             val read1 = financialInputDao.getByInputType(inputType = TransactionType.Income).first()[0]
             read1.type.shouldBeEqualTo(toBeInserted1.type)
             read1.dateTime.shouldBeEqualTo(toBeInserted1.dateTime)
             read1.amount.shouldBeEqualTo(toBeInserted1.amount)
             read1.description.shouldBeEqualTo(toBeInserted1.description)
             financialInputDao.getByInputType(inputType = TransactionType.Expense).first().size.shouldBeEqualTo(1)
-            val read2 = financialInputDao.getByInputType(inputType = TransactionType.Expense).first()[0]
-            read2.type.shouldBeEqualTo(toBeInserted2.type)
-            read2.dateTime.shouldBeEqualTo(toBeInserted2.dateTime)
-            read2.amount.shouldBeEqualTo(toBeInserted2.amount)
-            read2.description.shouldBeEqualTo(toBeInserted2.description)
         }
     }
 
@@ -160,7 +164,7 @@ class DatabaseTest : BaseRoomTest() {
                 dateTime = testDate.plusMonths(2),
                 type = TransactionType.Expense,
                 amount = 150F,
-                description = "A periodic transaction",
+                description = "A non-periodic transaction",
                 isPeriodic = false,
                 period = TransactionPeriod.None
             )
@@ -176,10 +180,9 @@ class DatabaseTest : BaseRoomTest() {
                 endDate = LocalDateTime.parse("2024-12-01T00:00:00")
             ).first()
 
-            entities.size.shouldBeEqualTo(3)
+            entities.size.shouldBeEqualTo(2)
             entities[0].dateTime.shouldBeEqualTo(transactions[3].dateTime)
             entities[1].dateTime.shouldBeEqualTo(transactions[2].dateTime)
-            entities[2].dateTime.shouldBeEqualTo(transactions[0].dateTime)
         }
     }
 

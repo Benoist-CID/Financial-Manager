@@ -17,7 +17,7 @@ interface FinancialInputDao {
     @Query("SELECT * FROM transactionentity")
     fun getAll(): Flow<List<TransactionEntity>>
 
-    @Query("SELECT * FROM transactionentity WHERE ((date_time >= :startDate AND date_time <= :endDate) AND is_periodic = false) OR (is_periodic = true) ORDER BY date_time DESC")
+    @Query("SELECT * FROM transactionentity WHERE (date_time >= :startDate AND date_time <= :endDate) AND is_periodic = false ORDER BY date_time DESC")
     fun getAllInDateRange(startDate:LocalDateTime, endDate: LocalDateTime): Flow<List<TransactionEntity>>
 
     @Query("SELECT * FROM transactionentity WHERE (is_periodic = true AND type=:type) ORDER BY date_time DESC")
