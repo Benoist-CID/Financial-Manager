@@ -26,7 +26,7 @@ class HomeScreenViewModel : ViewModel(), KoinComponent {
 
     val availableAmount : Flow<Float> = repository.getAllInDateRange(
         startDate = getDateBoundaries(startDay = START_DAY).first.atTime(0, 0),
-        endDate = getDateBoundaries(startDay = START_DAY).second.atTime(0, 0)
+        endDate = getDateBoundaries(startDay = START_DAY + 1).second.atTime(0, 0)
     ).map {
         it.sum()
     }
@@ -37,7 +37,7 @@ class HomeScreenViewModel : ViewModel(), KoinComponent {
 
     val allTransactions : Flow<List<Transaction>> = repository.getAllInDateRange(
         startDate = getDateBoundaries(startDay = START_DAY).first.atTime(0, 0),
-        endDate = getDateBoundaries(startDay = START_DAY).second.atTime(0, 0)
+        endDate = getDateBoundaries(startDay = START_DAY + 1).second.atTime(0, 0)
     )
 
     fun deleteTransaction(transaction: Transaction) {
