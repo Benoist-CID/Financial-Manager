@@ -5,11 +5,10 @@ import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.util.exportToCsvFormat
-import fr.laforge.benoist.financialmanager.util.getFirstDayOfMonth
-import fr.laforge.benoist.financialmanager.util.getLastDayOfMonth
 import fr.laforge.benoist.financialmanager.util.sum
 import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.repository.FinancialRepository
+import fr.laforge.benoist.util.getDateBoundaries
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +18,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import timber.log.Timber
 import java.time.LocalDateTime
 
 
@@ -27,8 +25,8 @@ class HomeScreenViewModel : ViewModel(), KoinComponent {
     private val repository: FinancialRepository by inject()
 
     val availableAmount : Flow<Float> = repository.getAllInDateRange(
-        startDate = LocalDateTime.now().getFirstDayOfMonth(),
-        endDate = LocalDateTime.now().getLastDayOfMonth()
+        startDate = getDateBoundaries(startDay = START_DAY).first.atTime(0, 0),
+        endDate = getDateBoundaries(startDay = START_DAY).second.atTime(0, 0)
     ).map {
         it.sum()
     }
@@ -38,8 +36,8 @@ class HomeScreenViewModel : ViewModel(), KoinComponent {
     }
 
     val allTransactions : Flow<List<Transaction>> = repository.getAllInDateRange(
-        startDate = LocalDateTime.now().getFirstDayOfMonth(),
-        endDate = LocalDateTime.now().getLastDayOfMonth()
+        startDate = getDateBoundaries(startDay = START_DAY).first.atTime(0, 0),
+        endDate = getDateBoundaries(startDay = START_DAY).second.atTime(0, 0)
     )
 
     fun deleteTransaction(transaction: Transaction) {
@@ -77,5 +75,10 @@ class HomeScreenViewModel : ViewModel(), KoinComponent {
                 }
             }
         }
+    }
+
+    companion object {
+        // This must be moved in settings when it will be implemented
+        const val START_DAY = 24
     }
 }

@@ -41,7 +41,7 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     vm: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    var displayBiometrics by remember{
+    var displayBiometrics by remember {
         mutableStateOf(true)
     }
 
@@ -77,7 +77,8 @@ fun LoginScreen(
         // the shape attribute to CircleShape
         // When the Button is clicked, a Toast
         // message would be displayed
-        Button(onClick = { displayBiometrics = true },
+        Button(
+            onClick = { displayBiometrics = true },
             modifier = modifier.size(60.dp),
             shape = CircleShape,
             contentPadding = PaddingValues(0.dp)

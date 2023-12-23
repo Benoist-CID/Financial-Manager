@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import timber.log.Timber
 
 class MainActivityViewModel : ViewModel(), DefaultLifecycleObserver {
-    var shouldDisplayLogin = false
     private lateinit var navController: NavController
 
     fun setNavController(navController: NavController) {

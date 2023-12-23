@@ -68,3 +68,16 @@ fun LocalDateTime.getLastDayOfMonth(): LocalDateTime {
 fun LocalDateTime.getNumberOfRemainingDaysInMonth(): Int {
     return this.getLastDayOfMonth().dayOfMonth - this.dayOfMonth
 }
+
+/**
+ * Returns the number of days remaining in sliding month starting at startDay, until next month startDay - 1
+ */
+fun LocalDateTime.getNumberOfRemainingDaysInPeriod(startDay: Int): Int {
+    val dayOfMonth = this.dayOfMonth
+
+    return if ((startDay..31).contains(dayOfMonth)) {
+        this.getLastDayOfMonth().dayOfMonth - this.dayOfMonth + startDay
+    } else {
+        startDay - dayOfMonth
+    }
+}

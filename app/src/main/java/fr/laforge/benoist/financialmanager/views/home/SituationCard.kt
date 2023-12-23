@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.sp
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.util.getNumberOfRemainingDaysInMonth
+import fr.laforge.benoist.financialmanager.util.getNumberOfRemainingDaysInPeriod
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -40,7 +41,7 @@ fun SituationCard(
         )
 
         Text(
-            text = "${date.getNumberOfRemainingDaysInMonth()} days left - ${(amount / date.getNumberOfRemainingDaysInMonth()).toInt()}€ per day",
+            text = "${date.getNumberOfRemainingDaysInPeriod(HomeScreenViewModel.START_DAY)} days left - ${(amount / date.getNumberOfRemainingDaysInPeriod(HomeScreenViewModel.START_DAY)).toInt()}€ per day",
             fontSize = 17.sp
         )
     }

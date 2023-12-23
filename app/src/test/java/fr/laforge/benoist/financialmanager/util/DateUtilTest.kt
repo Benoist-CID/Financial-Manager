@@ -2,6 +2,7 @@ package fr.laforge.benoist.financialmanager.util
 
 import fr.laforge.benoist.model.TransactionPeriod
 import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -62,9 +63,24 @@ class DateUtilTest {
     }
 
     @Test
-    fun `Tests LocalDateTime getNumberOfRemainingDaysInMonth` () {
+    fun `Tests LocalDateTime getNumberOfRemainingDaysInMonth`() {
         val testDate = LocalDateTime.parse("2023-12-04T00:00:00")
 
         testDate.getNumberOfRemainingDaysInMonth().`should be equal to`(27)
+    }
+
+    @Test
+    fun `Tests LocalDateTime getNumberOfRemainingDaysInPeriod`() {
+        var date = LocalDateTime.parse("2023-12-22T00:00:00")
+
+        date.getNumberOfRemainingDaysInPeriod(24).shouldBeEqualTo(2)
+
+        date = LocalDateTime.parse("2023-12-25T00:00:00")
+
+        date.getNumberOfRemainingDaysInPeriod(24).shouldBeEqualTo(30)
+
+        date = LocalDateTime.parse("2024-02-24T00:00:00")
+
+        date.getNumberOfRemainingDaysInPeriod(24).shouldBeEqualTo(29)
     }
 }
