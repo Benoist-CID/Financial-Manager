@@ -2,6 +2,7 @@ package fr.laforge.benoist.financialmanager.views.transaction.add
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.laforge.benoist.financialmanager.usecase.CreateTransactionUseCase
 import fr.laforge.benoist.financialmanager.usecase.CreateTransactionUseCaseImpl
 import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.model.TransactionPeriod
@@ -12,6 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,7 +31,7 @@ class AddTransactionViewModel : ViewModel(), KoinComponent {
     private var startDate: LocalDateTime = LocalDateTime.now()
     private var endDate: LocalDateTime = LocalDateTime.now()
 
-    private val repository : FinancialRepository by inject()
+    private val createTransactionUseCase: CreateTransactionUseCase by inject()
 
     fun updateAmount(amount: String) {
         _uiState.update { currentState ->
@@ -84,9 +86,15 @@ class AddTransactionViewModel : ViewModel(), KoinComponent {
                         period = period
                     )
 
-                repository.createTransaction(
-                    transaction = transaction
-                )
+                val result = createTransactionUseCase.execute(transaction).first()
+
+                if (result) {
+                    // TODO Display successfully created transaction message
+                    Timber.i("Successfully create transaction")
+                } else {
+                    // TODO Display error message here
+                    Timber.e("Error creating transaction")
+                }
             }
         }
     }

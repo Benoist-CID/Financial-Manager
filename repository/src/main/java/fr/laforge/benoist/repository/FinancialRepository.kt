@@ -1,6 +1,5 @@
 package fr.laforge.benoist.repository
 
-import androidx.room.Query
 import fr.laforge.benoist.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
@@ -9,7 +8,7 @@ interface FinancialRepository {
     /**
      * Creates a new FinancialInput
      */
-    fun createTransaction(transaction: Transaction)
+    fun createTransaction(transaction: Transaction): Long
 
     /**
      * Returns all FinancialInput

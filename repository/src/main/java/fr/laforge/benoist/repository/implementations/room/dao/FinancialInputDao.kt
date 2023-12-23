@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 @Dao
 interface FinancialInputDao {
     @Insert
-    fun insertAll(vararg financialInputs: TransactionEntity)
+    fun insertAll(vararg financialInputs: TransactionEntity): List<Long>
 
     @Query("SELECT * FROM transactionentity")
     fun getAll(): Flow<List<TransactionEntity>>

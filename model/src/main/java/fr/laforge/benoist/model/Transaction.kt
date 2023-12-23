@@ -9,5 +9,6 @@ data class Transaction(
     var description: String = "",
     var type: TransactionType = TransactionType.Expense,
     var isPeriodic: Boolean = false,
-    var period: TransactionPeriod = TransactionPeriod.None
+    var period: TransactionPeriod = TransactionPeriod.None,
+    var parent: Int = 0
 )

@@ -4,6 +4,7 @@ import android.app.Application
 import fr.laforge.benoist.financialmanager.di.module.controllersModule
 import fr.laforge.benoist.financialmanager.di.module.interactorsModule
 import fr.laforge.benoist.financialmanager.di.module.repositoryModule
+import fr.laforge.benoist.financialmanager.di.module.useCaseModule
 import fr.laforge.benoist.financialmanager.di.module.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -20,6 +21,7 @@ class FinancialManagerApp : Application() {
             modules(repositoryModule)
             modules(interactorsModule)
             modules(controllersModule)
+            modules(useCaseModule)
         }
 
         Timber.plant(Timber.DebugTree())

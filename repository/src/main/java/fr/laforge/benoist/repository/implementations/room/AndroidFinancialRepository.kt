@@ -13,8 +13,8 @@ import java.time.LocalDateTime
 class AndroidFinancialRepository(database: AppDatabase) : FinancialRepository {
     private val financialDao = database.getFinancialInputDao()
 
-    override fun createTransaction(transaction: Transaction) {
-        financialDao.insertAll(fromModel(transaction = transaction))
+    override fun createTransaction(transaction: Transaction): Long {
+        return financialDao.insertAll(fromModel(transaction = transaction))[0]
     }
 
     override fun getAll(): Flow<List<Transaction>> {

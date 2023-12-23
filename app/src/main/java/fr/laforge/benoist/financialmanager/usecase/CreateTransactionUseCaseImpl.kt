@@ -1,35 +1,31 @@
 package fr.laforge.benoist.financialmanager.usecase
 
-import fr.laforge.benoist.financialmanager.util.next
 import fr.laforge.benoist.model.Transaction
-import fr.laforge.benoist.model.TransactionPeriod
-import fr.laforge.benoist.model.TransactionType
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.Date
+import fr.laforge.benoist.repository.FinancialRepository
+import kotlinx.coroutines.flow.flow
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class CreateTransactionUseCaseImpl: CreateTransactionUseCase {
+class CreateTransactionUseCaseImpl: CreateTransactionUseCase, KoinComponent {
+    private val repository: FinancialRepository by inject()
+
     override fun execute(
-        date: LocalDateTime,
-        transactionType: TransactionType,
-        amount: Float,
-        description: String,
-        isPeriodic: Boolean,
-        period: TransactionPeriod,
-        startDate: LocalDateTime,
-        endDate: LocalDateTime
-    ): List<Transaction> {
-        val transactions = mutableListOf<Transaction>()
-
-        transactions.add(
-            Transaction(
-                dateTime = date,
-                amount = amount,
-                description = description,
-                type = transactionType
-            )
+        transaction: Transaction
+    ) = flow {
+        // Creates transaction
+        val id = repository.createTransaction(
+            transaction
         )
 
-        return transactions
+        // If transaction is periodic, creates the associated regular transaction for the current
+        // period
+        if (transaction.isPeriodic) {
+            val regularTransaction = transaction.copy(isPeriodic = false, parent = id.toInt())
+            repository.createTransaction(
+                regularTransaction
+            )
+        }
+
+        emit(true)
     }
 }

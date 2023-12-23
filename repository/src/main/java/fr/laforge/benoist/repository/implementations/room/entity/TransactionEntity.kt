@@ -27,7 +27,8 @@ data class TransactionEntity(
             type = type,
             description = description,
             isPeriodic = isPeriodic,
-            period = period
+            period = period,
+            parent = parentId
         )
     }
 }
@@ -40,6 +41,7 @@ fun fromModel(transaction: Transaction): TransactionEntity {
         type = transaction.type,
         description = transaction.description,
         isPeriodic = transaction.isPeriodic,
-        period = transaction.period
+        period = transaction.period,
+        parentId = transaction.parent
     )
 }
