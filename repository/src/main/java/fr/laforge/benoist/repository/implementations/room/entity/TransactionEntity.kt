@@ -16,7 +16,8 @@ data class TransactionEntity(
     @ColumnInfo(name="type") val type: TransactionType = TransactionType.Expense,
     @ColumnInfo(name="description") val description: String,
     @ColumnInfo(name="is_periodic") val isPeriodic: Boolean,
-    @ColumnInfo(name="period") val period: TransactionPeriod
+    @ColumnInfo(name="period") val period: TransactionPeriod,
+    @ColumnInfo(name="parent") val parentId: Int = 0
 ) {
     fun toModel(): Transaction {
         return Transaction(

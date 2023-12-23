@@ -47,5 +47,4 @@ interface FinancialRepository {
      * Returns all periodic transactions
      */
     fun getAllPeriodicTransactions(): Flow<List<Transaction>>
-
 }
