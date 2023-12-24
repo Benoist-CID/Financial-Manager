@@ -177,7 +177,7 @@ class CreateRegularTransactionsUseCaseTest : KoinTest {
     private fun createMockRepository(): FinancialRepository {
         val mockRepository: FinancialRepository = Mockito.mock()
 
-        Mockito.`when`(mockRepository.getAllPeriodicTransactions()).thenReturn(
+        Mockito.`when`(mockRepository.getAllPeriodicTransactionsByType()).thenReturn(
             flowOf(
                 getPeriodicTransactions()
             )

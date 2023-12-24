@@ -3,10 +3,8 @@ package fr.laforge.benoist.financialmanager.views.home
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import fr.laforge.benoist.financialmanager.usecase.CreateRegularTransactionsUseCase
 import fr.laforge.benoist.financialmanager.util.exportToCsvFormat
 import fr.laforge.benoist.financialmanager.util.sum
 import fr.laforge.benoist.model.Transaction
@@ -34,7 +32,7 @@ class HomeScreenViewModel : ViewModel(), KoinComponent, DefaultLifecycleObserver
         it.sum()
     }
 
-    val periodicAmount: Flow<Float> = repository.getAllPeriodicTransactions().map{
+    val periodicAmount: Flow<Float> = repository.getAllPeriodicTransactionsByType().map{
         it.sum()
     }
 

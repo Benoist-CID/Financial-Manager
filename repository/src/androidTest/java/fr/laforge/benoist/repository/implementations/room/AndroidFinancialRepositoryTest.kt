@@ -94,7 +94,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
     }
 
     @Test
-    fun getAllPeriodicTest() {
+    fun getAllPeriodicByTypeTest() {
         repository = AndroidFinancialRepository(database = db)
 
         val toBeInserted = Transaction(
@@ -138,7 +138,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
         repository.createTransaction(transaction = toBeInserted4)
 
         runBlocking {
-            val flow = repository.getAllPeriodicTransactions()
+            val flow = repository.getAllPeriodicTransactionsByType()
 
             flow.first().size.shouldBeEqualTo(1)
             flow.first()[0].shouldBeEqualTo(toBeInserted3)

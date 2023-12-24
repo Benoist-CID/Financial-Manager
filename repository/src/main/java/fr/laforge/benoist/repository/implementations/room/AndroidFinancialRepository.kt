@@ -7,7 +7,6 @@ import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.model.TransactionType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import java.time.LocalDateTime
 
 class AndroidFinancialRepository(database: AppDatabase) : FinancialRepository {
@@ -64,6 +63,14 @@ class AndroidFinancialRepository(database: AppDatabase) : FinancialRepository {
 
     override fun getAllPeriodicTransactions(): Flow<List<Transaction>> {
         return financialDao.getAllPeriodic().map { entities ->
+            entities.map {
+                it.toModel()
+            }
+        }
+    }
+
+    override fun getAllPeriodicTransactionsByType(type: TransactionType): Flow<List<Transaction>> {
+        return financialDao.getAllPeriodicByType(type).map { entities ->
             entities.map {
                 it.toModel()
             }

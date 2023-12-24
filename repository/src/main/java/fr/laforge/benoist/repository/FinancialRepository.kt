@@ -1,6 +1,7 @@
 package fr.laforge.benoist.repository
 
 import fr.laforge.benoist.model.Transaction
+import fr.laforge.benoist.model.TransactionType
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 
@@ -46,6 +47,11 @@ interface FinancialRepository {
      * Returns all periodic transactions
      */
     fun getAllPeriodicTransactions(): Flow<List<Transaction>>
+
+    /**
+     * Returns all periodic transactions by type
+     */
+    fun getAllPeriodicTransactionsByType(type: TransactionType = TransactionType.Expense): Flow<List<Transaction>>
 
     /**
      * Returns all children transactions for specified parent ID in the date range

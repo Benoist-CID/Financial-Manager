@@ -231,7 +231,7 @@ class DatabaseTest : BaseRoomTest() {
         }
 
         runBlocking {
-            val entities = financialInputDao.getAllPeriodic().first()
+            val entities = financialInputDao.getAllPeriodicByType().first()
 
             entities.size.shouldBeEqualTo(2)
             entities[0].isPeriodic.shouldBeEqualTo(true)
