@@ -31,4 +31,7 @@ interface FinancialInputDao {
 
     @Delete
     fun delete(vararg financialInputs: TransactionEntity)
+
+    @Query("SELECT * FROM transactionentity WHERE (date_time >= :startDate AND date_time <= :endDate) AND is_periodic = false AND parent=:parentId ORDER BY date_time DESC")
+    fun getChildrenTransactions(parentId: Int, startDate:LocalDateTime, endDate: LocalDateTime): List<TransactionEntity>
 }

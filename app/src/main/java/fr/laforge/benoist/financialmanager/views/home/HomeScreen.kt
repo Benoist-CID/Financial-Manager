@@ -78,7 +78,6 @@ fun HomeScreen(
             )
         },
     ) {
-
         Column(modifier.padding(top = it.calculateTopPadding() + 16.dp, bottom = it.calculateBottomPadding() + 16.dp)) {
             SituationCard(amount, -periodicAmount)
 

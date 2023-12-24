@@ -46,4 +46,16 @@ interface FinancialRepository {
      * Returns all periodic transactions
      */
     fun getAllPeriodicTransactions(): Flow<List<Transaction>>
+
+    /**
+     * Returns all children transactions for specified parent ID in the date range
+     *
+     * @param parentId Parent ID
+     * @param startDate First date in range
+     * @param endDate Last date in range
+     */
+    fun getChildrenTransactions(
+        parentId: Int,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime): List<Transaction>
 }

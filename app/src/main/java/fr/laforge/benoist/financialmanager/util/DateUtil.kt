@@ -40,6 +40,13 @@ fun LocalDateTime.next(period: TransactionPeriod): LocalDateTime {
 }
 
 /**
+ * Checks if LocalDateTime is in range formed by startDate and EndDate
+ */
+fun LocalDateTime.isInRange(startDate: LocalDateTime, endDate: LocalDateTime): Boolean {
+    return this.isAfter(startDate) && this.isBefore(endDate)
+}
+
+/**
  * Returns first day of month
  */
 fun LocalDateTime.getFirstDayOfMonth(): LocalDateTime {

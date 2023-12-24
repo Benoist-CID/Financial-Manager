@@ -2,6 +2,8 @@ package fr.laforge.benoist.financialmanager.util
 
 import fr.laforge.benoist.model.TransactionPeriod
 import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should be false`
+import org.amshove.kluent.`should be true`
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import java.text.SimpleDateFormat
@@ -82,5 +84,37 @@ class DateUtilTest {
         date = LocalDateTime.parse("2024-02-24T00:00:00")
 
         date.getNumberOfRemainingDaysInPeriod(24).shouldBeEqualTo(29)
+    }
+
+    @Test
+    fun `Tests LocalDateTime isInRange`() {
+        val startDate = LocalDateTime.parse("2023-12-22T00:00:00")
+
+        val endDate = LocalDateTime.parse("2024-01-23T00:00:00")
+
+        LocalDateTime.parse("2024-01-10T00:00:00").isInRange(
+            startDate,
+            endDate
+        ).`should be true`()
+
+        LocalDateTime.parse("2024-01-31T00:00:00").isInRange(
+            startDate,
+            endDate
+        ).`should be false`()
+
+        LocalDateTime.parse("2023-12-10T00:00:00").isInRange(
+            startDate,
+            endDate
+        ).`should be false`()
+
+        LocalDateTime.parse("2023-12-22T01:00:00").isInRange(
+            startDate,
+            endDate
+        ).`should be true`()
+
+        LocalDateTime.parse("2024-01-23T00:00:01").isInRange(
+            startDate,
+            endDate
+        ).`should be false`()
     }
 }

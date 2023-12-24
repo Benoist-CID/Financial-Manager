@@ -18,7 +18,6 @@ class AndroidFinancialRepository(database: AppDatabase) : FinancialRepository {
     }
 
     override fun getAll(): Flow<List<Transaction>> {
-        Timber.d("getAll")
         return financialDao.getAll().map {
             it.map { input ->
                 input.toModel()
@@ -68,6 +67,20 @@ class AndroidFinancialRepository(database: AppDatabase) : FinancialRepository {
             entities.map {
                 it.toModel()
             }
+        }
+    }
+
+    override fun getChildrenTransactions(
+        parentId: Int,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ): List<Transaction> {
+        return financialDao.getChildrenTransactions(
+            parentId,
+            startDate,
+            endDate
+        ).map { entities ->
+            entities.toModel()
         }
     }
 }

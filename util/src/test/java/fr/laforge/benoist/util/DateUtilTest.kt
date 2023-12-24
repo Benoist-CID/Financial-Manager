@@ -35,5 +35,11 @@ class DateUtilTest {
         getDateBoundaries(startDay, currentDate).`should be equal to`(
             Pair(LocalDate.parse("2023-12-24"), LocalDate.parse("2024-01-23"))
         )
+
+        // First day of period
+        currentDate = LocalDate.parse("2023-12-24")
+        getDateBoundaries(startDay, currentDate).`should be equal to`(
+            Pair(LocalDate.parse("2023-12-24"), LocalDate.parse("2024-01-23"))
+        )
     }
 }

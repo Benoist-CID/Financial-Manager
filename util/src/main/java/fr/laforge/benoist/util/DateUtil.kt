@@ -70,7 +70,7 @@ fun getDateBoundaries(startDay: Int, currentDate: LocalDate = LocalDate.now()): 
     }
 
     val startDate = LocalDate.of(startYear, startMonth, startDay)
-    val endDate = LocalDate.of(endYear, endMonth, startDay - 1)
+    val endDate = LocalDate.of(endYear, endMonth, startDay)
 
     return Pair(startDate, endDate)
 }

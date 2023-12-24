@@ -78,7 +78,10 @@ fun LoginScreen(
         // When the Button is clicked, a Toast
         // message would be displayed
         Button(
-            onClick = { displayBiometrics = true },
+            onClick = {
+                navController.navigate(FinancialManagerScreen.Home.name)
+                      /*displayBiometrics = true*/
+                      },
             modifier = modifier.size(60.dp),
             shape = CircleShape,
             contentPadding = PaddingValues(0.dp)
