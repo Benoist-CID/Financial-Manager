@@ -30,11 +30,9 @@ fun PeriodicalTransactionComponent(
     defaultValue: Boolean = false,
     defaultPeriod: TransactionPeriod = TransactionPeriod.Monthly,
     defaultStartDate: LocalDateTime = LocalDateTime.now(),
-    defaultEndDate: LocalDateTime = LocalDateTime.now(),
     onCheckedChange: (Boolean) -> Unit,
     onPeriodChanged: (TransactionPeriod) -> Unit,
-    onStartDateChanged: (LocalDateTime) -> Unit,
-    onEndDateChanged: (LocalDateTime) -> Unit
+    onStartDateChanged: (LocalDateTime) -> Unit
 ) {
     var checked by remember {
         mutableStateOf(defaultValue)
@@ -86,14 +84,6 @@ fun PeriodicalTransactionComponent(
                     Timber.i("$it")
                     onStartDateChanged(it)
                 }
-
-                DatePickerComponent(
-                    label = stringResource(R.string.end_date),
-                    defaultDate = defaultStartDate.next(period = period)
-                ) {
-                    Timber.i("$it")
-                    onEndDateChanged(it)
-                }
             }
         }
     }
@@ -109,7 +99,6 @@ fun PeriodicalTransactionComponentPreview() {
         defaultValue = true,
         onCheckedChange = {},
         onPeriodChanged = {},
-        onStartDateChanged = {},
-        onEndDateChanged = {}
+        onStartDateChanged = {}
     )
 }

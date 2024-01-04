@@ -32,7 +32,7 @@ class MainActivityViewModel : ViewModel(), DefaultLifecycleObserver, KoinCompone
             createRegularTransactionsUseCase.execute(
                 startDate = getDateBoundaries(startDay = HomeScreenViewModel.START_DAY).first.atTime(0, 0),
                 endDate = getDateBoundaries(startDay = HomeScreenViewModel.START_DAY).second.atTime(0, 0)
-            ).first()
+            )
         }
     }
 

@@ -120,8 +120,7 @@ fun AddTransactionScreen(
                     defaultPeriod = vm.period,
                     onCheckedChange = { checked -> vm.updateIsPeriodic(newState = checked) },
                     onPeriodChanged = { period -> vm.updatePeriod(newPeriod = period) },
-                    onStartDateChanged = { date -> vm.updateStartDate(newDate = date) },
-                    onEndDateChanged = { date -> vm.updateEndDate(newDate = date) }
+                    onStartDateChanged = { date -> vm.updateStartDate(newDate = date) }
                 )
             }
         }

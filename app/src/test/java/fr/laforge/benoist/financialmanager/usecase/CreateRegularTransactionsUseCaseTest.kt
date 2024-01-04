@@ -53,7 +53,7 @@ class CreateRegularTransactionsUseCaseTest : KoinTest {
                 startDate = START_DATE_1,
                 endDate = END_DATE_1,
                 currentDate = CURRENT_DATE_1
-            ).first()
+            )
 
             verify(mockRepository, times(1)).createTransaction(
                 Transaction(
@@ -88,7 +88,7 @@ class CreateRegularTransactionsUseCaseTest : KoinTest {
                 startDate = START_DATE_2,
                 endDate = END_DATE_2,
                 currentDate = CURRENT_DATE_2
-            ).first()
+            )
 
             verify(mockRepository, times(1)).createTransaction(
                 Transaction(
@@ -123,7 +123,7 @@ class CreateRegularTransactionsUseCaseTest : KoinTest {
                 startDate = START_DATE_2,
                 endDate = END_DATE_2,
                 currentDate = CURRENT_DATE_2
-            ).first()
+            )
 
             verify(mockRepository, times(1)).createTransaction(
                 Transaction(
@@ -158,7 +158,7 @@ class CreateRegularTransactionsUseCaseTest : KoinTest {
                 startDate = START_DATE_2,
                 endDate = END_DATE_2,
                 currentDate = CURRENT_DATE_3
-            ).first()
+            )
 
             verify(mockRepository, times(1)).createTransaction(
                 Transaction(
@@ -177,7 +177,7 @@ class CreateRegularTransactionsUseCaseTest : KoinTest {
     private fun createMockRepository(): FinancialRepository {
         val mockRepository: FinancialRepository = Mockito.mock()
 
-        Mockito.`when`(mockRepository.getAllPeriodicTransactionsByType()).thenReturn(
+        Mockito.`when`(mockRepository.getAllPeriodicTransactions()).thenReturn(
             flowOf(
                 getPeriodicTransactions()
             )

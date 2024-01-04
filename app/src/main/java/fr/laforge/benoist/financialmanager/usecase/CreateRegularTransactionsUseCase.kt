@@ -10,5 +10,5 @@ interface CreateRegularTransactionsUseCase {
         endDate: LocalDateTime,
         currentDate: LocalDateTime = LocalDateTime.now(),
         type: TransactionType = TransactionType.Expense
-    ): Flow<Boolean>
+    ): Boolean
 }

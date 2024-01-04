@@ -15,12 +15,12 @@ import java.time.LocalDateTime
 class CreateRegularTransactionsUseCaseImpl : CreateRegularTransactionsUseCase, KoinComponent {
     private val repository: FinancialRepository by inject()
 
-    override suspend  fun execute(
+    override suspend fun execute(
         startDate: LocalDateTime,
         endDate: LocalDateTime,
         currentDate: LocalDateTime,
         type: TransactionType
-    ): Flow<Boolean> = flow {
+    ): Boolean {
         val transactions = repository.getAllPeriodicTransactions().first()
 
         Timber.d("startDate: $startDate")
@@ -98,7 +98,7 @@ class CreateRegularTransactionsUseCaseImpl : CreateRegularTransactionsUseCase, K
             }
         }
 
-        emit(true)
+        return true
     }
 
     companion object {
