@@ -7,27 +7,34 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -55,16 +62,23 @@ import java.time.LocalDateTime
 fun HomeScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    vm: HomeScreenViewModel = HomeScreenViewModel()
+    vm: HomeScreenViewModel = HomeScreenViewModel(),
 ) {
     val amount by vm.availableAmount.collectAsState(initial = 0F)
     val periodicAmount by vm.periodicAmount.collectAsState(initial = 0F)
     val transactions by vm.allTransactions.collectAsState(initial = emptyList())
-
     val context = LocalContext.current
+    val uiState by vm.uiState.collectAsState()
 
     Scaffold(
-        topBar = { TopBar(navController = navController, title = displayDate(LocalDateTime.now().toDate()), onSave = { vm.saveDb(context) }, onLoad = { navController.navigate(FinancialManagerScreen.ImportDb.name) }) },
+        topBar = {
+            TopBar(
+                navController = navController,
+                title = displayDate(LocalDateTime.now().toDate()),
+                onSave = { vm.saveDb(context) },
+                onLoad = { navController.navigate(FinancialManagerScreen.ImportDb.name) },
+            )
+        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 text = { Text(text = stringResource(id = R.string.add_input)) },
@@ -74,24 +88,47 @@ fun HomeScreen(
                         contentDescription = "Favorite",
                     )
                 },
-                onClick = { navController.navigate(FinancialManagerScreen.AddInput.name) }
+                onClick = { navController.navigate(FinancialManagerScreen.AddInput.name) },
             )
         },
     ) {
-        Column(modifier.padding(top = it.calculateTopPadding() + 16.dp, bottom = it.calculateBottomPadding() + 16.dp)) {
+        Column(
+            modifier
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .padding(
+                    top = it.calculateTopPadding() + 16.dp,
+                    bottom = it.calculateBottomPadding(),
+                ),
+        ) {
             SituationCard(amount, -periodicAmount)
 
+            TextField(
+                value = uiState.query,
+                onValueChange = { newVal -> vm.updateSearch(newVal) },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(32.dp),
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                ),
+                placeholder = { Text("Search") }
+            )
+
             LazyColumn {
-                items(transactions) { transaction ->
+                items(transactions.filter {
+                    it.description.contains(uiState.query)
+                }) { transaction ->
                     val dismissState = rememberDismissState()
                     val openAlertDialog = remember { mutableStateOf(false) }
 
                     if (dismissState.isDismissed(direction = DismissDirection.EndToStart)) {
                         openAlertDialog.value = true
                     }
-
                     // Displays dialog
-
                     when {
                         openAlertDialog.value ->
                             ShowDialog(
@@ -112,7 +149,7 @@ fun HomeScreen(
                                 dialogText = "Once deleted, it is not possible to undelete, think of it carefully.",
                                 icon = {
                                     Icon(Icons.Filled.Delete, contentDescription = null)
-                                }
+                                },
                             )
                     }
 
@@ -121,24 +158,23 @@ fun HomeScreen(
                     SwipeToDismiss(
                         state = dismissState,
                         directions = setOf(
-                            DismissDirection.EndToStart
+                            DismissDirection.EndToStart,
                         ),
                         background = {
                             // this background is visible when we swipe.
                             // it contains the icon
-
                             // background color
                             val backgroundColor by animateColorAsState(
                                 when (dismissState.targetValue) {
                                     DismissValue.DismissedToStart -> Color.Red.copy(alpha = 0.6f)
                                     else -> Color.White
-                                }, label = ""
+                                },
+                                label = "",
                             )
-
                             // icon size
                             val iconScale by animateFloatAsState(
                                 targetValue = if (dismissState.targetValue == DismissValue.DismissedToStart) 1.3f else 0.5f,
-                                label = ""
+                                label = "",
                             )
 
                             Box(
@@ -146,13 +182,13 @@ fun HomeScreen(
                                     .fillMaxSize()
                                     .background(color = backgroundColor)
                                     .padding(end = 16.dp), // inner padding
-                                contentAlignment = Alignment.CenterEnd // place the icon at the end (left)
+                                contentAlignment = Alignment.CenterEnd, // place the icon at the end (left)
                             ) {
                                 Icon(
                                     modifier = Modifier.scale(iconScale),
                                     imageVector = Icons.Outlined.Delete,
                                     contentDescription = "Delete",
-                                    tint = Color.White
+                                    tint = Color.White,
                                 )
                             }
                         },
@@ -161,10 +197,10 @@ fun HomeScreen(
                             TransactionRow(transaction) { transaction ->
                                 Timber.i("Transaction #${transaction.uid}")
                                 navController.navigate(
-                                    FinancialManagerScreen.TransactionDetails.name + "/${transaction.uid}"
+                                    FinancialManagerScreen.TransactionDetails.name + "/${transaction.uid}",
                                 )
                             }
-                        }
+                        },
                     )
                 }
             }
@@ -175,5 +211,4 @@ fun HomeScreen(
 @Preview
 @Composable
 fun HomeScreenPreview() {
-
 }

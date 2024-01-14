@@ -79,7 +79,8 @@ fun LoginScreen(
         // message would be displayed
         Button(
             onClick = {
-                displayBiometrics = true
+                //displayBiometrics = true
+                navController.navigate(route = FinancialManagerScreen.Home.name)
             },
             modifier = modifier.size(60.dp),
             shape = CircleShape,

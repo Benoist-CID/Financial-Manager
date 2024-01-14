@@ -240,4 +240,68 @@ class DatabaseTest : BaseRoomTest() {
             entities[1].amount.shouldBeEqualTo(2F)
         }
     }
+
+    @Test
+    fun getAllInDateRangeByDescriptionTest() {
+        val periodicTransactionStartDate = LocalDateTime.parse("2023-01-01T00:00:00")
+        val testDate = LocalDateTime.parse("2024-01-01T00:00:00")
+        val transactions = listOf(
+            TransactionEntity(
+                dateTime = periodicTransactionStartDate,
+                type = TransactionType.Expense,
+                amount = 150F,
+                description = "A periodic transaction",
+                isPeriodic = true,
+                period = TransactionPeriod.Monthly
+            ),
+            TransactionEntity(
+                dateTime = testDate,
+                type = TransactionType.Expense,
+                amount = 150F,
+                description = "A non periodic transaction",
+                isPeriodic = false,
+                period = TransactionPeriod.None
+            ),
+            TransactionEntity(
+                dateTime = testDate.plusMonths(1),
+                type = TransactionType.Expense,
+                amount = 150F,
+                description = "A non periodic transaction",
+                isPeriodic = false,
+                period = TransactionPeriod.None
+            ),
+            TransactionEntity(
+                dateTime = testDate.plusMonths(2),
+                type = TransactionType.Expense,
+                amount = 150F,
+                description = "A no1n-periodic transaction",
+                isPeriodic = false,
+                period = TransactionPeriod.None
+            ),
+            TransactionEntity(
+                dateTime = testDate.plusMonths(3),
+                type = TransactionType.Expense,
+                amount = 150F,
+                description = "A non-periodic transaction",
+                isPeriodic = false,
+                period = TransactionPeriod.None
+            )
+        )
+
+        transactions.forEach {
+            financialInputDao.insertAll(it)
+        }
+
+        runBlocking {
+            val entities = financialInputDao.getAllInDateRangeByDescription(
+                startDate = LocalDateTime.parse("2024-01-31T00:00:00"),
+                endDate = LocalDateTime.parse("2024-12-01T00:00:00"),
+                description = "A non"
+            ).first()
+
+            entities.size.shouldBeEqualTo(2)
+            entities[0].dateTime.shouldBeEqualTo(transactions[4].dateTime)
+            entities[1].dateTime.shouldBeEqualTo(transactions[2].dateTime)
+        }
+    }
 }

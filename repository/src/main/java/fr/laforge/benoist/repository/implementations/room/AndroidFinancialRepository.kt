@@ -5,13 +5,12 @@ import fr.laforge.benoist.repository.implementations.room.database.AppDatabase
 import fr.laforge.benoist.repository.implementations.room.entity.fromModel
 import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.model.TransactionType
+import fr.laforge.benoist.repository.implementations.room.dao.FinancialInputDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
 
-class AndroidFinancialRepository(database: AppDatabase) : FinancialRepository {
-    private val financialDao = database.getFinancialInputDao()
-
+class AndroidFinancialRepository(private val financialDao: FinancialInputDao) : FinancialRepository {
     override fun createTransaction(transaction: Transaction): Long {
         return financialDao.insertAll(fromModel(transaction = transaction))[0]
     }
@@ -29,6 +28,18 @@ class AndroidFinancialRepository(database: AppDatabase) : FinancialRepository {
         endDate: LocalDateTime
     ): Flow<List<Transaction>> {
         return financialDao.getAllInDateRange(startDate, endDate).map {
+            it.map { transactionEntity ->
+                transactionEntity.toModel()
+            }
+        }
+    }
+
+    override fun getAllInDateRangeByDescription(
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+        description: String
+    ): Flow<List<Transaction>> {
+        return financialDao.getAllInDateRangeByDescription(startDate, endDate, description).map {
             it.map { transactionEntity ->
                 transactionEntity.toModel()
             }

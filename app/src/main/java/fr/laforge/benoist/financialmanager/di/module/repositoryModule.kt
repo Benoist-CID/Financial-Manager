@@ -11,7 +11,7 @@ val repositoryModule by lazy {
         single { Room.databaseBuilder(
                 get(),
                 AppDatabase::class.java, "database-name"
-            ).build()
+            ).build().getFinancialInputDao()
         }
         single<FinancialRepository> { AndroidFinancialRepository(get()) }
     }
