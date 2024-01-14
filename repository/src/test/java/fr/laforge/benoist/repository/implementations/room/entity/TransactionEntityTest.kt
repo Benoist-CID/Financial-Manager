@@ -1,6 +1,7 @@
 package fr.laforge.benoist.repository.implementations.room.entity
 
 import fr.laforge.benoist.model.Transaction
+import fr.laforge.benoist.model.TransactionCategory
 import fr.laforge.benoist.model.TransactionPeriod
 import fr.laforge.benoist.model.TransactionType
 import org.amshove.kluent.`should be equal to`
@@ -18,7 +19,8 @@ class TransactionEntityTest {
             type = TransactionType.Expense,
             isPeriodic = false,
             period = TransactionPeriod.None,
-            parent = 0
+            parent = 0,
+            category = TransactionCategory.Bank
         )
 
         fromModel(transaction).`should be equal to`(
@@ -30,7 +32,8 @@ class TransactionEntityTest {
                 type = TransactionType.Expense,
                 isPeriodic = false,
                 period = TransactionPeriod.None,
-                parentId = 0
+                parentId = 0,
+                category = TransactionCategory.Bank
             )
         )
     }
@@ -45,7 +48,8 @@ class TransactionEntityTest {
             type = TransactionType.Expense,
             isPeriodic = false,
             period = TransactionPeriod.None,
-            parentId = 0
+            parentId = 0,
+            category = TransactionCategory.Transport
         ).toModel().`should be equal to`(
             Transaction(
                 uid = 1,
@@ -55,7 +59,8 @@ class TransactionEntityTest {
                 type = TransactionType.Expense,
                 isPeriodic = false,
                 period = TransactionPeriod.None,
-                parent = 0
+                parent = 0,
+                category = TransactionCategory.Transport
             )
         )
     }

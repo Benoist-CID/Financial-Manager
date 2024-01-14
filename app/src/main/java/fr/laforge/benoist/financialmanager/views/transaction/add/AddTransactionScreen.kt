@@ -32,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import fr.laforge.benoist.financialmanager.AppViewModelProvider
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
+import fr.laforge.benoist.model.TransactionCategory
 import fr.laforge.benoist.model.TransactionType
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -78,13 +79,24 @@ fun AddTransactionScreen(
             ) {
                 GenericTypeDropdownMenu(
                     title = stringResource(R.string.type),
-                    data = TransactionType.values().map { it.toString() },
+                    data = TransactionType.entries.map { it.toString() },
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                     defaultValue = TransactionType.Expense.name
                 ) { transactionType ->
                     vm.updateInputType(transactionType = TransactionType.from(name = transactionType)!!)
+                }
+
+                GenericTypeDropdownMenu(
+                    title = stringResource(R.string.category),
+                    data = TransactionCategory.entries.map { it.toString() },
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    defaultValue = TransactionCategory.None.name
+                ) { transactionCategory ->
+                    vm.updateTransactionCategory(transactionCategory = TransactionCategory.from(name = transactionCategory)!!)
                 }
 
                 OutlinedTextField(

@@ -10,5 +10,6 @@ data class Transaction(
     var type: TransactionType = TransactionType.Expense,
     var isPeriodic: Boolean = false,
     var period: TransactionPeriod = TransactionPeriod.None,
-    var parent: Int = 0
+    var parent: Int = 0,
+    var category: TransactionCategory = TransactionCategory.None
 )

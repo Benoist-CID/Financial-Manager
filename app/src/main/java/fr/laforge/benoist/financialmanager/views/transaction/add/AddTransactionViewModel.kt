@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.usecase.CreateTransactionUseCase
 import fr.laforge.benoist.financialmanager.usecase.CreateTransactionUseCaseImpl
 import fr.laforge.benoist.model.Transaction
+import fr.laforge.benoist.model.TransactionCategory
 import fr.laforge.benoist.model.TransactionPeriod
 import fr.laforge.benoist.model.TransactionType
 import fr.laforge.benoist.repository.FinancialRepository
@@ -51,6 +52,12 @@ class AddTransactionViewModel : ViewModel(), KoinComponent {
         }
     }
 
+    fun updateTransactionCategory(transactionCategory: TransactionCategory) {
+        _uiState.update { currentState ->
+            currentState.copy(transactionCategory = transactionCategory)
+        }
+    }
+
     fun updateIsPeriodic(newState: Boolean) {
         Timber.d("updateIsPeriodic: $newState")
         isPeriodic = newState
@@ -83,7 +90,8 @@ class AddTransactionViewModel : ViewModel(), KoinComponent {
                         amount = _uiState.value.amount.toFloat(),
                         type = _uiState.value.transactionType,
                         isPeriodic = isPeriodic,
-                        period = period
+                        period = period,
+                        category = _uiState.value.transactionCategory
                     )
 
                 val result = createTransactionUseCase.execute(transaction).first()

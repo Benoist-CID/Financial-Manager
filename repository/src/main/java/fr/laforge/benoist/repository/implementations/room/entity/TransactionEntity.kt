@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import fr.laforge.benoist.model.Transaction
+import fr.laforge.benoist.model.TransactionCategory
 import fr.laforge.benoist.model.TransactionPeriod
 import fr.laforge.benoist.model.TransactionType
 import java.time.LocalDateTime
@@ -17,7 +18,8 @@ data class TransactionEntity(
     @ColumnInfo(name="description") val description: String,
     @ColumnInfo(name="is_periodic") val isPeriodic: Boolean,
     @ColumnInfo(name="period") val period: TransactionPeriod,
-    @ColumnInfo(name="parent") val parentId: Int = 0
+    @ColumnInfo(name="parent") val parentId: Int = 0,
+    @ColumnInfo(name="category", defaultValue = "None") val category: TransactionCategory = TransactionCategory.None
 ) {
     fun toModel(): Transaction {
         return Transaction(
@@ -28,7 +30,8 @@ data class TransactionEntity(
             description = description,
             isPeriodic = isPeriodic,
             period = period,
-            parent = parentId
+            parent = parentId,
+            category = category
         )
     }
 }
@@ -42,6 +45,7 @@ fun fromModel(transaction: Transaction): TransactionEntity {
         description = transaction.description,
         isPeriodic = transaction.isPeriodic,
         period = transaction.period,
-        parentId = transaction.parent
+        parentId = transaction.parent,
+        category = transaction.category
     )
 }

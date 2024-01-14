@@ -1,6 +1,7 @@
 package fr.laforge.benoist.financialmanager.util
 
 import fr.laforge.benoist.model.Transaction
+import fr.laforge.benoist.model.TransactionCategory
 import fr.laforge.benoist.model.TransactionPeriod
 import fr.laforge.benoist.model.TransactionType
 import fr.laforge.benoist.util.toLocalDateTime
@@ -8,7 +9,7 @@ import fr.laforge.benoist.util.toMilliseconds
 
 
 fun Transaction.exportToCsvFormat(): String {
-    return "$uid;${dateTime.toMilliseconds()};$amount;$description;$type;$isPeriodic;$period;$parent"
+    return "$uid;${dateTime.toMilliseconds()};$amount;$description;$type;$isPeriodic;$period;$parent;$category"
 }
 
 fun transactionFromCsv(csv: String): Transaction {
@@ -21,6 +22,7 @@ fun transactionFromCsv(csv: String): Transaction {
     val isPeriodic = split[5].toBoolean()
     val period = TransactionPeriod.from(split[6])!!
     val parent = split[7].toInt()
+    val category = TransactionCategory.from(split[8])!!
 
     return Transaction(
         uid,
@@ -30,7 +32,8 @@ fun transactionFromCsv(csv: String): Transaction {
         type,
         isPeriodic,
         period,
-        parent
+        parent,
+        category
     )
 }
 

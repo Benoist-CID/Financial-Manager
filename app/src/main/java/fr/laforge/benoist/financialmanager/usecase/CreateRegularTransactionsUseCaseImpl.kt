@@ -36,7 +36,10 @@ class CreateRegularTransactionsUseCaseImpl : CreateRegularTransactionsUseCase, K
                 endDate = endDate
             )
 
+            Timber.d("Children transactions: $childrenTransactions")
+
             if (childrenTransactions.isEmpty()) {
+                Timber.d("No children transactions, let's create them")
                 var date = LocalDateTime.of(
                     currentDate.year,
                     currentDate.monthValue,

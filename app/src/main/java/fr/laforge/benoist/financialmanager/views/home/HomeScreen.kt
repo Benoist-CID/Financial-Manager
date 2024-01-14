@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.Card
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -79,37 +81,41 @@ fun HomeScreen(
                 onLoad = { navController.navigate(FinancialManagerScreen.ImportDb.name) },
             )
         }
-        
     ) {
         Column(
             modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(
-                    top = it.calculateTopPadding() + 16.dp,
+                    top = it.calculateTopPadding(),
                     bottom = it.calculateBottomPadding(),
                 ),
         ) {
-            SituationCard(amount, -periodicAmount)
+            Column(
+                modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer)
+            ) {
+                SituationCard(amount, -periodicAmount)
 
-            TextField(
-                value = uiState.query,
-                onValueChange = { newVal -> vm.updateSearch(newVal) },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(32.dp),
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                ),
-                placeholder = { Text("Search") }
-            )
+                TextField(
+                    value = uiState.query,
+                    onValueChange = { newVal -> vm.updateSearch(newVal) },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    shape = RoundedCornerShape(32.dp),
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = Color.White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                    ),
+                    placeholder = { Text("Search") }
+                )
+            }
 
-            LazyColumn {
-                items(transactions.filter {
-                    it.description.contains(uiState.query)
+            LazyColumn(
+                modifier = modifier.background(Color.Red)
+            ) {
+                items(transactions.filter { transaction ->
+                    transaction.description.contains(uiState.query)
                 }) { transaction ->
                     val dismissState = rememberDismissState()
                     val openAlertDialog = remember { mutableStateOf(false) }
@@ -184,7 +190,6 @@ fun HomeScreen(
                         dismissContent = {
                             // list item
                             TransactionRow(transaction) { transaction ->
-                                Timber.i("Transaction #${transaction.uid}")
                                 navController.navigate(
                                     FinancialManagerScreen.TransactionDetails.name + "/${transaction.uid}",
                                 )
