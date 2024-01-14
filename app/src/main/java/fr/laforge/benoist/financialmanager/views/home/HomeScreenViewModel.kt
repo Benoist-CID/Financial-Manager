@@ -2,19 +2,25 @@ package fr.laforge.benoist.financialmanager.views.home
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.util.exportToCsvFormat
 import fr.laforge.benoist.financialmanager.util.sum
+import fr.laforge.benoist.financialmanager.views.transaction.add.AddTransactionUiState
 import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.repository.FinancialRepository
 import fr.laforge.benoist.util.getDateBoundaries
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -24,6 +30,8 @@ import java.time.LocalDateTime
 
 class HomeScreenViewModel : ViewModel(), KoinComponent, DefaultLifecycleObserver {
     private val repository: FinancialRepository by inject()
+    private val _uiState = MutableStateFlow(HomeScreenUiState())
+    val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
 
     val availableAmount : Flow<Float> = repository.getAllInDateRange(
         startDate = getDateBoundaries(startDay = START_DAY).first.atTime(0, 0),
@@ -36,7 +44,7 @@ class HomeScreenViewModel : ViewModel(), KoinComponent, DefaultLifecycleObserver
         it.sum()
     }
 
-    val allTransactions : Flow<List<Transaction>> = repository.getAllInDateRange(
+    var allTransactions : Flow<List<Transaction>> = repository.getAllInDateRange(
         startDate = getDateBoundaries(startDay = START_DAY).first.atTime(0, 0),
         endDate = getDateBoundaries(startDay = START_DAY).second.atTime(0, 0)
     )
@@ -75,6 +83,12 @@ class HomeScreenViewModel : ViewModel(), KoinComponent, DefaultLifecycleObserver
                     true
                 }
             }
+        }
+    }
+
+    fun updateSearch(newVal: String) {
+        _uiState.update { currentState ->
+            currentState.copy(query = newVal)
         }
     }
 

@@ -17,9 +17,18 @@ interface FinancialRepository {
     fun getAll(): Flow<List<Transaction>>
 
     /**
-     * Returns all FinancialInput
+     * Returns all Transaction ins specified date range
      */
     fun getAllInDateRange(startDate: LocalDateTime, endDate: LocalDateTime): Flow<List<Transaction>>
+
+    /**
+     * Returns all Transaction ins specified date range
+     */
+    fun getAllInDateRangeByDescription(
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+        description: String
+    ): Flow<List<Transaction>>
 
     /**
      * Gets a Transaction by its unique ID

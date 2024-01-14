@@ -24,7 +24,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
 
     @Test
     fun createFinancialInputTest() {
-        repository = AndroidFinancialRepository(database = db)
+        repository = AndroidFinancialRepository(financialDao = db.getFinancialInputDao())
 
         val toBeInserted = Transaction(
             uid= 1,
@@ -44,7 +44,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
 
     @Test
     fun getAllExpensesTest() {
-        repository = AndroidFinancialRepository(database = db)
+        repository = AndroidFinancialRepository(financialDao = db.getFinancialInputDao())
 
         val toBeInserted = Transaction(
             uid=1,
@@ -63,7 +63,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
 
     @Test
     fun getAllTest() {
-        repository = AndroidFinancialRepository(database = db)
+        repository = AndroidFinancialRepository(financialDao = db.getFinancialInputDao())
 
         val toBeInserted = Transaction(
             uid=1,
@@ -95,7 +95,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
 
     @Test
     fun getAllPeriodicByTypeTest() {
-        repository = AndroidFinancialRepository(database = db)
+        repository = AndroidFinancialRepository(financialDao = db.getFinancialInputDao())
 
         val toBeInserted = Transaction(
             uid=1,
@@ -147,7 +147,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
 
     @Test
     fun deleteTest() {
-        repository = AndroidFinancialRepository(database = db)
+        repository = AndroidFinancialRepository(financialDao = db.getFinancialInputDao())
 
         val toBeInserted = Transaction(
             dateTime = LocalDateTime.parse("2023-11-06T00:00:00"),
@@ -172,7 +172,7 @@ class AndroidFinancialRepositoryTest : BaseRoomTest() {
 
     @Test
     fun getChildrenTransactionsTest() {
-        repository = AndroidFinancialRepository(database = db)
+        repository = AndroidFinancialRepository(financialDao = db.getFinancialInputDao())
 
         val toBeInserted = Transaction(
             uid=1,
