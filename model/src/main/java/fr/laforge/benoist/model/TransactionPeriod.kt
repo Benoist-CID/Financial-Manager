@@ -7,6 +7,6 @@ enum class TransactionPeriod {
     Yearly;
 
     companion object {
-        infix fun from(name: String): TransactionPeriod? = TransactionPeriod.values().firstOrNull { it.name == name }
+        infix fun from(name: String): TransactionPeriod? = entries.firstOrNull { it.name == name }
     }
 }

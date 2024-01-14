@@ -8,7 +8,7 @@ import fr.laforge.benoist.util.toMilliseconds
 
 
 fun Transaction.exportToCsvFormat(): String {
-    return "$uid;${dateTime.toMilliseconds()};$amount;$description;$type;$isPeriodic;$period"
+    return "$uid;${dateTime.toMilliseconds()};$amount;$description;$type;$isPeriodic;$period;$parent"
 }
 
 fun transactionFromCsv(csv: String): Transaction {
@@ -20,6 +20,7 @@ fun transactionFromCsv(csv: String): Transaction {
     val type = TransactionType.from(split[4])!!
     val isPeriodic = split[5].toBoolean()
     val period = TransactionPeriod.from(split[6])!!
+    val parent = split[7].toInt()
 
     return Transaction(
         uid,
@@ -28,7 +29,8 @@ fun transactionFromCsv(csv: String): Transaction {
         description,
         type,
         isPeriodic,
-        period
+        period,
+        parent
     )
 }
 

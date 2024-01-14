@@ -78,19 +78,8 @@ fun HomeScreen(
                 onSave = { vm.saveDb(context) },
                 onLoad = { navController.navigate(FinancialManagerScreen.ImportDb.name) },
             )
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text(text = stringResource(id = R.string.add_input)) },
-                icon = {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Favorite",
-                    )
-                },
-                onClick = { navController.navigate(FinancialManagerScreen.AddInput.name) },
-            )
-        },
+        }
+        
     ) {
         Column(
             modifier

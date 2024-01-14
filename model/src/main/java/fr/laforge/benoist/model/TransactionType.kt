@@ -5,6 +5,6 @@ enum class TransactionType {
     Expense;
 
     companion object {
-        infix fun from(name: String): TransactionType? = TransactionType.values().firstOrNull { it.name == name }
+        infix fun from(name: String): TransactionType? = entries.firstOrNull { it.name == name }
     }
 }
