@@ -9,7 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.map
 
 class DataStorePreferencesInteractor(private val context: Context) : PreferencesInteractor {
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
     override suspend fun setFloat(key: String, value: Float) {
         context.dataStore.edit { settings ->

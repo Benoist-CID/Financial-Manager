@@ -13,9 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import fr.laforge.benoist.financialmanager.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
-import fr.laforge.benoist.financialmanager.util.getNumberOfRemainingDaysInMonth
 import fr.laforge.benoist.financialmanager.util.getNumberOfRemainingDaysInPeriod
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -24,6 +22,7 @@ import java.time.format.DateTimeFormatter
 fun SituationCard(
     amount: Float,
     periodicAmount: Float,
+    savingsTarget: Float,
     modifier: Modifier = Modifier,
     date: LocalDateTime = LocalDateTime.now()
 ) {
@@ -40,12 +39,17 @@ fun SituationCard(
         )
 
         Text(
-            text = "Total recurring expenses - $periodicAmount€",
+            text = "Total recurring expenses: $periodicAmount€",
             fontSize = 15.sp
         )
 
         Text(
-            text = "${date.getNumberOfRemainingDaysInPeriod(HomeScreenViewModel.START_DAY)} days left - ${(amount / date.getNumberOfRemainingDaysInPeriod(HomeScreenViewModel.START_DAY)).toInt()}€ per day",
+            text = "Savings target: $savingsTarget€",
+            fontSize = 15.sp
+        )
+
+        Text(
+            text = "${date.getNumberOfRemainingDaysInPeriod(HomeScreenViewModel.START_DAY)} days left: ${(amount / date.getNumberOfRemainingDaysInPeriod(HomeScreenViewModel.START_DAY)).toInt()}€ per day",
             fontSize = 17.sp
         )
     }
@@ -54,5 +58,5 @@ fun SituationCard(
 @Preview(showBackground = true)
 @Composable
 fun SituationCardPreview() {
-    SituationCard(amount = 2000.0F, periodicAmount = 1000F)
+    SituationCard(amount = 2000.0F, savingsTarget = 500F, periodicAmount = 1000F)
 }

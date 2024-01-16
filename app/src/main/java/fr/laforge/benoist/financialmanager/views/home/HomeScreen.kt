@@ -69,6 +69,7 @@ fun HomeScreen(
     val amount by vm.availableAmount.collectAsState(initial = 0F)
     val periodicAmount by vm.periodicAmount.collectAsState(initial = 0F)
     val transactions by vm.allTransactions.collectAsState(initial = emptyList())
+    val savingsTarget by vm.savingsTarget.collectAsState(initial = 0F)
     val context = LocalContext.current
     val uiState by vm.uiState.collectAsState()
 
@@ -92,7 +93,11 @@ fun HomeScreen(
             Column(
                 modifier = modifier.background(MaterialTheme.colorScheme.primaryContainer)
             ) {
-                SituationCard(amount, -periodicAmount)
+                SituationCard(
+                    amount = amount,
+                    periodicAmount = -periodicAmount,
+                    savingsTarget = savingsTarget
+                )
 
                 TextField(
                     value = uiState.query,

@@ -27,4 +27,8 @@
 
     <!-- Search bar -->
     <string name="search">Rechercher</string>
+
+    <!-- Settings -->
+    <string name="settings">Paramètres</string>
+    <string name="savings_target">Objectif d\'épargne</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.laforge.benoist.financialmanager.controller.PreferencesController
 import fr.laforge.benoist.financialmanager.util.exportToCsvFormat
 import fr.laforge.benoist.financialmanager.util.sum
 import fr.laforge.benoist.financialmanager.views.transaction.add.AddTransactionUiState
@@ -32,12 +33,13 @@ class HomeScreenViewModel : ViewModel(), KoinComponent, DefaultLifecycleObserver
     private val repository: FinancialRepository by inject()
     private val _uiState = MutableStateFlow(HomeScreenUiState())
     val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
+    private val preferencesController: PreferencesController by inject()
 
-    val availableAmount : Flow<Float> = repository.getAllInDateRange(
+    val availableAmount: Flow<Float> = repository.getAllInDateRange(
         startDate = getDateBoundaries(startDay = START_DAY).first.atTime(0, 0),
         endDate = getDateBoundaries(startDay = START_DAY).second.atTime(0, 0)
     ).map {
-        it.sum()
+        it.sum() - preferencesController.getSavingTarget().first()
     }
 
     val periodicAmount: Flow<Float> = repository.getAllPeriodicTransactionsByType().map{
@@ -48,6 +50,8 @@ class HomeScreenViewModel : ViewModel(), KoinComponent, DefaultLifecycleObserver
         startDate = getDateBoundaries(startDay = START_DAY).first.atTime(0, 0),
         endDate = getDateBoundaries(startDay = START_DAY).second.atTime(0, 0)
     )
+
+    val savingsTarget = preferencesController.getSavingTarget()
 
     fun deleteTransaction(transaction: Transaction) {
         viewModelScope.launch {

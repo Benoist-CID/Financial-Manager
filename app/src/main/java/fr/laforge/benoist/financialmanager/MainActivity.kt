@@ -7,26 +7,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import fr.laforge.benoist.financialmanager.views.transaction.add.AddTransactionScreen
-import fr.laforge.benoist.financialmanager.views.home.HomeScreen
 import fr.laforge.benoist.financialmanager.ui.theme.FinancialManagerTheme
 import fr.laforge.benoist.financialmanager.views.db.ImportDbScreen
+import fr.laforge.benoist.financialmanager.views.home.HomeScreen
 import fr.laforge.benoist.financialmanager.views.login.LoginScreen
+import fr.laforge.benoist.financialmanager.views.settings.SettingsScreen
+import fr.laforge.benoist.financialmanager.views.transaction.add.AddTransactionScreen
 import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetails
 import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetailsViewModel
-import timber.log.Timber
 
 class MainActivity : FragmentActivity() {
     private val vm = MainActivityViewModel()
@@ -44,7 +40,7 @@ class MainActivity : FragmentActivity() {
                 ) {
                     val navController = rememberNavController()
                     vm.setNavController(navController)
-                    NavHost(navController = navController, startDestination = FinancialManagerScreen.Login.name) {
+                    NavHost(navController = navController, startDestination = FinancialManagerScreen.Home.name) {
                         composable(FinancialManagerScreen.Login.name) {
                             LoginScreen(navController = navController)
                         }
@@ -71,6 +67,10 @@ class MainActivity : FragmentActivity() {
 
                         composable(FinancialManagerScreen.ImportDb.name) {
                             ImportDbScreen(navController = navController)
+                        }
+
+                        composable(FinancialManagerScreen.Settings.name) {
+                            SettingsScreen()
                         }
                     }
 
@@ -101,5 +101,6 @@ enum class FinancialManagerScreen {
     Home,
     AddInput,
     TransactionDetails,
-    ImportDb
+    ImportDb,
+    Settings
 }

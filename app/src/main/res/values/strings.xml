@@ -27,4 +27,8 @@
 
     <!-- Search bar -->
     <string name="search">Search</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="savings_target">Savings target</string>
 </resources>

@@ -24,8 +24,8 @@ class PreferencesControllerTest {
     fun targetTest() {
 
         runBlocking {
-            preferencesController.setTarget(12.52F)
-            preferencesController.getTarget().first().shouldBeEqualTo(12.52F)
+            preferencesController.setSavingsTarget(12.52F)
+            preferencesController.getSavingTarget().first().shouldBeEqualTo(12.52F)
         }
     }
 }
