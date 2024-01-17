@@ -15,7 +15,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,8 +49,7 @@ fun TransactionRow(
         Row(
             modifier = Modifier
                 .background(color = Color.White)
-                .padding(start = 4.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(start = 4.dp)
         ) {
             transaction.category.GetCategoryIcon()
 
@@ -61,11 +59,11 @@ fun TransactionRow(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(color = Color.White)
-                        .padding(8.dp)
+                        .padding(4.dp)
                 ) {
                     Text(
                         text = transaction.description,
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                     )
 
                     Text(
@@ -82,7 +80,7 @@ fun TransactionRow(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(color = Color.White)
-                        .padding(8.dp)
+                        .padding(4.dp)
                 ) {
                     val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
                     val date = if (transaction.isPeriodic) {
@@ -90,7 +88,7 @@ fun TransactionRow(
                     } else {
                         transaction.dateTime
                     }.format(formatter)
-                    Text(text = date)
+                    Text(text = date, fontSize = 12.sp)
 
                     Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null)
                 }
