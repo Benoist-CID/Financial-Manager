@@ -11,9 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,13 +21,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import fr.laforge.benoist.financialmanager.util.GetCategoryIcon
 import fr.laforge.benoist.financialmanager.util.getAmountColor
 import fr.laforge.benoist.financialmanager.util.getAmountFontWeight
 import fr.laforge.benoist.financialmanager.util.getAmountTextStyle
-import fr.laforge.benoist.financialmanager.util.GetCategoryIcon
 import fr.laforge.benoist.financialmanager.util.getFinancialInputText
-import fr.laforge.benoist.model.TransactionType
 import fr.laforge.benoist.model.Transaction
+import fr.laforge.benoist.model.TransactionCategory
+import fr.laforge.benoist.model.TransactionType
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -39,23 +39,20 @@ fun TransactionRow(
     modifier: Modifier = Modifier,
     onClicked: (Transaction) -> Unit = {}
 ) {
-    Card(
+    Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = Color.Transparent)
-            .padding(top = 4.dp, bottom = 0.dp, start = 8.dp, end = 8.dp)
+            .background(color = Color.White)
             .clickable {
                 onClicked(transaction)
             }
     ) {
         Row(
             modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                .background(color = Color.White)
                 .padding(start = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            //Image(painter = getCategoryIcon(), contentDescription = null, modifier = modifier..background(MaterialTheme.colorScheme.onSecondaryContainer))
-
             transaction.category.GetCategoryIcon()
 
             Column {
@@ -63,7 +60,7 @@ fun TransactionRow(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                        .background(color = Color.White)
                         .padding(8.dp)
                 ) {
                     Text(
@@ -84,7 +81,7 @@ fun TransactionRow(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                        .background(color = Color.White)
                         .padding(8.dp)
                 ) {
                     val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
@@ -109,17 +106,18 @@ fun TransactionRow(
 fun FinancialInputRowPreview() {
     val transactions = mutableListOf(
             Transaction(
-                description = "An income", type = TransactionType.Income, amount = 10.0F
+                description = "An income", type = TransactionType.Income, amount = 10.0F, category = TransactionCategory.EducationAndFamily
             ),
 
             Transaction(
-                description = "An expense", type = TransactionType.Expense, amount = 10.0F
+                description = "An expense", type = TransactionType.Expense, amount = 10.0F, category = TransactionCategory.Accommodation
             )
     )
 
     LazyColumn {
         items(transactions) { input ->
             TransactionRow(input)
+            Divider(color = Color.Black)
         }
     }
 }

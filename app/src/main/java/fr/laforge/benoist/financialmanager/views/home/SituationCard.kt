@@ -1,10 +1,8 @@
 package fr.laforge.benoist.financialmanager.views.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.laforge.benoist.financialmanager.R
-import fr.laforge.benoist.financialmanager.util.getNumberOfRemainingDaysInPeriod
+import fr.laforge.benoist.financialmanager.util.getNumberOfRemainingDaysInMonth
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -49,7 +47,7 @@ fun SituationCard(
         )
 
         Text(
-            text = "${date.getNumberOfRemainingDaysInPeriod(HomeScreenViewModel.START_DAY)} days left: ${(amount / date.getNumberOfRemainingDaysInPeriod(HomeScreenViewModel.START_DAY)).toInt()}€ per day",
+            text = "${date.getNumberOfRemainingDaysInMonth()} days left: ${(amount / date.getNumberOfRemainingDaysInMonth()).toInt()}€ per day",
             fontSize = 17.sp
         )
     }
