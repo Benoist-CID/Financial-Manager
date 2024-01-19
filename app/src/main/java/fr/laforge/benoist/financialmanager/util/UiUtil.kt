@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +31,7 @@ fun Transaction.getAmountColor(): Color {
     return if (type == TransactionType.Income) {
         colorResource(R.color.green_1)
     } else {
-        colorResource(R.color.black)
+        MaterialTheme.colorScheme.onBackground
     }
 }
 
@@ -119,6 +120,31 @@ fun TransactionCategory.GetCategoryIcon(modifier: Modifier = Modifier) {
             modifier = modifier
                 .padding(5.dp)
         )
+    }
+}
+
+@Composable
+fun TransactionCategory.getCategoryColor(): Color {
+    return when(this) {
+        TransactionCategory.None -> colorResource(id = R.color.green_3)
+        TransactionCategory.Food -> colorResource(id = R.color.red_3)
+        TransactionCategory.Bank -> colorResource(id = R.color.grey_3)
+        TransactionCategory.EducationAndFamily -> colorResource(id = R.color.orange_3)
+        TransactionCategory.Saving -> colorResource(id = R.color.yellow_3)
+        TransactionCategory.Taxes -> colorResource(id = R.color.blue_5)
+        TransactionCategory.Juridic -> colorResource(id = R.color.green_3)
+        TransactionCategory.Accommodation -> colorResource(id = R.color.grey_4)
+        TransactionCategory.Leisure -> colorResource(id = R.color.purple_3)
+        TransactionCategory.Income -> colorResource(id = R.color.green_4)
+        TransactionCategory.Health -> Color.Red
+        TransactionCategory.Shopping -> colorResource(id = R.color.yellow_4)
+        TransactionCategory.Transport -> colorResource(id = R.color.pink_3)
+        TransactionCategory.Sport -> colorResource(id = R.color.blue_4)
+        TransactionCategory.Vehicle -> colorResource(id = R.color.blue_3)
+        TransactionCategory.Telecom -> colorResource(id = R.color.black)
+        TransactionCategory.Pet -> colorResource(id = R.color.brown_3)
+        else -> {
+            colorResource(id = R.color.white)}
     }
 }
 

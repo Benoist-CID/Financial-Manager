@@ -1,10 +1,19 @@
 package fr.laforge.benoist.financialmanager.views.home
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,10 +31,16 @@ fun SituationCard(
     periodicAmount: Float,
     savingsTarget: Float,
     modifier: Modifier = Modifier,
-    date: LocalDateTime = LocalDateTime.now()
+    date: LocalDateTime = LocalDateTime.now(),
+    expanded: Boolean = true
 ) {
     Column(
-        modifier = modifier.fillMaxWidth().padding(top = 8.dp),
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.background)
+            .animateContentSize()
+            .height(if (expanded) 120.dp else 0.dp)
+            .fillMaxWidth()
+            .padding(top = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "$amount €", fontSize = 20.sp)
