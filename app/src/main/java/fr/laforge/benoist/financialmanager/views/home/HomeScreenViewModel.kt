@@ -11,6 +11,7 @@ import fr.laforge.benoist.financialmanager.util.getFirstDayOfMonth
 import fr.laforge.benoist.financialmanager.util.getLastDayOfMonth
 import fr.laforge.benoist.financialmanager.util.sum
 import fr.laforge.benoist.model.Transaction
+import fr.laforge.benoist.model.TransactionType
 import fr.laforge.benoist.repository.FinancialRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -36,18 +37,20 @@ class HomeScreenViewModel : ViewModel(), KoinComponent, DefaultLifecycleObserver
 
     val availableAmount: Flow<Float> = repository.getAllInDateRange(
         startDate = LocalDateTime.now().getFirstDayOfMonth(),
-        endDate = LocalDateTime.now().getLastDayOfMonth()
+        endDate = LocalDateTime.now().getLastDayOfMonth().plusDays(1)
     ).map {
         it.sum() - preferencesController.getSavingTarget().first()
     }
 
-    val periodicAmount: Flow<Float> = repository.getAllPeriodicTransactionsByType().map{
+    val periodicAmount: Flow<Float> = repository.getAllPeriodicTransactionsByType(
+        type = TransactionType.Expense
+    ).map{
         it.sum()
     }
 
     var allTransactions : Flow<List<Transaction>> = repository.getAllInDateRange(
         startDate = LocalDateTime.now().getFirstDayOfMonth(),
-        endDate = LocalDateTime.now().getLastDayOfMonth()
+        endDate = LocalDateTime.now().getLastDayOfMonth().plusDays(1)
     )
 
     val savingsTarget = preferencesController.getSavingTarget()

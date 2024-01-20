@@ -74,9 +74,6 @@ fun HomeScreen(
     val savingsTarget by vm.savingsTarget.collectAsState(initial = 0F)
     val context = LocalContext.current
     val uiState by vm.uiState.collectAsState()
-    var situationCardExpanded by remember {
-        mutableStateOf(true)
-    }
 
     Scaffold(
         topBar = {
@@ -101,8 +98,7 @@ fun HomeScreen(
                 SituationCard(
                     amount = amount,
                     periodicAmount = -periodicAmount,
-                    savingsTarget = savingsTarget,
-                    expanded = situationCardExpanded
+                    savingsTarget = savingsTarget
                 )
 
                 TextField(

@@ -31,14 +31,12 @@ fun SituationCard(
     periodicAmount: Float,
     savingsTarget: Float,
     modifier: Modifier = Modifier,
-    date: LocalDateTime = LocalDateTime.now(),
-    expanded: Boolean = true
+    date: LocalDateTime = LocalDateTime.now()
 ) {
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.background)
             .animateContentSize()
-            .height(if (expanded) 120.dp else 0.dp)
             .fillMaxWidth()
             .padding(top = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally

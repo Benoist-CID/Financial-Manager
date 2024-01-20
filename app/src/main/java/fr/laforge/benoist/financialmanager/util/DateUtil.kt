@@ -73,7 +73,7 @@ fun LocalDateTime.getLastDayOfMonth(): LocalDateTime {
  * Returns the number of days remaining in month
  */
 fun LocalDateTime.getNumberOfRemainingDaysInMonth(): Int {
-    return this.getLastDayOfMonth().dayOfMonth - this.dayOfMonth
+    return this.getLastDayOfMonth().dayOfMonth - this.dayOfMonth + 1
 }
 
 /**
