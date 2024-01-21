@@ -14,6 +14,7 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="situation_on">Situation on</string>
+    <string name="per_day">per day</string>
 
     <!-- Add input screen -->
     <string name="description">Description</string>

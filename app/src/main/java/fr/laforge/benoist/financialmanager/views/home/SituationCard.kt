@@ -1,47 +1,73 @@
 package fr.laforge.benoist.financialmanager.views.home
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.laforge.benoist.financialmanager.R
+import fr.laforge.benoist.financialmanager.ui.component.AnimatedCircle
+import fr.laforge.benoist.financialmanager.ui.component.formatAmount
 import fr.laforge.benoist.financialmanager.util.getNumberOfRemainingDaysInMonth
+import fr.laforge.benoist.financialmanager.util.getProportions
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun SituationCard(
     amount: Float,
-    periodicAmount: Float,
+    income: Float,
     savingsTarget: Float,
     modifier: Modifier = Modifier,
     date: LocalDateTime = LocalDateTime.now()
 ) {
-    Column(
+    Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.background)
-            .animateContentSize()
             .fillMaxWidth()
-            .padding(top = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(top = 8.dp)
     ) {
-        Text(text = "$amount €", fontSize = 20.sp)
+        AnimatedCircle(
+            proportions = getProportions(income, amount, savingsTarget),
+            colors = listOf(colorResource(R.color.red_3), colorResource(R.color.green_3), colorResource(R.color.blue_4)),
+            Modifier
+                .height(200.dp)
+                .fillMaxWidth()
+        )
+
+        Column(modifier = Modifier.align(Alignment.Center)) {
+            Text(
+                text = "${formatAmount(amount)} €",
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = modifier.height(20.dp))
+
+            Text(
+                text = "${formatAmount(amount / date.getNumberOfRemainingDaysInMonth())}€ " + stringResource(
+                    id = R.string.per_day
+                ),
+                fontSize = 18.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        /*Text(text = "$amount €", fontSize = 20.sp)
         val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
         Text(
@@ -62,12 +88,12 @@ fun SituationCard(
         Text(
             text = "${date.getNumberOfRemainingDaysInMonth()} days left: ${(amount / date.getNumberOfRemainingDaysInMonth()).toInt()}€ per day",
             fontSize = 17.sp
-        )
+        )*/
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun SituationCardPreview() {
-    SituationCard(amount = 2000.0F, savingsTarget = 500F, periodicAmount = 1000F)
+    SituationCard(amount = 2000.0F, savingsTarget = 500F, income = 1000F)
 }

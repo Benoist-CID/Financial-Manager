@@ -1,6 +1,7 @@
 package fr.laforge.benoist.financialmanager.ui.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -74,7 +75,7 @@ fun TransactionRow(
             .clearAndSetSemantics {
                 contentDescription =
                     ""
-            },
+            }.clickable { onClicked(transaction) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         val typography = MaterialTheme.typography

@@ -7,13 +7,14 @@
     <string name="biometric_negative">Annuler</string>
 
     <!-- Home screen -->
-    <string name="add_input">Add Input</string>
-    <string name="create_input">Create Input</string>
-    <string name="do_you_want_to_delete">Do you want to delete?</string>
-    <string name="delete_warning_message">Once deleted, it is not possible to undelete, think of it carefully.</string>
-    <string name="confirm">Confirm</string>
-    <string name="cancel">Cancel</string>
-    <string name="situation_on">Situation on</string>
+    <string name="add_input">Ajouter une transaction</string>
+    <string name="create_input">Créer une dépense</string>
+    <string name="do_you_want_to_delete">Voulez-vous supprimer?</string>
+    <string name="delete_warning_message">La suppression est définitve, réfléchis y bien.</string>
+    <string name="confirm">Confirmer</string>
+    <string name="cancel">Annuler</string>
+    <string name="situation_on">Situation au</string>
+    <string name="per_day">par jour</string>
 
     <!-- Add input screen -->
     <string name="description">Description</string>
