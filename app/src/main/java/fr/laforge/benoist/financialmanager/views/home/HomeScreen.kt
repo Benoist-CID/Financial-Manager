@@ -47,7 +47,9 @@ import fr.laforge.benoist.financialmanager.ui.component.TopBar
 import fr.laforge.benoist.financialmanager.ui.component.TransactionRow
 import fr.laforge.benoist.financialmanager.util.displayDate
 import fr.laforge.benoist.financialmanager.util.toDate
+import fr.laforge.benoist.util.getProportions
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDateTime
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -59,11 +61,19 @@ fun HomeScreen(
     vm: HomeScreenViewModel = HomeScreenViewModel(),
 ) {
     val amount by vm.availableAmount.collectAsState(initial = 0F)
-    val periodicAmount by vm.periodicAmount.collectAsState(initial = 0F)
+    val recurringExpenses by vm.periodicAmount.collectAsState(initial = 0F)
+    val regularExpenses by vm.regularExpenses.collectAsState(initial = 0F)
     val transactions by vm.allTransactions.collectAsState(initial = emptyList())
     val savingsTarget by vm.savingsTarget.collectAsState(initial = 0F)
     val context = LocalContext.current
     val uiState by vm.uiState.collectAsState()
+    val income by vm.income.collectAsState(initial = 0F)
+
+    Timber.d("INCOME: $income")
+    Timber.d("REGULAR EXPENSES: $regularExpenses")
+    Timber.d("RECURRING EXPENSES: $recurringExpenses")
+    Timber.d("PROPORTIONS: ${getProportions(income = income, recurringExpenses = -recurringExpenses, expenses = -regularExpenses, savings = 500F)}")
+
 
     Scaffold(
         topBar = {
@@ -86,8 +96,9 @@ fun HomeScreen(
                 modifier = modifier.background(MaterialTheme.colorScheme.background)
             ) {
                 SituationCard(
-                    amount = amount,
-                    income = 5350F,
+                    regularExpenses = -regularExpenses,
+                    recurringExpenses = -recurringExpenses,
+                    income = income,
                     savingsTarget = savingsTarget
                 )
 

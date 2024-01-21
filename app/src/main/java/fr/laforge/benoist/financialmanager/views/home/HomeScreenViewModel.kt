@@ -53,6 +53,17 @@ class HomeScreenViewModel : ViewModel(), KoinComponent, DefaultLifecycleObserver
         endDate = LocalDateTime.now().getLastDayOfMonth().plusDays(1)
     )
 
+    val income: Flow<Float> =
+        allTransactions.map {
+            transactions -> transactions.filter {
+                transaction -> transaction.type == TransactionType.Income
+            }.sum()
+        }
+
+    val regularExpenses: Flow<Float> = allTransactions.map {
+        it.filter{ transaction -> transaction.type == TransactionType.Expense && transaction.parent == 0 && !transaction.isPeriodic}.sum()
+    }
+
     val savingsTarget = preferencesController.getSavingTarget()
 
     fun deleteTransaction(transaction: Transaction) {
