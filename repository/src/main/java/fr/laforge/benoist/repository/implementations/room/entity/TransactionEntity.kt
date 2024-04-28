@@ -12,14 +12,14 @@ import java.time.LocalDateTime
 @Entity
 data class TransactionEntity(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
-    @ColumnInfo(name="date_time") val dateTime: LocalDateTime = LocalDateTime.now(),
-    @ColumnInfo(name="amount") val amount: Float,
-    @ColumnInfo(name="type") val type: TransactionType = TransactionType.Expense,
-    @ColumnInfo(name="description") val description: String,
-    @ColumnInfo(name="is_periodic") val isPeriodic: Boolean,
-    @ColumnInfo(name="period") val period: TransactionPeriod,
-    @ColumnInfo(name="parent") val parentId: Int = 0,
-    @ColumnInfo(name="category", defaultValue = "None") val category: TransactionCategory = TransactionCategory.None
+    @ColumnInfo(name="date_time") var dateTime: LocalDateTime = LocalDateTime.now(),
+    @ColumnInfo(name="amount") var amount: Float,
+    @ColumnInfo(name="type") var type: TransactionType = TransactionType.Expense,
+    @ColumnInfo(name="description") var description: String,
+    @ColumnInfo(name="is_periodic") var isPeriodic: Boolean,
+    @ColumnInfo(name="period") var period: TransactionPeriod,
+    @ColumnInfo(name="parent") var parentId: Int = 0,
+    @ColumnInfo(name="category", defaultValue = "None") var category: TransactionCategory = TransactionCategory.None
 ) {
     fun toModel(): Transaction {
         return Transaction(

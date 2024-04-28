@@ -7,6 +7,7 @@ import fr.laforge.benoist.repository.implementations.room.entity.TransactionEnti
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBeEqualTo
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDateTime
@@ -116,18 +117,22 @@ class DatabaseTest : BaseRoomTest() {
 
         financialInputDao.insertAll(toBeInserted1, toBeInserted2)
         runBlocking {
-            financialInputDao.getByInputType(inputType = TransactionType.Income).first().size.shouldBeEqualTo(1)
-            val read2 = financialInputDao.getByInputType(inputType = TransactionType.Expense).first()[0]
+            financialInputDao.getByInputType(inputType = TransactionType.Income)
+                .first().size.shouldBeEqualTo(1)
+            val read2 =
+                financialInputDao.getByInputType(inputType = TransactionType.Expense).first()[0]
             read2.type.shouldBeEqualTo(toBeInserted2.type)
             read2.dateTime.shouldBeEqualTo(toBeInserted2.dateTime)
             read2.amount.shouldBeEqualTo(toBeInserted2.amount)
             read2.description.shouldBeEqualTo(toBeInserted2.description)
-            val read1 = financialInputDao.getByInputType(inputType = TransactionType.Income).first()[0]
+            val read1 =
+                financialInputDao.getByInputType(inputType = TransactionType.Income).first()[0]
             read1.type.shouldBeEqualTo(toBeInserted1.type)
             read1.dateTime.shouldBeEqualTo(toBeInserted1.dateTime)
             read1.amount.shouldBeEqualTo(toBeInserted1.amount)
             read1.description.shouldBeEqualTo(toBeInserted1.description)
-            financialInputDao.getByInputType(inputType = TransactionType.Expense).first().size.shouldBeEqualTo(1)
+            financialInputDao.getByInputType(inputType = TransactionType.Expense)
+                .first().size.shouldBeEqualTo(1)
         }
     }
 
@@ -303,5 +308,33 @@ class DatabaseTest : BaseRoomTest() {
             entities[0].dateTime.shouldBeEqualTo(transactions[4].dateTime)
             entities[1].dateTime.shouldBeEqualTo(transactions[2].dateTime)
         }
+    }
+
+    @Test
+    fun updateTest() {
+        val transaction = TransactionEntity(
+            type = TransactionType.Expense,
+            amount = 150F,
+            description = "A periodic transaction",
+            isPeriodic = true,
+            period = TransactionPeriod.Monthly
+        )
+
+        val indexes = financialInputDao.insertAll(transaction)
+
+        indexes[0].shouldBeEqualTo(1)
+
+        runBlocking {
+            var transactionLoaded = financialInputDao.getAll().first()[0]
+
+            val transactionUpdated = transactionLoaded.copy(uid = 1, amount = 100F)
+
+            financialInputDao.update(transactionUpdated)
+
+            transactionLoaded = financialInputDao.getAll().first()[0]
+
+            assertThat(transactionLoaded).usingRecursiveComparison().isEqualTo(transactionUpdated)
+        }
+
     }
 }

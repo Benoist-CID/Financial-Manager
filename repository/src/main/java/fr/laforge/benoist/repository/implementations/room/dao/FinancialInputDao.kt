@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
+import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.model.TransactionType
 import fr.laforge.benoist.repository.implementations.room.entity.TransactionEntity
 import kotlinx.coroutines.flow.Flow
@@ -44,4 +46,7 @@ interface FinancialInputDao {
 
     @Query("SELECT * FROM transactionentity WHERE (date_time >= :startDate AND date_time <= :endDate) AND is_periodic = false AND parent=:parentId ORDER BY date_time DESC")
     fun getChildrenTransactions(parentId: Int, startDate:LocalDateTime, endDate: LocalDateTime): List<TransactionEntity>
+
+    @Update
+    fun update(vararg transactions: TransactionEntity)
 }

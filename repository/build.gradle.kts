@@ -53,6 +53,7 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$roomVersion")
+    implementation("org.assertj:assertj-core:3.22.0")
 
 
     testImplementation("junit:junit:4.13.2")
