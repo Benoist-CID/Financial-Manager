@@ -7,9 +7,9 @@ fun getProportions(
     savings: Float
 ): List<Float> {
     return listOf(
-        (income - (recurringExpenses + expenses + savings))/income,
         recurringExpenses / income,
         expenses / income,
-        savings / income
+        (income - (recurringExpenses + expenses + savings))/income,
+        savings / income,
     )
 }

@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -34,13 +35,6 @@ class HomeScreenViewModel : ViewModel(), KoinComponent, DefaultLifecycleObserver
     private val _uiState = MutableStateFlow(HomeScreenUiState())
     val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
     private val preferencesController: PreferencesController by inject()
-
-    val availableAmount: Flow<Float> = repository.getAllInDateRange(
-        startDate = LocalDateTime.now().getFirstDayOfMonth(),
-        endDate = LocalDateTime.now().getLastDayOfMonth().plusDays(1)
-    ).map {
-        it.sum() - preferencesController.getSavingTarget().first()
-    }
 
     val periodicAmount: Flow<Float> = repository.getAllPeriodicTransactionsByType(
         type = TransactionType.Expense

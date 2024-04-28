@@ -37,11 +37,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
+import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.ui.component.ShowDialog
 import fr.laforge.benoist.financialmanager.ui.component.TopBar
 import fr.laforge.benoist.financialmanager.ui.component.TransactionRow
@@ -60,7 +62,6 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     vm: HomeScreenViewModel = HomeScreenViewModel(),
 ) {
-    val amount by vm.availableAmount.collectAsState(initial = 0F)
     val recurringExpenses by vm.periodicAmount.collectAsState(initial = 0F)
     val regularExpenses by vm.regularExpenses.collectAsState(initial = 0F)
     val transactions by vm.allTransactions.collectAsState(initial = emptyList())
@@ -68,12 +69,6 @@ fun HomeScreen(
     val context = LocalContext.current
     val uiState by vm.uiState.collectAsState()
     val income by vm.income.collectAsState(initial = 0F)
-
-    Timber.d("INCOME: $income")
-    Timber.d("REGULAR EXPENSES: $regularExpenses")
-    Timber.d("RECURRING EXPENSES: $recurringExpenses")
-    Timber.d("PROPORTIONS: ${getProportions(income = income, recurringExpenses = -recurringExpenses, expenses = -regularExpenses, savings = 500F)}")
-
 
     Scaffold(
         topBar = {
@@ -152,8 +147,8 @@ fun HomeScreen(
                                     }
                                     openAlertDialog.value = false
                                 },
-                                dialogTitle = "Do you want to delete?",
-                                dialogText = "Once deleted, it is not possible to undelete, think of it carefully.",
+                                dialogTitle = stringResource(R.string.do_you_want_to_delete),
+                                dialogText = stringResource(R.string.delete_warning_message),
                                 icon = {
                                     Icon(Icons.Filled.Delete, contentDescription = null)
                                 },

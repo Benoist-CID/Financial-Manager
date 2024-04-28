@@ -45,9 +45,9 @@ fun SituationCard(
         AnimatedCircle(
             proportions = getProportions(income, recurringExpenses, regularExpenses, savingsTarget),
             colors = listOf(
-                colorResource(R.color.green_3),
                 colorResource(R.color.orange_3),
                 colorResource(R.color.red_3),
+                colorResource(R.color.green_3),
                 colorResource(R.color.blue_4)
             ),
             modifier = modifier
