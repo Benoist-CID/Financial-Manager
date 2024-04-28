@@ -53,6 +53,13 @@ interface FinancialRepository {
     fun deleteTransaction(transaction: Transaction)
 
     /**
+     * Updates the transaction
+     *
+     * @param transaction Transaction to update
+     */
+    fun updateTransaction(transaction: Transaction)
+
+    /**
      * Returns all periodic transactions
      */
     fun getAllPeriodicTransactions(): Flow<List<Transaction>>

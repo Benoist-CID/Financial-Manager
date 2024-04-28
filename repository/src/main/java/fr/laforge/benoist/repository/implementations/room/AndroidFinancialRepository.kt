@@ -72,6 +72,10 @@ class AndroidFinancialRepository(private val financialDao: FinancialInputDao) : 
         financialDao.delete(fromModel(transaction))
     }
 
+    override fun updateTransaction(transaction: Transaction) {
+        financialDao.update(fromModel(transaction))
+    }
+
     override fun getAllPeriodicTransactions(): Flow<List<Transaction>> {
         return financialDao.getAllPeriodic().map { entities ->
             entities.map {
