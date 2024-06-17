@@ -49,9 +49,8 @@ import fr.laforge.benoist.financialmanager.ui.component.TopBar
 import fr.laforge.benoist.financialmanager.ui.component.TransactionRow
 import fr.laforge.benoist.financialmanager.util.displayDate
 import fr.laforge.benoist.financialmanager.util.toDate
-import fr.laforge.benoist.util.getProportions
 import kotlinx.coroutines.launch
-import timber.log.Timber
+import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDateTime
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -60,7 +59,7 @@ import java.time.LocalDateTime
 fun HomeScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    vm: HomeScreenViewModel = HomeScreenViewModel(),
+    vm: HomeScreenViewModel = koinViewModel(),
 ) {
     val recurringExpenses by vm.periodicAmount.collectAsState(initial = 0F)
     val regularExpenses by vm.regularExpenses.collectAsState(initial = 0F)

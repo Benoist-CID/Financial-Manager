@@ -68,7 +68,9 @@ dependencies {
     implementation("androidx.biometric:biometric:1.1.0")
     implementation("com.jakewharton.timber:timber:5.0.1")
     // Dependency injection
-    implementation("io.insert-koin:koin-android:3.3.3")
+    implementation("io.insert-koin:koin-core")
+    implementation("io.insert-koin:koin-android:3.5.6")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.6")
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation(project(mapOf("path" to ":preferences")))
     testImplementation("junit:junit:4.13.2")

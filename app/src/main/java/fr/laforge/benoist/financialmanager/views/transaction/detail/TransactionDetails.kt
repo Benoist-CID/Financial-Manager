@@ -9,12 +9,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import fr.laforge.benoist.model.Transaction
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TransactionDetails(
     navController: NavController,
     vm: TransactionDetailsViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val transaction: Transaction by vm.transaction.collectAsState(initial = Transaction())
     Text("Transaction details: ${transaction.description}")
@@ -23,5 +24,8 @@ fun TransactionDetails(
 @Composable
 @Preview(showBackground = true)
 fun TransactionDetailsPreview() {
-//    TransactionDetails(navController = rememberNavController())
+    TransactionDetails(
+        navController = rememberNavController(),
+        vm = TransactionDetailsViewModel(0)
+        )
 }

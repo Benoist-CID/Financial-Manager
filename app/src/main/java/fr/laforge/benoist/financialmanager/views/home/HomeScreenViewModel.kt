@@ -19,22 +19,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.time.LocalDateTime
 
 
-class HomeScreenViewModel : ViewModel(), KoinComponent, DefaultLifecycleObserver {
-    private val repository: FinancialRepository by inject()
+class HomeScreenViewModel(
+    private val repository: FinancialRepository,
+    preferencesController: PreferencesController,
+) : ViewModel(), DefaultLifecycleObserver {
     private val _uiState = MutableStateFlow(HomeScreenUiState())
     val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
-    private val preferencesController: PreferencesController by inject()
 
     val periodicAmount: Flow<Float> = repository.getAllPeriodicTransactionsByType(
         type = TransactionType.Expense
