@@ -7,4 +7,6 @@ interface CreateTransactionUseCase {
     fun execute(
         transaction: Transaction
     ): Flow<Boolean>
+
+    operator fun invoke(transaction: Transaction): Boolean
 }

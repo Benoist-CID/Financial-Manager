@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Financial Manager</string>
+    <string name="service_name">Notification Listener Service</string>
 
     <!-- Login screen -->
     <string name="biometric_title">Biometrics</string>

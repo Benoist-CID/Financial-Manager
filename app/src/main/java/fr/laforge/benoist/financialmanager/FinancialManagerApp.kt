@@ -2,6 +2,7 @@ package fr.laforge.benoist.financialmanager
 
 import android.app.Application
 import fr.laforge.benoist.financialmanager.di.module.controllersModule
+import fr.laforge.benoist.financialmanager.di.module.helperModule
 import fr.laforge.benoist.financialmanager.di.module.interactorsModule
 import fr.laforge.benoist.financialmanager.di.module.repositoryModule
 import fr.laforge.benoist.financialmanager.di.module.useCaseModule
@@ -22,6 +23,7 @@ class FinancialManagerApp : Application() {
             modules(interactorsModule)
             modules(controllersModule)
             modules(useCaseModule)
+            modules(helperModule)
         }
 
         Timber.plant(Timber.DebugTree())

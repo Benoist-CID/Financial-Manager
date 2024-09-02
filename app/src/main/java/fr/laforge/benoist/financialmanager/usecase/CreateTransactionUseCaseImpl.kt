@@ -28,4 +28,22 @@ class CreateTransactionUseCaseImpl: CreateTransactionUseCase, KoinComponent {
 
         emit(true)
     }
+
+    override fun invoke(transaction: Transaction): Boolean {
+        // Creates transaction
+        val id = repository.createTransaction(
+            transaction
+        )
+
+        // If transaction is periodic, creates the associated regular transaction for the current
+        // period
+        if (transaction.isPeriodic) {
+            val regularTransaction = transaction.copy(isPeriodic = false, parent = id.toInt())
+            repository.createTransaction(
+                regularTransaction
+            )
+        }
+
+        return true
+    }
 }
