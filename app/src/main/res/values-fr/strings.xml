@@ -33,4 +33,7 @@
     <!-- Settings -->
     <string name="settings">Paramètres</string>
     <string name="savings_target">Objectif d\'épargne</string>
+
+    <!-- Notification -->
+    <string name="notification_title">Voulez-vous créer une Transaction?</string>
 </resources>

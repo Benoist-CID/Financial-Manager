@@ -20,6 +20,7 @@ import fr.laforge.benoist.financialmanager.views.settings.SettingsScreen
 import fr.laforge.benoist.financialmanager.views.transaction.add.AddTransactionScreen
 import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetails
 import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetailsViewModel
+import fr.laforge.benoist.model.Notification
 import org.koin.android.ext.android.inject
 
 class MainActivity : FragmentActivity() {
@@ -27,6 +28,16 @@ class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            intent?.let {
+                val message = intent.extras?.getString("value")
+
+                message?.let {
+                    vm.createTransaction(notification = Notification(message = message))
+                }
+            }
+        }
 
         setContent {
             lifecycle.addObserver(vm)

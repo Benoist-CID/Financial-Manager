@@ -1,26 +1,33 @@
-package fr.laforge.benoist.financialmanager.usecase.notification
+package fr.laforge.benoist.financialmanager.interactors.notification
 
+import fr.laforge.benoist.financialmanager.util.NotificationUtil
+import fr.laforge.benoist.model.Notification
 import fr.laforge.benoist.model.Transaction
 
 interface NotificationHelper {
     /**
      * Indicates if a message is a transaction or not
      *
-     * @param notificationMessage Notification message
+     * @param notification Notification
      *
      * @return Result<Boolean>
      */
-    fun isTransaction(notificationMessage: String): Result<Boolean>
+    fun isTransaction(notification: Notification): Result<Boolean>
 
     /**
-     * TAkes a notification message and converts it to a Transaction
+     * Takes a notification message and converts it to a Transaction
      */
     fun parseNotificationMessage(notificationMessage: String): Result<Transaction>
+
+    /**
+     * Creates a notification to create a new transaction
+     */
+    fun postNotification(notification: Notification)
 }
 
-class NotificationHelperImpl : NotificationHelper {
-    override fun isTransaction(notificationMessage: String): Result<Boolean> {
-        return if (notificationMessage.contains(EURO_SYMBOL)) {
+class NotificationHelperImpl(private val notificationUtil: NotificationUtil) : NotificationHelper {
+    override fun isTransaction(notification: Notification): Result<Boolean> {
+        return if (notification.message.contains(EURO_SYMBOL)) {
             Result.success(true)
         } else {
             Result.success(false)
@@ -40,6 +47,10 @@ class NotificationHelperImpl : NotificationHelper {
                 description = split[0].trim()
             )
         )
+    }
+
+    override fun postNotification(notification: Notification) {
+        notificationUtil.createNotification(notification = notification)
     }
 
     companion object {

@@ -1,5 +1,7 @@
 package fr.laforge.benoist.financialmanager.usecase.notification
 
+import fr.laforge.benoist.financialmanager.interactors.notification.NotificationHelper
+import fr.laforge.benoist.financialmanager.interactors.notification.NotificationHelperImpl
 import org.amshove.kluent.`should be equal to`
 import org.junit.Test
 
@@ -29,7 +31,7 @@ class NotificationHelperKtTest {
 
         val expected = transaction.getOrNull()
 
-        expected?.amount.`should be equal to`(36.67F)
+        expected?.amount.`should be equal to`(36.67F                                                                  )
         expected?.description.`should be equal to`("POINT P 1233")
     }
 }

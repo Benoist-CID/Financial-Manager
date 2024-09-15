@@ -1,4 +1,4 @@
-package fr.laforge.benoist.financialmanager.usecase.notification
+package fr.laforge.benoist.financialmanager.interactors.notification
 
 import android.content.ComponentName
 import android.content.Context
@@ -15,7 +15,8 @@ interface EnableNotificationAccessUseCase {
     operator fun invoke()
 }
 
-class EnableNotificationAccessUseCaseImpl(private var context: Context) : EnableNotificationAccessUseCase {
+class EnableNotificationAccessUseCaseImpl(private var context: Context) :
+    EnableNotificationAccessUseCase {
     override fun invoke() {
         if (!isNotificationServiceEnabled(context = context)) {
             val intent = Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS)

@@ -14,6 +14,7 @@ val viewModelModule by lazy {
             MainActivityViewModel(
                 createRegularTransactionsUseCase = get(),
                 enableNotificationAccessUseCase = get(),
+                createTransactionFromNotificationInteractor = get(),
             )
         }
         viewModel { AddTransactionViewModel() }
