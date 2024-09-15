@@ -3,17 +3,13 @@ package fr.laforge.benoist.financialmanager.views.transaction.add
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +17,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -32,8 +27,10 @@ import androidx.navigation.compose.rememberNavController
 import fr.laforge.benoist.financialmanager.AppViewModelProvider
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
-import fr.laforge.benoist.model.TransactionCategory
-import fr.laforge.benoist.model.TransactionType
+import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionAmountEditor
+import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionCategorySelector
+import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionDescriptionEditor
+import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionTypeSelector
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -63,7 +60,7 @@ fun AddTransactionScreen(
     ) {
         Column {
             Text(
-                text = "Add input",
+                text = stringResource(id = R.string.create_transaction),
                 fontSize = 30.sp,
                 modifier = Modifier.padding(
                     top = it.calculateTopPadding() + 16.dp,
@@ -71,62 +68,27 @@ fun AddTransactionScreen(
                     bottom = 40.dp
                 )
             )
-            
+
             Column(
                 modifier = modifier
                     .verticalScroll(rememberScrollState())
                     .padding(bottom = it.calculateBottomPadding() + 16.dp)
             ) {
-                GenericTypeDropdownMenu(
-                    title = stringResource(R.string.type),
-                    data = TransactionType.entries.map { it.toString() },
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    defaultValue = TransactionType.Expense.name
-                ) { transactionType ->
-                    vm.updateInputType(transactionType = TransactionType.from(name = transactionType)!!)
+                TransactionTypeSelector { transactionType ->
+                    vm.updateInputType(transactionType = transactionType)
                 }
 
-                GenericTypeDropdownMenu(
-                    title = stringResource(R.string.category),
-                    data = TransactionCategory.entries.map { it.toString() },
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    defaultValue = TransactionCategory.None.name
-                ) { transactionCategory ->
-                    vm.updateTransactionCategory(transactionCategory = TransactionCategory.from(name = transactionCategory)!!)
+                TransactionCategorySelector { category ->
+                    vm.updateTransactionCategory(transactionCategory = category)
                 }
 
-                OutlinedTextField(
-                    modifier = modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    value = uiState.amount,
-                    onValueChange = { newVal -> vm.updateAmount(newVal) },
-                    label = {
-                        Text(
-                            text = stringResource(id = R.string.amount),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
+                TransactionAmountEditor(initialValue = uiState.amount.toDouble()) { newVal ->
+                    vm.updateAmount(amount = newVal.toString())
+                }
 
-                OutlinedTextField(
-                    modifier = modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    value = uiState.description,
-                    onValueChange = { newDescription -> vm.updateDescription(newDescription) },
-                    label = {
-                        Text(
-                            text = stringResource(id = R.string.description),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    },
-                )
+                TransactionDescriptionEditor(initialValue = uiState.description) { newDescription ->
+                    vm.updateDescription(newDescription)
+                }
 
                 PeriodicalTransactionComponent(
                     defaultPeriod = vm.period,

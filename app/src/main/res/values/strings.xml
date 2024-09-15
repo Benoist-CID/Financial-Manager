@@ -18,6 +18,7 @@
     <string name="per_day">per day</string>
 
     <!-- Add input screen -->
+    <string name="create_transaction">Create Transaction</string>
     <string name="description">Description</string>
     <string name="amount">Amount</string>
     <string name="type">Type</string>
@@ -26,6 +27,9 @@
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
     <string name="period">Period</string>
+
+    <!-- Update transaction screen -->
+    <string name="update_transaction">Update Transaction</string>
 
     <!-- Search bar -->
     <string name="search">Search</string>
