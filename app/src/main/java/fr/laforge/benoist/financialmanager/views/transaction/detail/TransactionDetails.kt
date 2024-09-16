@@ -12,34 +12,53 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
-import fr.laforge.benoist.financialmanager.views.transaction.add.PeriodicalTransactionComponent
 import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionAmountEditor
 import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionCategorySelector
 import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionDescriptionEditor
 import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionTypeSelector
-import fr.laforge.benoist.model.Transaction
+import fr.laforge.benoist.model.TransactionType
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TransactionDetails(
     navController: NavController,
-    vm: TransactionDetailsViewModel,
     modifier: Modifier = Modifier,
+    vm: TransactionDetailsViewModel,
 ) {
-    val transaction: Transaction by vm.transaction.collectAsState(initial = Transaction())
-    Text("Transaction details: ${transaction.description}")
+    val uiState by vm.uiState.collectAsState()
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
+
+    LaunchedEffect(lifecycleState) {
+        // Do something with your state
+        // You may want to use DisposableEffect or other alternatives
+        // instead of LaunchedEffect
+        when (lifecycleState) {
+            Lifecycle.State.DESTROYED -> {}
+            Lifecycle.State.INITIALIZED -> {}
+            Lifecycle.State.CREATED -> {}
+            Lifecycle.State.STARTED -> {}
+            Lifecycle.State.RESUMED -> { vm.getTransaction() }
+        }
+    }
 
     Scaffold(
         floatingActionButton = {
@@ -52,7 +71,6 @@ fun TransactionDetails(
                     )
                 },
                 onClick = {
-//                    vm.createTransaction()
                     navController.popBackStack(FinancialManagerScreen.Home.name, false)
                 }
             )
@@ -75,19 +93,28 @@ fun TransactionDetails(
                     .verticalScroll(rememberScrollState())
                     .padding(bottom = it.calculateBottomPadding() + 16.dp)
             ) {
-                TransactionTypeSelector { transactionType ->
+                TransactionTypeSelector(initialValue = TransactionType.Expense, modifier = modifier) { transactionType ->
 //                vm.updateInputType(transactionType = transactionType)
                 }
 
-                TransactionCategorySelector { category ->
+                TransactionCategorySelector(
+                    initialValue = uiState.transactionCategory,
+                    modifier = modifier
+                ) { category ->
 //                vm.updateTransactionCategory(transactionCategory = category)
                 }
 
-                TransactionAmountEditor(initialValue = transaction.amount.toDouble()/*uiState.amount.toDouble()*/) { newVal ->
+                TransactionAmountEditor(
+                    modifier = modifier,
+                    initialValue = uiState.amount.toDouble()
+                ) { newVal ->
 //                vm.updateAmount(amount = newVal.toString())
                 }
 
-                TransactionDescriptionEditor(initialValue = transaction.description/* uiState.description*/) { newDescription ->
+                TransactionDescriptionEditor(
+                    modifier = modifier,
+                    initialValue = uiState.description/* uiState.description*/
+                ) { newDescription ->
 //                vm.updateDescription(newDescription)
                 }
             }

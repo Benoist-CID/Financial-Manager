@@ -3,6 +3,9 @@ package fr.laforge.benoist.financialmanager.views.transaction.composables
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,7 +26,7 @@ fun TransactionTypeSelector(
     GenericTypeDropdownMenu(
         title = stringResource(R.string.type),
         data = TransactionType.entries.map { it.toString() },
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth(),
         defaultValue = initialValue.name
