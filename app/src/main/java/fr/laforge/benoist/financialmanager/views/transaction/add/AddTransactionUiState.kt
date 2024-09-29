@@ -6,6 +6,6 @@ import fr.laforge.benoist.model.TransactionType
 data class AddTransactionUiState(
     val transactionType: TransactionType = TransactionType.Expense,
     val transactionCategory: TransactionCategory = TransactionCategory.None,
-    val amount: String = "0",
+    val amount: String = "0.0",
     val description: String = ""
 )
