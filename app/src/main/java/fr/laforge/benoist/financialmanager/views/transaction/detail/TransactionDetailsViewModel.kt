@@ -1,5 +1,6 @@
 package fr.laforge.benoist.financialmanager.views.transaction.detail
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.repository.FinancialRepository
