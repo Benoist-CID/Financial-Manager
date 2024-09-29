@@ -13,11 +13,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import fr.laforge.benoist.financialmanager.R
+import timber.log.Timber
 
 @Composable
 fun TransactionAmountEditor(
     modifier: Modifier = Modifier,
-    initialValue: Double = 0.0,
+    initialValue: Float = 0.0F,
     onAmountChanged: (Double) -> Unit,
 ) {
     OutlinedTextField(
@@ -39,7 +40,7 @@ fun TransactionAmountEditor(
 @Composable
 @Preview(showBackground = true)
 fun TransactionAmountPreview() {
-    TransactionAmountEditor(initialValue = 10.0) {
+    TransactionAmountEditor(initialValue = 10.0F) {
 
     }
 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.model.TransactionType
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,10 +32,6 @@ fun GenericTypeDropdownMenu(
         mutableStateOf(false)
     }
 
-    var selectedData by remember {
-        mutableStateOf(defaultValue)
-    }
-
     ExposedDropdownMenuBox(
         expanded = isExpanded,
         onExpandedChange = { newValue ->
@@ -43,7 +40,7 @@ fun GenericTypeDropdownMenu(
         modifier = modifier
     ) {
         OutlinedTextField(
-            value = selectedData,
+            value = defaultValue,
             onValueChange = {},
             readOnly = true,
             trailingIcon = {
@@ -73,7 +70,6 @@ fun GenericTypeDropdownMenu(
                         Text(text = type)
                     },
                     onClick = {
-                        selectedData = type
                         onSelectedValueChanged(type)
                         isExpanded = false
                     }

@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.views.transaction.add.GenericTypeDropdownMenu
 import fr.laforge.benoist.model.TransactionType
+import timber.log.Timber
 
 /**
  * Displays a drop down selector for the Transaction type
@@ -23,6 +24,8 @@ fun TransactionTypeSelector(
     initialValue: TransactionType = TransactionType.Expense,
     onTypeChanged: (TransactionType) -> Unit,
 ) {
+    Timber.d("Transaction type: $initialValue")
+
     GenericTypeDropdownMenu(
         title = stringResource(R.string.type),
         data = TransactionType.entries.map { it.toString() },

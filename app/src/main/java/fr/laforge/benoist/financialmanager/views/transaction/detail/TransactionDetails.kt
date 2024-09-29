@@ -1,14 +1,19 @@
 package fr.laforge.benoist.financialmanager.views.transaction.detail
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,7 +23,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
@@ -35,6 +42,7 @@ import fr.laforge.benoist.financialmanager.views.transaction.composables.Transac
 import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionTypeSelector
 import fr.laforge.benoist.model.TransactionType
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun TransactionDetails(
@@ -43,22 +51,6 @@ fun TransactionDetails(
     vm: TransactionDetailsViewModel,
 ) {
     val uiState by vm.uiState.collectAsState()
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
-
-    LaunchedEffect(lifecycleState) {
-        // Do something with your state
-        // You may want to use DisposableEffect or other alternatives
-        // instead of LaunchedEffect
-        when (lifecycleState) {
-            Lifecycle.State.DESTROYED -> {}
-            Lifecycle.State.INITIALIZED -> {}
-            Lifecycle.State.CREATED -> {}
-            Lifecycle.State.STARTED -> {}
-            Lifecycle.State.RESUMED -> { vm.getTransaction() }
-        }
-    }
 
     Scaffold(
         floatingActionButton = {
@@ -76,49 +68,89 @@ fun TransactionDetails(
             )
         },
     ) {
-
-        Column {
-            Text(
-                text = stringResource(id = R.string.create_transaction),
-                fontSize = 30.sp,
-                modifier = Modifier.padding(
-                    top = it.calculateTopPadding() + 16.dp,
-                    start = it.calculateStartPadding(LayoutDirection.Ltr) + 16.dp,
-                    bottom = 40.dp
-                )
+        Card(
+            modifier = Modifier.padding(
+                top = it.calculateTopPadding() + 16.dp,
+                start = it.calculateStartPadding(LayoutDirection.Ltr) + 16.dp,
+                bottom = 40.dp
+            ), colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
+        ) {
+            TransactionTypeSelector(
+                    modifier = modifier,
+                    initialValue = uiState.transaction.type,
+                ) { transactionType ->
 
-            Column(
-                modifier = modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(bottom = it.calculateBottomPadding() + 16.dp)
-            ) {
-                TransactionTypeSelector(initialValue = TransactionType.Expense, modifier = modifier) { transactionType ->
-//                vm.updateInputType(transactionType = transactionType)
                 }
 
                 TransactionCategorySelector(
-                    initialValue = uiState.transactionCategory,
-                    modifier = modifier
+                    modifier = modifier,
+                    initialValue = uiState.transaction.category,
                 ) { category ->
-//                vm.updateTransactionCategory(transactionCategory = category)
+
                 }
 
                 TransactionAmountEditor(
                     modifier = modifier,
-                    initialValue = uiState.amount.toDouble()
+                    initialValue = uiState.transaction.amount
                 ) { newVal ->
-//                vm.updateAmount(amount = newVal.toString())
+
                 }
 
                 TransactionDescriptionEditor(
                     modifier = modifier,
-                    initialValue = uiState.description/* uiState.description*/
+                    initialValue = uiState.transaction.description
                 ) { newDescription ->
-//                vm.updateDescription(newDescription)
+
                 }
-            }
         }
+//        Column {
+//            Text(
+//                text = stringResource(id = R.string.create_transaction),
+//                fontSize = 30.sp,
+//                modifier = Modifier.padding(
+//                    top = it.calculateTopPadding() + 16.dp,
+//                    start = it.calculateStartPadding(LayoutDirection.Ltr) + 16.dp,
+//                    bottom = 40.dp
+//                )
+//            )
+//
+//            Column(
+//                modifier = modifier
+//                    .verticalScroll(rememberScrollState())
+//                    .padding(bottom = it.calculateBottomPadding() + 16.dp)
+//            ) {
+//                TransactionTypeSelector(
+//                    modifier = modifier,
+//                    initialValue = uiState.transaction.type,
+//                ) { transactionType ->
+//
+//                }
+//
+//                TransactionCategorySelector(
+//                    modifier = modifier,
+//                    initialValue = uiState.transaction.category,
+//                ) { category ->
+//
+//                }
+//
+//                TransactionAmountEditor(
+//                    modifier = modifier,
+//                    initialValue = uiState.transaction.amount
+//                ) { newVal ->
+//
+//                }
+//
+//                TransactionDescriptionEditor(
+//                    modifier = modifier,
+//                    initialValue = uiState.transaction.description/* uiState.description*/
+//                ) { newDescription ->
+//
+//                }
+//            }
+//        }
     }
 }
 
@@ -128,5 +160,5 @@ fun TransactionDetailsPreview() {
     TransactionDetails(
         navController = rememberNavController(),
         vm = TransactionDetailsViewModel(0)
-        )
+    )
 }

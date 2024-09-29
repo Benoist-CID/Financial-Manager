@@ -84,7 +84,7 @@ fun AddTransactionScreen(
                     vm.updateTransactionCategory(transactionCategory = category)
                 }
 
-                TransactionAmountEditor(initialValue = uiState.amount.toDouble()) { newVal ->
+                TransactionAmountEditor(initialValue = uiState.amount.toFloat()) { newVal ->
                     vm.updateAmount(amount = newVal.toString())
                 }
 
