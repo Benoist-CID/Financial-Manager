@@ -31,7 +31,6 @@ fun TransactionRow(
         Text(
             text = text,
             fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Justify,
         )
     }
 }

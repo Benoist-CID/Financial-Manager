@@ -37,4 +37,5 @@
     <!-- Settings -->
     <string name="settings">Settings</string>
     <string name="savings_target">Savings target</string>
+    <string name="transaction_details">Transaction Details</string>
 </resources>

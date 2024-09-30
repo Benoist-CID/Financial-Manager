@@ -37,4 +37,5 @@
     <!-- Settings -->
     <string name="settings">Paramètres</string>
     <string name="savings_target">Objectif d\'épargne</string>
+    <string name="transaction_details">Détails de la Transaction</string>
 </resources>

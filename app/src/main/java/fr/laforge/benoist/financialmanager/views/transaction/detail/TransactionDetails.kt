@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
@@ -59,91 +60,58 @@ fun TransactionDetails(
             }
         },
     ) {
-        Card(
-            modifier = Modifier.padding(
-                top = it.calculateTopPadding() + 16.dp,
-                start = it.calculateStartPadding(LayoutDirection.Ltr) + 16.dp,
-                end = it.calculateEndPadding(LayoutDirection.Ltr) + 16.dp,
-                bottom = 40.dp
-            ), colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        Column {
+            Text(
+                text = stringResource(id = R.string.transaction_details),
+                fontSize = 30.sp,
+                modifier = Modifier.padding(
+                    top = it.calculateTopPadding() + 16.dp,
+                    start = it.calculateStartPadding(LayoutDirection.Ltr) + 16.dp,
+                    bottom = 40.dp
+                )
             )
-        ) {
-            Column(
-                modifier = modifier.fillMaxWidth()
-                    .padding(16.dp)
+
+            Card(
+                modifier = Modifier.padding(
+                    top = it.calculateTopPadding() + 16.dp,
+                    start = it.calculateStartPadding(LayoutDirection.Ltr) + 16.dp,
+                    end = it.calculateEndPadding(LayoutDirection.Ltr) + 16.dp,
+                    bottom = 40.dp
+                ), colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             ) {
-                TransactionRow(
-                    labelId = R.string.type,
-                    text = uiState.transaction.type.name,
-                    modifier = Modifier.padding(8.dp)
-                )
+                Column(
+                    modifier = modifier.fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    TransactionRow(
+                        labelId = R.string.type,
+                        text = uiState.transaction.type.name,
+                        modifier = Modifier.padding(8.dp)
+                    )
 
-                TransactionRow(
-                    labelId = R.string.category,
-                    text = uiState.transaction.category.name,
-                    modifier = Modifier.padding(8.dp)
-                )
+                    TransactionRow(
+                        labelId = R.string.category,
+                        text = uiState.transaction.category.name,
+                        modifier = Modifier.padding(8.dp)
+                    )
 
-                TransactionRow(
-                    labelId = R.string.amount,
-                    text = uiState.transaction.amount.toString(),
-                    modifier = Modifier.padding(8.dp)
-                )
+                    TransactionRow(
+                        labelId = R.string.amount,
+                        text = uiState.transaction.amount.toString(),
+                        modifier = Modifier.padding(8.dp)
+                    )
 
-                TransactionRow(
-                    labelId = R.string.description,
-                    text = uiState.transaction.description,
-                    modifier = Modifier.padding(8.dp)
-                )
+                    TransactionRow(
+                        labelId = R.string.description,
+                        text = uiState.transaction.description,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
         }
-//        Column {
-//            Text(
-//                text = stringResource(id = R.string.create_transaction),
-//                fontSize = 30.sp,
-//                modifier = Modifier.padding(
-//                    top = it.calculateTopPadding() + 16.dp,
-//                    start = it.calculateStartPadding(LayoutDirection.Ltr) + 16.dp,
-//                    bottom = 40.dp
-//                )
-//            )
-//
-//            Column(
-//                modifier = modifier
-//                    .verticalScroll(rememberScrollState())
-//                    .padding(bottom = it.calculateBottomPadding() + 16.dp)
-//            ) {
-//                TransactionTypeSelector(
-//                    modifier = modifier,
-//                    initialValue = uiState.transaction.type,
-//                ) { transactionType ->
-//
-//                }
-//
-//                TransactionCategorySelector(
-//                    modifier = modifier,
-//                    initialValue = uiState.transaction.category,
-//                ) { category ->
-//
-//                }
-//
-//                TransactionAmountEditor(
-//                    modifier = modifier,
-//                    initialValue = uiState.transaction.amount
-//                ) { newVal ->
-//
-//                }
-//
-//                TransactionDescriptionEditor(
-//                    modifier = modifier,
-//                    initialValue = uiState.transaction.description/* uiState.description*/
-//                ) { newDescription ->
-//
-//                }
-//            }
-//        }
     }
 }
 
