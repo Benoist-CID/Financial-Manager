@@ -74,57 +74,29 @@ fun TransactionDetails(
                 modifier = modifier.fillMaxWidth()
                     .padding(16.dp)
             ) {
-                Row(modifier = modifier.padding(8.dp)) {
-                    Text(
-                        text = stringResource(R.string.type)
-                    )
+                TransactionRow(
+                    labelId = R.string.type,
+                    text = uiState.transaction.type.name,
+                    modifier = Modifier.padding(8.dp)
+                )
 
-                    Spacer(modifier = Modifier.weight(1f))
+                TransactionRow(
+                    labelId = R.string.category,
+                    text = uiState.transaction.category.name,
+                    modifier = Modifier.padding(8.dp)
+                )
 
-                    Text(
-                        text = uiState.transaction.type.name,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                TransactionRow(
+                    labelId = R.string.amount,
+                    text = uiState.transaction.amount.toString(),
+                    modifier = Modifier.padding(8.dp)
+                )
 
-                Row(modifier = modifier.padding(8.dp)) {
-                    Text(
-                        text = stringResource(R.string.category)
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Text(
-                        text = uiState.transaction.category.name,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Row(modifier = modifier.padding(8.dp)) {
-                    Text(
-                        text = stringResource(R.string.amount)
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Text(
-                        text = uiState.transaction.amount.toString(),
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Row(modifier = modifier.padding(8.dp)) {
-                    Text(
-                        text = stringResource(R.string.description)
-                    )
-
-                    Spacer(modifier = modifier.weight(1f))
-
-                    Text(
-                        text = uiState.transaction.description,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                TransactionRow(
+                    labelId = R.string.description,
+                    text = uiState.transaction.description,
+                    modifier = Modifier.padding(8.dp)
+                )
             }
         }
 //        Column {
