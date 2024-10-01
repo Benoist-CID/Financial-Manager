@@ -6,13 +6,11 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.room.Room
-import fr.laforge.benoist.financialmanager.views.db.ImportDbViewModel
-import fr.laforge.benoist.financialmanager.views.login.LoginViewModel
-import fr.laforge.benoist.financialmanager.views.transaction.add.AddTransactionViewModel
-import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetailsViewModel
-import fr.laforge.benoist.repository.implementations.room.AndroidFinancialRepository
-import fr.laforge.benoist.repository.implementations.room.database.AppDatabase
+import fr.laforge.benoist.financialmanager.ui.db.ImportDbViewModel
+import fr.laforge.benoist.financialmanager.ui.login.LoginViewModel
+import fr.laforge.benoist.financialmanager.ui.transaction.add.AddTransactionViewModel
+import fr.laforge.benoist.financialmanager.ui.transaction.detail.TransactionDetailsViewModel
+import fr.laforge.benoist.financialmanager.ui.transaction.update.UpdateTransactionViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -30,6 +28,13 @@ object AppViewModelProvider {
 
         initializer {
             TransactionDetailsViewModel(
+                savedStateHandle = this.createSavedStateHandle(),
+                financialRepository = financialManagerApplication().container.financialRepository,
+            )
+        }
+
+        initializer {
+            UpdateTransactionViewModel(
                 savedStateHandle = this.createSavedStateHandle(),
                 financialRepository = financialManagerApplication().container.financialRepository,
             )

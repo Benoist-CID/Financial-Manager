@@ -8,13 +8,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
-import fr.laforge.benoist.financialmanager.views.db.ImportDbScreen
-import fr.laforge.benoist.financialmanager.views.home.HomeScreen
-import fr.laforge.benoist.financialmanager.views.login.LoginScreen
-import fr.laforge.benoist.financialmanager.views.settings.SettingsScreen
-import fr.laforge.benoist.financialmanager.views.transaction.add.AddTransactionScreen
-import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetails
-import fr.laforge.benoist.financialmanager.views.transaction.detail.TransactionDetailsViewModel
+import fr.laforge.benoist.financialmanager.ui.db.ImportDbScreen
+import fr.laforge.benoist.financialmanager.ui.home.HomeScreen
+import fr.laforge.benoist.financialmanager.ui.login.LoginScreen
+import fr.laforge.benoist.financialmanager.ui.settings.SettingsScreen
+import fr.laforge.benoist.financialmanager.ui.transaction.add.AddTransactionScreen
+import fr.laforge.benoist.financialmanager.ui.transaction.detail.TransactionDetails
+import fr.laforge.benoist.financialmanager.ui.transaction.update.UpdateTransaction
 
 @Composable
 fun FinancialManagerNavHost(
@@ -42,6 +42,13 @@ fun FinancialManagerNavHost(
             arguments = listOf(navArgument("transactionId") { type = NavType.IntType })
         ) {
             TransactionDetails(navController = navController)
+        }
+
+        composable(
+            route = FinancialManagerScreen.UpdateTransaction.name + "/{transactionId}",
+            arguments = listOf(navArgument("transactionId") { type = NavType.IntType }),
+        ) {
+            UpdateTransaction(navController = navController)
         }
 
         composable(FinancialManagerScreen.ImportDb.name) {
