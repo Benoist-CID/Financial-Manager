@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import fr.laforge.benoist.financialmanager.ui.navigation.FinancialManagerNavHost
 import fr.laforge.benoist.financialmanager.ui.theme.FinancialManagerTheme
 import fr.laforge.benoist.financialmanager.views.db.ImportDbScreen
 import fr.laforge.benoist.financialmanager.views.home.HomeScreen
@@ -39,40 +40,8 @@ class MainActivity : FragmentActivity() {
                 ) {
                     val navController = rememberNavController()
                     vm.setNavController(navController)
-                    NavHost(navController = navController, startDestination = FinancialManagerScreen.Home.name) {
-                        composable(FinancialManagerScreen.Login.name) {
-                            LoginScreen(navController = navController)
-                        }
-                        composable(FinancialManagerScreen.Home.name) {
-                            HomeScreen(navController = navController)
-                        }
 
-                        composable(FinancialManagerScreen.AddInput.name) {
-                            AddTransactionScreen(navController = navController)
-                        }
-
-                        composable(
-                            FinancialManagerScreen.TransactionDetails.name + "/{transactionId}",
-                            arguments = listOf(navArgument("transactionId") { type = NavType.IntType })
-                        ) { backStackEntry ->
-                            val vm = TransactionDetailsViewModel(
-                                transactionId = backStackEntry.arguments?.getInt("transactionId")!!
-                            )
-                            TransactionDetails(
-                                navController = navController,
-                                vm = vm
-                            )
-                        }
-
-                        composable(FinancialManagerScreen.ImportDb.name) {
-                            ImportDbScreen(navController = navController)
-                        }
-
-                        composable(FinancialManagerScreen.Settings.name) {
-                            SettingsScreen()
-                        }
-                    }
-
+                    FinancialManagerNavHost(navController = navController)
                 }
             }
         }

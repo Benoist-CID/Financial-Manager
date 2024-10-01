@@ -46,11 +46,9 @@ class AndroidFinancialRepository(private val financialDao: FinancialInputDao) : 
         }
     }
 
-    override fun get(uid: Int): Flow<Transaction> {
-        return financialDao.getById(uid = uid).map {
+    override fun get(uid: Int): Flow<Transaction> = financialDao.getById(uid = uid).map {
                 transactionEntity -> transactionEntity.toModel()
             }
-    }
 
     override fun getAllExpenses(): Flow<List<Transaction>> {
         return financialDao.getByInputType(inputType = TransactionType.Expense).map {

@@ -29,22 +29,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import fr.laforge.benoist.financialmanager.AppViewModelProvider
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionAmountEditor
 import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionCategorySelector
 import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionDescriptionEditor
 import fr.laforge.benoist.financialmanager.views.transaction.composables.TransactionTypeSelector
+import timber.log.Timber
 
 @Composable
 fun TransactionDetails(
     navController: NavController,
     modifier: Modifier = Modifier,
-    vm: TransactionDetailsViewModel,
+    vm: TransactionDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val uiState by vm.uiState.collectAsState()
+
+    Timber.d("Recomposition $uiState")
 
     Scaffold(
         floatingActionButton = {
@@ -120,6 +125,6 @@ fun TransactionDetails(
 fun TransactionDetailsPreview() {
     TransactionDetails(
         navController = rememberNavController(),
-        vm = TransactionDetailsViewModel(0)
+//        vm = TransactionDetailsViewModel()
     )
 }
