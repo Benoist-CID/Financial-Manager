@@ -27,6 +27,7 @@ import java.time.LocalDateTime
 
 @Composable
 fun SituationCard(
+    allExpenses: Float,
     regularExpenses: Float,
     recurringExpenses: Float,
     income: Float,
@@ -34,7 +35,7 @@ fun SituationCard(
     modifier: Modifier = Modifier,
     date: LocalDateTime = LocalDateTime.now()
 ) {
-    val remaining = income - recurringExpenses - regularExpenses - savingsTarget
+    val remaining = income - allExpenses - savingsTarget
 
     Box(
         modifier = modifier
@@ -80,5 +81,5 @@ fun SituationCard(
 @Preview(showBackground = true)
 @Composable
 fun SituationCardPreview() {
-    SituationCard(regularExpenses = 2000.0F, recurringExpenses = 200F, savingsTarget = 500F, income = 1000F)
+    SituationCard(allExpenses = -2500F, regularExpenses = 2000.0F, recurringExpenses = 200F, savingsTarget = 500F, income = 1000F)
 }

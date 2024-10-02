@@ -51,6 +51,7 @@ import fr.laforge.benoist.financialmanager.util.displayDate
 import fr.laforge.benoist.financialmanager.util.toDate
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 import java.time.LocalDateTime
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -61,6 +62,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     vm: HomeScreenViewModel = koinViewModel(),
 ) {
+    val allExpenses by vm.allCurrentMonthTransactionsAmount.collectAsState(initial = 0F)
     val recurringExpenses by vm.periodicAmount.collectAsState(initial = 0F)
     val regularExpenses by vm.regularExpenses.collectAsState(initial = 0F)
     val transactions by vm.allTransactions.collectAsState(initial = emptyList())
@@ -89,7 +91,10 @@ fun HomeScreen(
             Column(
                 modifier = modifier.background(MaterialTheme.colorScheme.background)
             ) {
+
+                Timber.d("allExpenses: $allExpenses, income: $income, savingsTarget: $savingsTarget")
                 SituationCard(
+                    allExpenses = -allExpenses,
                     regularExpenses = -regularExpenses,
                     recurringExpenses = -recurringExpenses,
                     income = income,

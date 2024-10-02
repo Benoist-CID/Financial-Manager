@@ -36,24 +36,31 @@ class HomeScreenViewModel(
 
     val periodicAmount: Flow<Float> = repository.getAllPeriodicTransactionsByType(
         type = TransactionType.Expense
-    ).map{
+    ).map {
         it.sum()
     }
 
-    var allTransactions : Flow<List<Transaction>> = repository.getAllInDateRange(
+    var allTransactions: Flow<List<Transaction>> = repository.getAllInDateRange(
         startDate = LocalDateTime.now().getFirstDayOfMonth(),
         endDate = LocalDateTime.now().getLastDayOfMonth().plusDays(1)
     )
 
+    val allCurrentMonthTransactionsAmount = allTransactions.map { transactions ->
+        transactions.filter { transaction ->
+            transaction.type == TransactionType.Expense
+        }.sum()
+    }
+
     val income: Flow<Float> =
-        allTransactions.map {
-            transactions -> transactions.filter {
-                transaction -> transaction.type == TransactionType.Income
+        allTransactions.map { transactions ->
+            transactions.filter { transaction ->
+                transaction.type == TransactionType.Income
             }.sum()
         }
 
     val regularExpenses: Flow<Float> = allTransactions.map {
-        it.filter{ transaction -> transaction.type == TransactionType.Expense && transaction.parent == 0 && !transaction.isPeriodic}.sum()
+        it.filter { transaction -> transaction.type == TransactionType.Expense && transaction.parent == 0 && !transaction.isPeriodic }
+            .sum()
     }
 
     val savingsTarget = preferencesController.getSavingTarget()
