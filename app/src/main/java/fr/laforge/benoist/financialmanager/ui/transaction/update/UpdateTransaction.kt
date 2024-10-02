@@ -39,7 +39,7 @@ fun UpdateTransaction(
     modifier: Modifier = Modifier,
     vm: UpdateTransactionViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
-    val uiState = vm.uiState.collectAsState().value
+    val uiState = vm.uiState
 
     Scaffold(
         floatingActionButton = {
@@ -52,7 +52,7 @@ fun UpdateTransaction(
                     )
                 },
                 onClick = {
-
+                    vm.updateTransaction()
                     navController.popBackStack(FinancialManagerScreen.Home.name, false)
                 }
             )
@@ -77,7 +77,7 @@ fun UpdateTransaction(
                 TransactionTypeSelector(
                     initialValue = uiState.transaction.type
                 ) { transactionType ->
-//                    vm.updateInputType(transactionType = transactionType)
+                    vm.updateInputType(transactionType = transactionType)
                 }
 
                 TransactionCategorySelector(initialValue = uiState.transaction.category) { category ->
@@ -85,11 +85,11 @@ fun UpdateTransaction(
                 }
 
                 TransactionAmountEditor(initialValue = uiState.transaction.amount.toString()) { newVal ->
-//                    vm.updateAmount(amount = newVal)
+                    vm.updateAmount(amount = newVal)
                 }
 
                 TransactionDescriptionEditor(initialValue = uiState.transaction.description) { newDescription ->
-//                    vm.updateDescription(newDescription)
+                    vm.updateDescription(newDescription)
                 }
             }
         }

@@ -1,30 +1,67 @@
 package fr.laforge.benoist.financialmanager.ui.transaction.update
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.ui.transaction.detail.TransactionUiState
+import fr.laforge.benoist.model.TransactionCategory
+import fr.laforge.benoist.model.TransactionType
 import fr.laforge.benoist.repository.FinancialRepository
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class UpdateTransactionViewModel(
     savedStateHandle: SavedStateHandle,
     private val financialRepository: FinancialRepository
 ) : ViewModel() {
-    private val transactionId = savedStateHandle.get<Int>("transactionId") ?: 0
+    private val transactionId = savedStateHandle["transactionId"] ?: 0
+    var uiState: TransactionUiState by mutableStateOf(TransactionUiState())
 
-    val uiState: StateFlow<TransactionUiState> = financialRepository.get(uid = transactionId)
-        .filterNotNull()
-        .map {
-            TransactionUiState(transaction = it)
+    init {
+        viewModelScope.launch {
+            uiState = TransactionUiState(
+                financialRepository.get(uid = transactionId)
+                    .filterNotNull()
+                    .first()
+            )
         }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = TransactionUiState()
-        )
+    }
+
+    fun updateInputType(transactionType: TransactionType) {
+        uiState = uiState.copy(transaction = uiState.transaction.copy(type = transactionType))
+    }
+
+    fun updateTransactionCategory(transactionCategory: TransactionCategory) {
+        uiState =
+            uiState.copy(transaction = uiState.transaction.copy(category = transactionCategory))
+    }
+
+    fun updateAmount(amount: String) {
+        try {
+            uiState =
+                uiState.copy(transaction = uiState.transaction.copy(amount = amount.toFloat()))
+        } catch (e: NumberFormatException) {
+            Timber.w(e)
+        }
+    }
+
+    fun updateDescription(newDescription: String) {
+        uiState = uiState.copy(transaction = uiState.transaction.copy(description = newDescription))
+    }
+
+    /**
+     * Updates the transaction
+     */
+    fun updateTransaction(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
+            financialRepository.updateTransaction(uiState.transaction)
+        }
+    }
 }
