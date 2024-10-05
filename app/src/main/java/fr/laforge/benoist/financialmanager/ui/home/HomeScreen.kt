@@ -91,8 +91,6 @@ fun HomeScreen(
             Column(
                 modifier = modifier.background(MaterialTheme.colorScheme.background)
             ) {
-
-                Timber.d("allExpenses: $allExpenses, income: $income, savingsTarget: $savingsTarget")
                 SituationCard(
                     allExpenses = -allExpenses,
                     regularExpenses = -regularExpenses,
