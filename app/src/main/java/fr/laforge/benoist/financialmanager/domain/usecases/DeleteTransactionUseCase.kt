@@ -3,7 +3,9 @@ package fr.laforge.benoist.financialmanager.domain.usecases
 import fr.laforge.benoist.financialmanager.util.isChildTransaction
 import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.repository.FinancialRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 interface DeleteTransactionUseCase {
@@ -11,7 +13,7 @@ interface DeleteTransactionUseCase {
         transaction: Transaction,
         onPeriodicChildTransaction: () -> DeletePeriodicStatus,
         onShouldDisplayConfirmationDialog: () -> Boolean,
-    ): Result<Boolean>
+    ): Flow<DeleteTransactionUseCaseStatus>
 }
 
 enum class DeletePeriodicStatus {
@@ -19,33 +21,37 @@ enum class DeletePeriodicStatus {
     AllOccurrences,
 }
 
-class DeleteTransactionUseCaseImpl(private val financialRepository: FinancialRepository) : DeleteTransactionUseCase {
+enum class DeleteTransactionUseCaseStatus {
+    ShouldDisplayPeriodicDialog,
+    ShouldDisplayConfirmationDialog,
+    Success,
+    Error,
+}
+
+class DeleteTransactionUseCaseImpl(private val financialRepository: FinancialRepository) :
+    DeleteTransactionUseCase {
     override suspend fun invoke(
         transaction: Transaction,
         onPeriodicChildTransaction: () -> DeletePeriodicStatus,
         onShouldDisplayConfirmationDialog: () -> Boolean,
-    ): Result<Boolean> {
-        return try {
-            val deleteTransactionStatus = if (transaction.isChildTransaction()) {
-                onPeriodicChildTransaction()
-            } else {
-                DeletePeriodicStatus.ThisOccurrenceOnly
+    ) = flow {
+        if (transaction.isChildTransaction()) {
+            emit(DeleteTransactionUseCaseStatus.ShouldDisplayPeriodicDialog))
+        }
+
+        val deletePeriodicStatus = onPeriodicChildTransaction()
+
+        val shouldDelete = onShouldDisplayConfirmationDialog()
+
+        if (shouldDelete) {
+            financialRepository.deleteTransaction(transaction)
+
+            if (deletePeriodicStatus == DeletePeriodicStatus.AllOccurrences) {
+                deleteParentTransaction(transaction)
             }
-
-            val shouldDelete = onShouldDisplayConfirmationDialog()
-
-            if (shouldDelete) {
-                financialRepository.deleteTransaction(transaction)
-
-                if (deleteTransactionStatus == DeletePeriodicStatus.AllOccurrences) {
-                    deleteParentTransaction(transaction)
-                }
-                Result.success(true)
-            } else {
-                Result.success(false) // User canceled
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
+            Result.success(true)
+        } else {
+            Result.success(false) // User canceled
         }
     }
 
