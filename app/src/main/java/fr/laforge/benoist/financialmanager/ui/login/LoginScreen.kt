@@ -39,7 +39,7 @@ import fr.laforge.benoist.financialmanager.R
 fun LoginScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    vm: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    vm: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     var displayBiometrics by remember {
         mutableStateOf(true)

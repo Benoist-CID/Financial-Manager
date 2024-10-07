@@ -6,14 +6,38 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import fr.laforge.benoist.financialmanager.controller.PreferencesControllerImpl
+import fr.laforge.benoist.financialmanager.domain.usecases.CheckIfTransactionIsPeriodicUseCaseImpl
+import fr.laforge.benoist.financialmanager.domain.usecases.DeleteTransactionUseCaseImpl
+import fr.laforge.benoist.financialmanager.interactors.DeleteTransactionInteractorImpl
 import fr.laforge.benoist.financialmanager.ui.db.ImportDbViewModel
+import fr.laforge.benoist.financialmanager.ui.home.HomeScreenViewModel
 import fr.laforge.benoist.financialmanager.ui.login.LoginViewModel
 import fr.laforge.benoist.financialmanager.ui.transaction.add.AddTransactionViewModel
 import fr.laforge.benoist.financialmanager.ui.transaction.detail.TransactionDetailsViewModel
 import fr.laforge.benoist.financialmanager.ui.transaction.update.UpdateTransactionViewModel
+import fr.laforge.benoist.preferences.DataStorePreferencesInteractor
+
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
+        initializer {
+            HomeScreenViewModel(
+                repository = financialManagerApplication().container.financialRepository,
+                deleteTransactionInteractor = DeleteTransactionInteractorImpl(
+                    checkIfTransactionIsPeriodicUseCase = CheckIfTransactionIsPeriodicUseCaseImpl(),
+                    deleteTransactionUseCase = DeleteTransactionUseCaseImpl(
+                        financialManagerApplication().container.financialRepository
+                    ),
+                ),
+                preferencesController = PreferencesControllerImpl(
+                    preferencesInteractor = DataStorePreferencesInteractor(
+                        context = financialManagerApplication()
+                    )
+                ),
+            )
+        }
+
         initializer {
             AddTransactionViewModel()
         }

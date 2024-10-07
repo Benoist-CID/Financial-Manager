@@ -6,10 +6,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.controller.PreferencesController
-import fr.laforge.benoist.financialmanager.domain.usecases.CheckIfTransactionIsPeriodicUseCase
-import fr.laforge.benoist.financialmanager.domain.usecases.DeletePeriodicStatus
-import fr.laforge.benoist.financialmanager.domain.usecases.DeleteTransactionUseCase
-import fr.laforge.benoist.financialmanager.domain.usecases.DeleteTransactionUseCaseStatus
+import fr.laforge.benoist.financialmanager.domain.usecases.DeleteTransactionType
+import fr.laforge.benoist.financialmanager.interactors.DeleteTransactionInteractor
 import fr.laforge.benoist.financialmanager.util.exportToCsvFormat
 import fr.laforge.benoist.financialmanager.util.getFirstDayOfMonth
 import fr.laforge.benoist.financialmanager.util.getLastDayOfMonth
@@ -18,9 +16,7 @@ import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.model.TransactionType
 import fr.laforge.benoist.repository.FinancialRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,13 +30,11 @@ import java.time.LocalDateTime
 
 class HomeScreenViewModel(
     private val repository: FinancialRepository,
-    private val checkIfTransactionIsPeriodicUseCase: CheckIfTransactionIsPeriodicUseCase,
-    private val deleteTransactionUseCase: DeleteTransactionUseCase,
+    private val deleteTransactionInteractor: DeleteTransactionInteractor,
     preferencesController: PreferencesController,
 ) : ViewModel(), DefaultLifecycleObserver {
     private val _uiState = MutableStateFlow(HomeScreenUiState())
     val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
-    val deletePeriodicStatusFlow: Flow<DeletePeriodicStatus> = MutableSharedFlow()
 
     val periodicAmount: Flow<Float> = repository.getAllPeriodicTransactionsByType(
         type = TransactionType.Expense
@@ -73,11 +67,25 @@ class HomeScreenViewModel(
 
     val savingsTarget = preferencesController.getSavingTarget()
 
-    suspend fun deleteTransaction(
-        transaction: Transaction
+    fun isPeriodicTransaction(transaction: Transaction): Boolean {
+        return deleteTransactionInteractor.isPeriodicTransaction(transaction)
+    }
+
+    fun deleteTransaction(
+        transaction: Transaction,
+        shouldDeleteParent: Boolean = false,
     ) {
-        if (checkIfTransactionIsPeriodicUseCase(transaction)) {
-               
+        val deleteTransactionType = if (shouldDeleteParent) {
+            DeleteTransactionType.AllOccurrences
+        } else {
+            DeleteTransactionType.ThisOccurrenceOnly
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteTransactionInteractor.deleteTransaction(
+                transaction = transaction,
+                deleteTransactionType = deleteTransactionType
+            )
         }
     }
 

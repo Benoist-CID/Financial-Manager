@@ -41,17 +41,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import fr.laforge.benoist.financialmanager.AppViewModelProvider
 import fr.laforge.benoist.financialmanager.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
+import fr.laforge.benoist.financialmanager.ui.component.DialogType
 import fr.laforge.benoist.financialmanager.ui.component.ShowDialog
 import fr.laforge.benoist.financialmanager.ui.component.TopBar
 import fr.laforge.benoist.financialmanager.ui.component.TransactionRow
 import fr.laforge.benoist.financialmanager.util.displayDate
 import fr.laforge.benoist.financialmanager.util.toDate
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 import java.time.LocalDateTime
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -60,7 +61,7 @@ import java.time.LocalDateTime
 fun HomeScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    vm: HomeScreenViewModel = koinViewModel(),
+    vm: HomeScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val allExpenses by vm.allCurrentMonthTransactionsAmount.collectAsState(initial = 0F)
     val recurringExpenses by vm.periodicAmount.collectAsState(initial = 0F)
@@ -113,8 +114,7 @@ fun HomeScreen(
                         unfocusedContainerColor = Color.White,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-
-                        ),
+                    ),
                     placeholder = { Text("Search") }
                 )
             }
@@ -128,33 +128,81 @@ fun HomeScreen(
                 }) { transaction ->
                     val dismissState = rememberDismissState()
                     val openAlertDialog = remember { mutableStateOf(false) }
+                    val openPeriodicAlertDialog = remember { mutableStateOf(false) }
 
                     if (dismissState.isDismissed(direction = DismissDirection.EndToStart)) {
-                        openAlertDialog.value = true
+                        if (vm.isPeriodicTransaction(transaction)) {
+                            openPeriodicAlertDialog.value = true
+                        } else {
+                            openAlertDialog.value = true
+                        }
                     }
+
+                    if (openPeriodicAlertDialog.value) {
+                        ShowDialog(
+                            onDismissRequest = {
+                                vm.viewModelScope.launch {
+                                    dismissState.snapTo(DismissValue.Default)
+                                }
+                                openPeriodicAlertDialog.value = false
+                            },
+                            onConfirmation = {
+                                vm.deleteTransaction(
+                                    transaction = transaction,
+                                    shouldDeleteParent = true
+                                )
+                                vm.viewModelScope.launch {
+                                    dismissState.snapTo(DismissValue.Default)
+                                }
+                                openPeriodicAlertDialog.value = false
+                            },
+                            onThirdButton = {
+                                vm.deleteTransaction(
+                                    transaction = transaction,
+                                    shouldDeleteParent = false
+                                )
+                                vm.viewModelScope.launch {
+                                    dismissState.snapTo(DismissValue.Default)
+                                }
+                                openPeriodicAlertDialog.value = false
+                            },
+                            dialogTitle = stringResource(R.string.periodic_transaction),
+                            dialogText = stringResource(R.string.periodic_transaction_description),
+                            icon = {
+                                Icon(Icons.Filled.Delete, contentDescription = null)
+                            },
+                            confirmButtonText = stringResource(R.string.all),
+                            dismissButtonText = stringResource(R.string.cancel),
+                            thirdButtonText = stringResource(R.string.just_this_one),
+                            dialogType = DialogType.ThreeButtons
+                        )
+                    }
+
                     // Displays dialog
-                    when {
-                        openAlertDialog.value ->
-                            ShowDialog(
-                                onDismissRequest = {
-                                    vm.viewModelScope.launch {
-                                        dismissState.snapTo(DismissValue.Default)
-                                    }
-                                    openAlertDialog.value = false
-                                },
-                                onConfirmation = {
-                                    vm.deleteTransaction(transaction = transaction)
-                                    vm.viewModelScope.launch {
-                                        dismissState.snapTo(DismissValue.Default)
-                                    }
-                                    openAlertDialog.value = false
-                                },
-                                dialogTitle = stringResource(R.string.do_you_want_to_delete),
-                                dialogText = stringResource(R.string.delete_warning_message),
-                                icon = {
-                                    Icon(Icons.Filled.Delete, contentDescription = null)
-                                },
-                            )
+                    if (openAlertDialog.value) {
+                        ShowDialog(
+                            onDismissRequest = {
+                                vm.viewModelScope.launch {
+                                    dismissState.snapTo(DismissValue.Default)
+                                }
+                                openAlertDialog.value = false
+                            },
+                            onConfirmation = {
+                                vm.deleteTransaction(
+                                    transaction = transaction,
+                                    shouldDeleteParent = false
+                                )
+                                vm.viewModelScope.launch {
+                                    dismissState.snapTo(DismissValue.Default)
+                                }
+                                openAlertDialog.value = false
+                            },
+                            dialogTitle = stringResource(R.string.do_you_want_to_delete),
+                            dialogText = stringResource(R.string.delete_warning_message),
+                            icon = {
+                                Icon(Icons.Filled.Delete, contentDescription = null)
+                            },
+                        )
                     }
 
                     SwipeToDismiss(

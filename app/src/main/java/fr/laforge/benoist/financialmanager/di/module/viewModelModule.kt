@@ -1,7 +1,6 @@
 package fr.laforge.benoist.financialmanager.di.module
 
 import fr.laforge.benoist.financialmanager.MainActivityViewModel
-import fr.laforge.benoist.financialmanager.ui.home.HomeScreenViewModel
 import fr.laforge.benoist.financialmanager.ui.transaction.add.AddTransactionViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -15,11 +14,5 @@ val viewModelModule by lazy {
             )
         }
         viewModel { AddTransactionViewModel() }
-        viewModel  {
-            HomeScreenViewModel(
-                preferencesController = get(),
-                repository = get(),
-            )
-        }
     }
 }

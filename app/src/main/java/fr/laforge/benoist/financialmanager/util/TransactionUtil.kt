@@ -54,12 +54,3 @@ fun List<Transaction>.sum(): Float {
 
     return sum
 }
-
-/**
- * Checks if a Transaction is a child transaction or not
- *
- * @return Boolean
- */
-fun Transaction.isChildTransaction(): Boolean {
-    return this.parent != 0
-}
