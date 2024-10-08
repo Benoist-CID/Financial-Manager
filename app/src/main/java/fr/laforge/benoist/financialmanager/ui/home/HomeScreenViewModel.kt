@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.controller.PreferencesController
 import fr.laforge.benoist.financialmanager.domain.usecases.DeleteTransactionType
-import fr.laforge.benoist.financialmanager.interactors.DeleteTransactionInteractor
+import fr.laforge.benoist.financialmanager.interactors.TransactionInteractor
 import fr.laforge.benoist.financialmanager.util.exportToCsvFormat
 import fr.laforge.benoist.financialmanager.util.getFirstDayOfMonth
 import fr.laforge.benoist.financialmanager.util.getLastDayOfMonth
@@ -30,7 +30,7 @@ import java.time.LocalDateTime
 
 class HomeScreenViewModel(
     private val repository: FinancialRepository,
-    private val deleteTransactionInteractor: DeleteTransactionInteractor,
+    private val transactionInteractor: TransactionInteractor,
     preferencesController: PreferencesController,
 ) : ViewModel(), DefaultLifecycleObserver {
     private val _uiState = MutableStateFlow(HomeScreenUiState())
@@ -67,9 +67,8 @@ class HomeScreenViewModel(
 
     val savingsTarget = preferencesController.getSavingTarget()
 
-    fun isPeriodicTransaction(transaction: Transaction): Boolean {
-        return deleteTransactionInteractor.isPeriodicTransaction(transaction)
-    }
+    fun isPeriodicTransaction(transaction: Transaction) =
+        transactionInteractor.isPeriodicTransaction(transaction)
 
     fun deleteTransaction(
         transaction: Transaction,
@@ -82,7 +81,7 @@ class HomeScreenViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            deleteTransactionInteractor.deleteTransaction(
+            transactionInteractor.deleteTransaction(
                 transaction = transaction,
                 deleteTransactionType = deleteTransactionType
             )

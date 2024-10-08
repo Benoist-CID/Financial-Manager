@@ -9,7 +9,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import fr.laforge.benoist.financialmanager.controller.PreferencesControllerImpl
 import fr.laforge.benoist.financialmanager.domain.usecases.CheckIfTransactionIsPeriodicUseCaseImpl
 import fr.laforge.benoist.financialmanager.domain.usecases.DeleteTransactionUseCaseImpl
-import fr.laforge.benoist.financialmanager.interactors.DeleteTransactionInteractorImpl
+import fr.laforge.benoist.financialmanager.domain.usecases.UpdateTransactionUseCaseImpl
+import fr.laforge.benoist.financialmanager.interactors.TransactionInteractorImpl
 import fr.laforge.benoist.financialmanager.ui.db.ImportDbViewModel
 import fr.laforge.benoist.financialmanager.ui.home.HomeScreenViewModel
 import fr.laforge.benoist.financialmanager.ui.login.LoginViewModel
@@ -20,15 +21,19 @@ import fr.laforge.benoist.preferences.DataStorePreferencesInteractor
 
 
 object AppViewModelProvider {
+
     val Factory = viewModelFactory {
         initializer {
             HomeScreenViewModel(
                 repository = financialManagerApplication().container.financialRepository,
-                deleteTransactionInteractor = DeleteTransactionInteractorImpl(
+                transactionInteractor = TransactionInteractorImpl(
                     checkIfTransactionIsPeriodicUseCase = CheckIfTransactionIsPeriodicUseCaseImpl(),
                     deleteTransactionUseCase = DeleteTransactionUseCaseImpl(
                         financialManagerApplication().container.financialRepository
                     ),
+                    updateTransactionUseCase = UpdateTransactionUseCaseImpl(
+                        financialRepository = financialManagerApplication().container.financialRepository
+                    )
                 ),
                 preferencesController = PreferencesControllerImpl(
                     preferencesInteractor = DataStorePreferencesInteractor(
@@ -61,6 +66,15 @@ object AppViewModelProvider {
             UpdateTransactionViewModel(
                 savedStateHandle = this.createSavedStateHandle(),
                 financialRepository = financialManagerApplication().container.financialRepository,
+                transactionInteractor = TransactionInteractorImpl(
+                    checkIfTransactionIsPeriodicUseCase = CheckIfTransactionIsPeriodicUseCaseImpl(),
+                    deleteTransactionUseCase = DeleteTransactionUseCaseImpl(
+                        financialManagerApplication().container.financialRepository
+                    ),
+                    updateTransactionUseCase = UpdateTransactionUseCaseImpl(
+                        financialRepository = financialManagerApplication().container.financialRepository
+                    )
+                ),
             )
         }
     }
