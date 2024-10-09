@@ -5,15 +5,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import fr.laforge.benoist.financialmanager.ui.home.HomeScreenViewModel
 import fr.laforge.benoist.financialmanager.usecase.CreateRegularTransactionsUseCase
 import fr.laforge.benoist.financialmanager.usecase.notification.EnableNotificationAccessUseCase
-import fr.laforge.benoist.financialmanager.views.home.HomeScreenViewModel
 import fr.laforge.benoist.util.getDateBoundaries
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 
 class MainActivityViewModel(

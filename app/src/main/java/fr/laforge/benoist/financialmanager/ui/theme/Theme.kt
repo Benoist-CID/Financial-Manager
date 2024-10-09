@@ -68,6 +68,7 @@ fun FinancialManagerTheme(
     MaterialTheme(
         colorScheme = DarkColorScheme,
         typography = Typography,
+        shapes = Shapes,
         content = content
     )
 }

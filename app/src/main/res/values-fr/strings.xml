@@ -12,12 +12,19 @@
     <string name="create_input">Créer une dépense</string>
     <string name="do_you_want_to_delete">Voulez-vous supprimer?</string>
     <string name="delete_warning_message">La suppression est définitve, réfléchis y bien.</string>
+    <string name="update_warning_message">La mise à jour est définitve, réfléchis y bien.</string>
+    <string name="periodic_transaction">Transaction périodique</string>
+    <string name="periodic_transaction_description">Voulez-vous supprimer toutes les occurrences ou juste celle-ci?</string>
+    <string name="periodic_transaction_update_description">Voulez-vous mettre à jour toutes les occurrences ou juste celle-ci?</string>
     <string name="confirm">Confirmer</string>
     <string name="cancel">Annuler</string>
     <string name="situation_on">Situation au</string>
     <string name="per_day">par jour</string>
+    <string name="all">Toutes</string>
+    <string name="just_this_one">Celle-ci</string>
 
     <!-- Add input screen -->
+    <string name="create_transaction">Créer une Transaction</string>
     <string name="description">Description</string>
     <string name="amount">Montant</string>
     <string name="type">Type</string>
@@ -27,10 +34,14 @@
     <string name="end_date">End date</string>
     <string name="period">Period</string>
 
+    <!-- Update transaction screen -->
+    <string name="update_transaction">Modifier la Transaction</string>
+
     <!-- Search bar -->
     <string name="search">Rechercher</string>
 
     <!-- Settings -->
     <string name="settings">Paramètres</string>
     <string name="savings_target">Objectif d\'épargne</string>
+    <string name="transaction_details">Détails de la Transaction</string>
 </resources>
