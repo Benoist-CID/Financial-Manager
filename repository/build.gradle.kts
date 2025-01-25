@@ -45,6 +45,7 @@ dependencies {
     implementation("com.google.android.material:material:1.10.0")
     implementation(project(mapOf("path" to ":model")))
     implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation("androidx.test:core-ktx:1.6.1")
     // Room
     val roomVersion = "2.6.0"
     implementation("androidx.room:room-runtime:$roomVersion")

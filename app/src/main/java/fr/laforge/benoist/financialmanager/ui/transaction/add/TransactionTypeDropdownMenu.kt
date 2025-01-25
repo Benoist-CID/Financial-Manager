@@ -32,6 +32,8 @@ fun GenericTypeDropdownMenu(
         mutableStateOf(false)
     }
 
+    var currentValue by remember { mutableStateOf(defaultValue) }
+
     ExposedDropdownMenuBox(
         expanded = isExpanded,
         onExpandedChange = { newValue ->
@@ -40,7 +42,7 @@ fun GenericTypeDropdownMenu(
         modifier = modifier
     ) {
         OutlinedTextField(
-            value = defaultValue,
+            value = currentValue,
             onValueChange = {},
             readOnly = true,
             trailingIcon = {
@@ -70,6 +72,7 @@ fun GenericTypeDropdownMenu(
                         Text(text = type)
                     },
                     onClick = {
+                        currentValue = type
                         onSelectedValueChanged(type)
                         isExpanded = false
                     }
@@ -84,7 +87,7 @@ fun GenericTypeDropdownMenu(
 fun TransactionTypeDropdownMenuPreview() {
     GenericTypeDropdownMenu(
         title = stringResource(id = R.string.type),
-        data = TransactionType.values().map{ it.toString() }
+        data = TransactionType.entries.map{ it.toString() }
     ) {
     }
 }

@@ -73,6 +73,7 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-compose:3.5.6")
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation(project(mapOf("path" to ":preferences")))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4-android:1.7.6")
     testImplementation("junit:junit:4.13.2")
     // for JVM:
     testImplementation("org.mockito:mockito-core:5.1.1")

@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "fr.laforge.benoist.util"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 26

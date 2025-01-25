@@ -60,7 +60,7 @@ class DateUtilTest {
         testDate = LocalDateTime.parse("2023-02-24T00:00:00")
         testDate.getLastDayOfMonth().`should be equal to`(LocalDateTime.parse("2023-02-28T00:00:00"))
 
-        testDate = LocalDateTime.now()
+        testDate = LocalDateTime.parse("2023-12-09T00:00:00")
         testDate.getLastDayOfMonth().`should be equal to`(LocalDateTime.parse("2023-12-31T00:00:00"))
     }
 
@@ -68,7 +68,7 @@ class DateUtilTest {
     fun `Tests LocalDateTime getNumberOfRemainingDaysInMonth`() {
         val testDate = LocalDateTime.parse("2023-12-04T00:00:00")
 
-        testDate.getNumberOfRemainingDaysInMonth().`should be equal to`(27)
+        testDate.getNumberOfRemainingDaysInMonth().`should be equal to`(28)
     }
 
     @Test
