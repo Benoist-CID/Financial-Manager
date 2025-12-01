@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 interface CreateTransactionFromNotificationUseCase {
-    suspend operator fun invoke(notificationMessage: String): Any
+    suspend operator fun invoke(notificationTitle: String, notificationMessage: String): Any
 }
 
 class CreateTransactionFromNotificationUseCaseImpl(
@@ -15,11 +15,11 @@ class CreateTransactionFromNotificationUseCaseImpl(
     private val notificationHelper: NotificationHelper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : CreateTransactionFromNotificationUseCase {
-    override suspend fun invoke(notificationMessage: String) = withContext(dispatcher) {
+    override suspend fun invoke(notificationTitle: String, notificationMessage: String) = withContext(dispatcher) {
         // Checks if the message contains a transaction
         if (notificationHelper.isTransaction(notificationMessage = notificationMessage) == Result.success(true)) {
             // Creates a transaction from message
-            val transaction = notificationHelper.parseNotificationMessage(notificationMessage = notificationMessage)
+            val transaction = notificationHelper.parseNotificationMessage(notificationTitle = notificationTitle, notificationMessage = notificationMessage)
             // Creates transaction
             transaction.getOrNull()?.let {
                 createTransactionUseCase(transaction = it)

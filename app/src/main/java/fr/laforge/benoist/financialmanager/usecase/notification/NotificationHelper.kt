@@ -13,9 +13,9 @@ interface NotificationHelper {
     fun isTransaction(notificationMessage: String): Result<Boolean>
 
     /**
-     * TAkes a notification message and converts it to a Transaction
+     * Takes a notification message and converts it to a Transaction
      */
-    fun parseNotificationMessage(notificationMessage: String): Result<Transaction>
+    fun parseNotificationMessage(notificationTitle: String, notificationMessage: String): Result<Transaction>
 }
 
 class NotificationHelperImpl : NotificationHelper {
@@ -27,7 +27,7 @@ class NotificationHelperImpl : NotificationHelper {
         }
     }
 
-    override fun parseNotificationMessage(notificationMessage: String): Result<Transaction> {
+    override fun parseNotificationMessage(notificationTitle: String, notificationMessage: String): Result<Transaction> {
         val split = notificationMessage.split(EURO_SYMBOL)
 
         if (split.size <= 1) {
@@ -36,8 +36,8 @@ class NotificationHelperImpl : NotificationHelper {
 
         return Result.success(
             Transaction(
-                amount = split[1].replace(',', '.').toFloat(),
-                description = split[0].trim()
+                amount = split[0].replace(',', '.').toFloat(),
+                description = notificationTitle
             )
         )
     }

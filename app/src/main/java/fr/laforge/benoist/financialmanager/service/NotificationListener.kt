@@ -21,9 +21,11 @@ class NotificationListener : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
 
+        val title = sbn?.notification?.extras?.getString("android.title") ?: "No description"
+
         sbn?.notification?.extras?.getString("android.text")?. let {
             MainScope().launch {
-                createTransactionFromNotificationUseCase(notificationMessage = it)
+                createTransactionFromNotificationUseCase(notificationTitle = title, notificationMessage = it)
             }
         } ?: Timber.e("Notification message is null")
     }
