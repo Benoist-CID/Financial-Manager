@@ -1,7 +1,7 @@
 package fr.laforge.benoist.financialmanager.domain.usecase
 
-import fr.laforge.benoist.model.Transaction
-import fr.laforge.benoist.repository.FinancialRepository
+import fr.laforge.benoist.financialmanager.domain.model.Transaction
+import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 

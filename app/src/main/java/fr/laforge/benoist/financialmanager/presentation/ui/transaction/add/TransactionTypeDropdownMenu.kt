@@ -16,8 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import fr.laforge.benoist.financialmanager.R
-import fr.laforge.benoist.model.TransactionType
-import timber.log.Timber
+import fr.laforge.benoist.financialmanager.domain.model.TransactionType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

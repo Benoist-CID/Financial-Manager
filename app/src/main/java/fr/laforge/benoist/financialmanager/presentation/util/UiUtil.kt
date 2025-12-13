@@ -21,9 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import fr.laforge.benoist.financialmanager.R
-import fr.laforge.benoist.model.Transaction
-import fr.laforge.benoist.model.TransactionCategory
-import fr.laforge.benoist.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.model.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.TransactionCategory
+import fr.laforge.benoist.financialmanager.domain.model.TransactionType
 
 @Composable
 fun Transaction.getAmountColor(): Color {

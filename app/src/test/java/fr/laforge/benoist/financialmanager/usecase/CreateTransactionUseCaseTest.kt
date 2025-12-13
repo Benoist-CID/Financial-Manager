@@ -2,9 +2,9 @@ package fr.laforge.benoist.financialmanager.usecase
 
 import fr.laforge.benoist.financialmanager.domain.usecase.CreateTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.CreateTransactionUseCaseImpl
-import fr.laforge.benoist.model.Transaction
-import fr.laforge.benoist.model.TransactionType
-import fr.laforge.benoist.repository.FinancialRepository
+import fr.laforge.benoist.financialmanager.domain.model.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After

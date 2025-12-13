@@ -3,10 +3,10 @@ package fr.laforge.benoist.financialmanager.presentation.ui.transaction.add
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.domain.usecase.CreateTransactionUseCase
-import fr.laforge.benoist.model.Transaction
-import fr.laforge.benoist.model.TransactionCategory
-import fr.laforge.benoist.model.TransactionPeriod
-import fr.laforge.benoist.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.model.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.TransactionCategory
+import fr.laforge.benoist.financialmanager.domain.model.TransactionPeriod
+import fr.laforge.benoist.financialmanager.domain.model.TransactionType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

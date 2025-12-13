@@ -1,8 +1,59 @@
 [versions]
 
+activityCompose = "1.8.0"
+androidxJunit = "1.1.5"
+biometric = "1.1.0"
+composeBom = "2023.03.00"
+coreKtx = "1.9.0"
 datastore = "1.2.0"
+espressoCore = "3.5.1"
+junit = "4.13.2"
+junitVersion = "4.12"
+kluent = "1.73"
+koinAndroid = "3.5.6"
+koinTest = "3.1.2"
+lifecycleRuntimeCompose = "2.7.0-rc01"
+material3 = "1.1.2"
+mockitoCore = "5.1.1"
+mockitoKotlin = "4.1.0"
+navigationRuntimeKtx = "2.7.5"
+navigationCompose = "2.7.5"
+roomKtx = "2.6.0"
+timber = "5.0.1"
+uiTestJunit4Android = "1.7.6"
 
 [libraries]
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
+androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtx" }
+androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-ui-test-junit4-android = { module = "androidx.compose.ui:ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
+androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+junit = { module = "junit:junit", version.ref = "junit" }
+junit-v412 = { module = "junit:junit", version.ref = "junitVersion" }
+kluent = { module = "org.amshove.kluent:kluent", version.ref = "kluent" }
+kluent-android = { module = "org.amshove.kluent:kluent-android", version.ref = "kluent" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroid" }
+koin-core = { module = "io.insert-koin:koin-core" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koinTest" }
+lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+navigation-runtime-ktx = { module = "androidx.navigation:navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+ui = { module = "androidx.compose.ui:ui" }
+ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 
 [plugins]

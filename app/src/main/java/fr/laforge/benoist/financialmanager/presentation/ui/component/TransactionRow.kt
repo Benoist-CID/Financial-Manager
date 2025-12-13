@@ -29,9 +29,9 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import fr.laforge.benoist.financialmanager.presentation.util.getCategoryColor
-import fr.laforge.benoist.model.Transaction
-import fr.laforge.benoist.model.TransactionCategory
-import fr.laforge.benoist.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.model.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.TransactionCategory
+import fr.laforge.benoist.financialmanager.domain.model.TransactionType
 import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

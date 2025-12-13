@@ -1,6 +1,6 @@
 package fr.laforge.benoist.financialmanager.domain.usecase
 
-import fr.laforge.benoist.model.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.Transaction
 
 interface CheckIfTransactionIsPeriodicUseCase {
     operator fun invoke(transaction: Transaction): Boolean

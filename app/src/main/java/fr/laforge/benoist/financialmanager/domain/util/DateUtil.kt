@@ -1,6 +1,6 @@
 package fr.laforge.benoist.financialmanager.domain.util
 
-import fr.laforge.benoist.model.TransactionPeriod
+import fr.laforge.benoist.financialmanager.domain.model.TransactionPeriod
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId

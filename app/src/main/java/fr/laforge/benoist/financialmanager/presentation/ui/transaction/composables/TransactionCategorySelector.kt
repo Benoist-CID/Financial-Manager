@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.add.GenericTypeDropdownMenu
-import fr.laforge.benoist.model.TransactionCategory
+import fr.laforge.benoist.financialmanager.domain.model.TransactionCategory
 import timber.log.Timber
 
 @Composable
