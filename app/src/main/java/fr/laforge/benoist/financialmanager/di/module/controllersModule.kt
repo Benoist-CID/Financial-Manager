@@ -6,6 +6,6 @@ import org.koin.dsl.module
 
 val controllersModule by lazy {
     module {
-        factory<PreferencesController> { PreferencesControllerImpl(preferencesInteractor = get()) }
+        single<PreferencesController> { PreferencesControllerImpl(preferencesInteractor = get()) }
     }
 }

@@ -1,9 +1,11 @@
 package fr.laforge.benoist.financialmanager.interactors
 
-import fr.laforge.benoist.financialmanager.domain.usecases.CheckIfTransactionIsPeriodicUseCase
-import fr.laforge.benoist.financialmanager.domain.usecases.DeleteTransactionType
-import fr.laforge.benoist.financialmanager.domain.usecases.DeleteTransactionUseCase
-import fr.laforge.benoist.financialmanager.domain.usecases.UpdateTransactionUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.CheckIfTransactionIsPeriodicUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionType
+import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractor
+import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractorImpl
+import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCase
 import fr.laforge.benoist.model.Transaction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -22,7 +24,7 @@ class TransactionInteractorTest {
 
     private val transactionInteractor: TransactionInteractor =
         TransactionInteractorImpl(
-            checkIfTransactionIsPeriodicUseCase =  checkIfTransactionIsPeriodicUseCase,
+            checkIfTransactionIsPeriodicUseCase = checkIfTransactionIsPeriodicUseCase,
             deleteTransactionUseCase = deleteTransactionUseCase,
             updateTransactionUseCase = updateTransactionUseCase
         )

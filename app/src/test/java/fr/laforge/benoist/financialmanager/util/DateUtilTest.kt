@@ -1,5 +1,13 @@
 package fr.laforge.benoist.financialmanager.util
 
+import fr.laforge.benoist.financialmanager.domain.util.getFirstDayOfMonth
+import fr.laforge.benoist.financialmanager.domain.util.getLastDayOfMonth
+import fr.laforge.benoist.financialmanager.domain.util.getNumberOfRemainingDaysInMonth
+import fr.laforge.benoist.financialmanager.domain.util.getNumberOfRemainingDaysInPeriod
+import fr.laforge.benoist.financialmanager.domain.util.isInRange
+import fr.laforge.benoist.financialmanager.domain.util.next
+import fr.laforge.benoist.financialmanager.domain.util.toDate
+import fr.laforge.benoist.financialmanager.domain.util.toLocalDateTime
 import fr.laforge.benoist.model.TransactionPeriod
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should be false`

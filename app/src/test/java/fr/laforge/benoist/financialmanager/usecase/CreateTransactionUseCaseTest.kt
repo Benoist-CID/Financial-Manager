@@ -1,11 +1,12 @@
 package fr.laforge.benoist.financialmanager.usecase
 
+import fr.laforge.benoist.financialmanager.domain.usecase.CreateTransactionUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.CreateTransactionUseCaseImpl
 import fr.laforge.benoist.model.Transaction
 import fr.laforge.benoist.model.TransactionType
 import fr.laforge.benoist.repository.FinancialRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.amshove.kluent.`should be equal to`
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -16,12 +17,9 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.mockito.Mockito
 import org.mockito.kotlin.any
-import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.Calendar
 
 class CreateTransactionUseCaseTest : KoinTest {
     private val mockRepository by lazy {
@@ -35,7 +33,7 @@ class CreateTransactionUseCaseTest : KoinTest {
             modules(
                 module {
                     single { mockRepository }
-                    single<CreateTransactionUseCase> {CreateTransactionUseCaseImpl()}
+                    single<CreateTransactionUseCase> { CreateTransactionUseCaseImpl() }
                 }
             )
         }
