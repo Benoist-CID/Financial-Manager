@@ -3,9 +3,8 @@ package fr.laforge.benoist.financialmanager.infrastructure
 import android.app.Application
 import fr.laforge.benoist.financialmanager.data.AppContainer
 import fr.laforge.benoist.financialmanager.data.AppDataContainer
-import fr.laforge.benoist.financialmanager.di.module.controllersModule
+import fr.laforge.benoist.financialmanager.di.module.dataModule
 import fr.laforge.benoist.financialmanager.di.module.helperModule
-import fr.laforge.benoist.financialmanager.di.module.interactorsModule
 import fr.laforge.benoist.financialmanager.di.module.repositoryModule
 import fr.laforge.benoist.financialmanager.di.module.useCaseModule
 import fr.laforge.benoist.financialmanager.di.module.viewModelModule
@@ -24,10 +23,9 @@ class FinancialManagerApp : Application() {
             androidContext(this@FinancialManagerApp)
             modules(viewModelModule)
             modules(repositoryModule)
-            modules(interactorsModule)
-            modules(controllersModule)
             modules(useCaseModule)
             modules(helperModule)
+            modules(dataModule)
         }
 
         Timber.Forest.plant(Timber.DebugTree())

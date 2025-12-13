@@ -17,11 +17,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.laforge.benoist.financialmanager.R
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    vm: SettingsViewModel = SettingsViewModel()
+    vm: SettingsViewModel = koinViewModel()
 ) {
     val savingsTarget by vm.savingsTarget.collectAsState(initial = 0F)
 

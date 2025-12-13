@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import fr.laforge.benoist.financialmanager.controller.PreferencesController
+import fr.laforge.benoist.financialmanager.domain.repository.PreferencesRepository
 import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionType
 import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractor
 import fr.laforge.benoist.financialmanager.domain.util.exportToCsvFormat
@@ -31,7 +31,7 @@ import java.time.LocalDateTime
 class HomeScreenViewModel(
     private val repository: FinancialRepository,
     private val transactionInteractor: TransactionInteractor,
-    preferencesController: PreferencesController,
+    preferencesRepository: PreferencesRepository,
 ) : ViewModel(), DefaultLifecycleObserver {
     private val _uiState = MutableStateFlow(HomeScreenUiState())
     val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
@@ -65,7 +65,7 @@ class HomeScreenViewModel(
             .sum()
     }
 
-    val savingsTarget = preferencesController.getSavingTarget()
+    val savingsTarget = preferencesRepository.getSavingTarget()
 
     fun isPeriodicTransaction(transaction: Transaction) =
         transactionInteractor.isPeriodicTransaction(transaction)

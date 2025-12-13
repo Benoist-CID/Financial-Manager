@@ -1,0 +1,8 @@
+[versions]
+
+datastore = "1.2.0"
+
+[libraries]
+datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+
+[plugins]

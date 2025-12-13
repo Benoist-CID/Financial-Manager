@@ -41,18 +41,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import fr.laforge.benoist.financialmanager.di.AppViewModelProvider
-import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
+import fr.laforge.benoist.financialmanager.domain.util.displayDate
+import fr.laforge.benoist.financialmanager.domain.util.toDate
+import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.component.DialogType
 import fr.laforge.benoist.financialmanager.presentation.ui.component.ShowDialog
 import fr.laforge.benoist.financialmanager.presentation.ui.component.TopBar
 import fr.laforge.benoist.financialmanager.presentation.ui.component.TransactionRow
-import fr.laforge.benoist.financialmanager.domain.util.displayDate
-import fr.laforge.benoist.financialmanager.domain.util.toDate
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDateTime
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -61,7 +60,7 @@ import java.time.LocalDateTime
 fun HomeScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    vm: HomeScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    vm: HomeScreenViewModel = koinViewModel(),
 ) {
     val allExpenses by vm.allCurrentMonthTransactionsAmount.collectAsState(initial = 0F)
     val recurringExpenses by vm.periodicAmount.collectAsState(initial = 0F)

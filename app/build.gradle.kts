@@ -54,6 +54,7 @@ dependencies {
     implementation(project(mapOf("path" to ":model")))
     implementation(project(mapOf("path" to ":repository")))
     implementation(project(mapOf("path" to ":util")))
+    implementation(libs.datastore)
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0-rc01")
     implementation("androidx.activity:activity-compose:1.8.0")
@@ -72,7 +73,6 @@ dependencies {
     implementation("io.insert-koin:koin-android:3.5.6")
     implementation("io.insert-koin:koin-androidx-compose:3.5.6")
     implementation("androidx.compose.material3:material3:1.1.2")
-    implementation(project(mapOf("path" to ":preferences")))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4-android:1.7.6")
     testImplementation("junit:junit:4.13.2")
     // for JVM:

@@ -1,9 +1,17 @@
 package fr.laforge.benoist.financialmanager.di.module
 
+import fr.laforge.benoist.financialmanager.domain.usecase.CheckIfTransactionIsPeriodicUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.CheckIfTransactionIsPeriodicUseCaseImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.CreateRegularTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.CreateRegularTransactionsUseCaseImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.CreateTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.CreateTransactionUseCaseImpl
+import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionUseCaseImpl
+import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractor
+import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractorImpl
+import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCaseImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCaseImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.EnableNotificationAccessUseCase
@@ -19,6 +27,27 @@ val useCaseModule by lazy {
             CreateTransactionFromNotificationUseCaseImpl(
                 createTransactionUseCase = get(),
                 notificationHelper = get()
+            )
+        }
+
+        factory<CheckIfTransactionIsPeriodicUseCase> {
+            CheckIfTransactionIsPeriodicUseCaseImpl()
+        }
+        factory<DeleteTransactionUseCase> {
+            DeleteTransactionUseCaseImpl(
+                financialRepository = get()
+            )
+        }
+        factory<UpdateTransactionUseCase> {
+            UpdateTransactionUseCaseImpl(
+                financialRepository = get()
+            )
+        }
+        factory<TransactionInteractor> {
+            TransactionInteractorImpl(
+                checkIfTransactionIsPeriodicUseCase = get(),
+                deleteTransactionUseCase = get(),
+                updateTransactionUseCase = get(),
             )
         }
     }
