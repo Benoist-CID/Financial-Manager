@@ -56,7 +56,6 @@ android {
 }
 
 dependencies {
-    implementation(project(mapOf("path" to ":util")))
     implementation(libs.datastore)
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.compose)

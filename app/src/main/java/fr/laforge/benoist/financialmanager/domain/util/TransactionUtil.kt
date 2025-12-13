@@ -4,8 +4,8 @@ import fr.laforge.benoist.financialmanager.domain.model.Transaction
 import fr.laforge.benoist.financialmanager.domain.model.TransactionCategory
 import fr.laforge.benoist.financialmanager.domain.model.TransactionPeriod
 import fr.laforge.benoist.financialmanager.domain.model.TransactionType
-import fr.laforge.benoist.util.toLocalDateTime
-import fr.laforge.benoist.util.toMilliseconds
+import fr.laforge.benoist.financialmanager.application.util.toLocalDateTime
+import fr.laforge.benoist.financialmanager.application.util.toMilliseconds
 
 
 fun Transaction.exportToCsvFormat(): String {

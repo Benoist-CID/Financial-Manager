@@ -8,7 +8,7 @@ import androidx.navigation.NavController
 import fr.laforge.benoist.financialmanager.domain.usecase.CreateRegularTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.EnableNotificationAccessUseCase
 import fr.laforge.benoist.financialmanager.presentation.ui.home.HomeScreenViewModel
-import fr.laforge.benoist.util.getDateBoundaries
+import fr.laforge.benoist.financialmanager.application.util.getDateBoundaries
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber

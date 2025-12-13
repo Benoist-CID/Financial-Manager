@@ -1,8 +1,8 @@
 package fr.laforge.benoist.financialmanager.infrastructure.repository.converters
 
 import androidx.room.TypeConverter
-import fr.laforge.benoist.util.toLocalDateTime
-import fr.laforge.benoist.util.toMilliseconds
+import fr.laforge.benoist.financialmanager.application.util.toLocalDateTime
+import fr.laforge.benoist.financialmanager.application.util.toMilliseconds
 import java.time.LocalDateTime
 
 class LocalDateTimeConverters {

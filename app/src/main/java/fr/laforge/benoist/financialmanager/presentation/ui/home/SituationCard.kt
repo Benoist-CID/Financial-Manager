@@ -22,7 +22,7 @@ import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.presentation.ui.component.AnimatedCircle
 import fr.laforge.benoist.financialmanager.presentation.ui.component.formatAmount
 import fr.laforge.benoist.financialmanager.domain.util.getNumberOfRemainingDaysInMonth
-import fr.laforge.benoist.util.getProportions
+import fr.laforge.benoist.financialmanager.domain.util.getProportions
 import java.time.LocalDateTime
 
 @Composable
@@ -46,9 +46,9 @@ fun SituationCard(
         AnimatedCircle(
             proportions = getProportions(income, recurringExpenses, regularExpenses, savingsTarget),
             colors = listOf(
-                colorResource(R.color.green_3),
-                colorResource(R.color.red_3),
                 colorResource(R.color.orange_3),
+                colorResource(R.color.red_3),
+                colorResource(R.color.green_3),
                 colorResource(R.color.blue_4)
             ),
             modifier = modifier

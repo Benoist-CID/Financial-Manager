@@ -1,4 +1,4 @@
-package fr.laforge.benoist.util
+package fr.laforge.benoist.financialmanager.domain.util
 
 import org.amshove.kluent.`should be equal to`
 import org.junit.Test
