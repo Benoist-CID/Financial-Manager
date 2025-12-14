@@ -28,7 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import fr.laforge.benoist.financialmanager.R
-import fr.laforge.benoist.financialmanager.domain.model.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

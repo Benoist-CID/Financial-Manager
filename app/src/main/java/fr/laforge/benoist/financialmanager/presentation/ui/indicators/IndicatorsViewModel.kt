@@ -2,6 +2,8 @@ package fr.laforge.benoist.financialmanager.presentation.ui.indicators
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.laforge.benoist.financialmanager.domain.model.indicator.LifestyleState
+import fr.laforge.benoist.financialmanager.domain.model.indicator.LifestyleStatus
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularExpensesUseCase
@@ -83,4 +85,18 @@ class IndicatorsViewModel(
         currentBalance - projectedFutureSpend
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0f)
+
+    val lifestyleRatio: StateFlow<LifestyleState> = combine(
+        recurringIncome,
+        recurringExpenses
+    ) { income, expenses ->
+        if (income == 0f) return@combine LifestyleState(0f, LifestyleStatus.Danger)
+
+        val ratio = expenses / income
+
+        // Logic is now delegated to the Enum
+        val status = LifestyleStatus.from(ratio)
+
+        LifestyleState(ratio, status)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), LifestyleState())
 }

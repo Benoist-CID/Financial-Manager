@@ -1,8 +1,8 @@
 package fr.laforge.benoist.financialmanager.util
 
 import fr.laforge.benoist.financialmanager.domain.util.sum
-import fr.laforge.benoist.financialmanager.domain.model.Transaction
-import fr.laforge.benoist.financialmanager.domain.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import org.amshove.kluent.`should be equal to`
 import org.junit.Test
 

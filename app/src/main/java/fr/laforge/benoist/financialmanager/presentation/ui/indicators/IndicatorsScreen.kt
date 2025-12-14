@@ -1,7 +1,9 @@
 package fr.laforge.benoist.financialmanager.presentation.ui.indicators
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,25 +20,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import fr.laforge.benoist.financialmanager.presentation.ui.component.ForecastCard
 import fr.laforge.benoist.financialmanager.presentation.ui.component.IndicatorBar
+import fr.laforge.benoist.financialmanager.presentation.ui.component.LifestyleRatioIndicator
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun IndicatorsScreen(
-    // Injected automatically by Koin
     vm: IndicatorsViewModel = koinViewModel(),
 ) {
     val recurringIncome by vm.recurringIncome.collectAsState(initial = 0f)
     val recurringExpenses by vm.recurringExpenses.collectAsState(initial = 0f)
     val regularExpenses by vm.regularExpenses.collectAsState(initial = 0f)
     val projectedBalance by vm.projectedBalance.collectAsState()
-
+    val lifestyleState by vm.lifestyleRatio.collectAsState()
     val totalIncome = recurringIncome
-
     val totalExpenses = recurringExpenses + regularExpenses
     val remainingBalance = totalIncome - totalExpenses
-
-    // Define Reference for bars (Income is baseline 100%)
-    val maxReference = if (totalIncome > 0) totalIncome else 1f // Avoid division by zero
+    val maxReference = if (totalIncome > 0) totalIncome else 1f
 
     Scaffold(
         topBar = {
@@ -122,6 +121,12 @@ fun IndicatorsScreen(
                 projectedBalance = projectedBalance,
                 modifier = Modifier
             )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            LifestyleRatioIndicator(state = lifestyleState)
+
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }

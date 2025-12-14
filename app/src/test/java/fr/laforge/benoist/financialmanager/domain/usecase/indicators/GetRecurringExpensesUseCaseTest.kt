@@ -1,7 +1,7 @@
 package fr.laforge.benoist.financialmanager.domain.usecase.indicators
 
-import fr.laforge.benoist.financialmanager.domain.model.Transaction
-import fr.laforge.benoist.financialmanager.domain.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import io.mockk.every
 import io.mockk.mockk

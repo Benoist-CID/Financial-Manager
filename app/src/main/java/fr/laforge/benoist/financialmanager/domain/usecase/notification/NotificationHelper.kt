@@ -1,6 +1,6 @@
 package fr.laforge.benoist.financialmanager.domain.usecase.notification
 
-import fr.laforge.benoist.financialmanager.domain.model.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 
 interface NotificationHelper {
     /**

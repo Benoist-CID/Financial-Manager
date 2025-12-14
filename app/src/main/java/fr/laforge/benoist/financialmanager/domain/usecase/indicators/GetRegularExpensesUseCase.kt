@@ -1,6 +1,6 @@
 package fr.laforge.benoist.financialmanager.domain.usecase.indicators
 
-import fr.laforge.benoist.financialmanager.domain.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import fr.laforge.benoist.financialmanager.domain.util.getFirstDayOfMonth
 import fr.laforge.benoist.financialmanager.domain.util.getLastDayOfMonth

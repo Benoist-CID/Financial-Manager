@@ -1,9 +1,9 @@
 package fr.laforge.benoist.financialmanager.domain.util
 
-import fr.laforge.benoist.financialmanager.domain.model.Transaction
-import fr.laforge.benoist.financialmanager.domain.model.TransactionCategory
-import fr.laforge.benoist.financialmanager.domain.model.TransactionPeriod
-import fr.laforge.benoist.financialmanager.domain.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionCategory
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionPeriod
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.application.util.toLocalDateTime
 import fr.laforge.benoist.financialmanager.application.util.toMilliseconds
 

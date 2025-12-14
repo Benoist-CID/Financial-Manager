@@ -1,7 +1,7 @@
 package fr.laforge.benoist.financialmanager.domain.repository
 
-import fr.laforge.benoist.financialmanager.domain.model.Transaction
-import fr.laforge.benoist.financialmanager.domain.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 

@@ -8,7 +8,7 @@ import fr.laforge.benoist.financialmanager.domain.util.isInRange
 import fr.laforge.benoist.financialmanager.domain.util.next
 import fr.laforge.benoist.financialmanager.domain.util.toDate
 import fr.laforge.benoist.financialmanager.domain.util.toLocalDateTime
-import fr.laforge.benoist.financialmanager.domain.model.TransactionPeriod
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionPeriod
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should be false`
 import org.amshove.kluent.`should be true`

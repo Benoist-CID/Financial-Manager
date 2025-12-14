@@ -1,6 +1,6 @@
 package fr.laforge.benoist.financialmanager.domain.usecase
 
-import fr.laforge.benoist.financialmanager.domain.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import java.time.LocalDateTime
 
 interface CreateRegularTransactionsUseCase {

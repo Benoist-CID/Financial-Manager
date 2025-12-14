@@ -1,7 +1,7 @@
 package fr.laforge.benoist.financialmanager.infrastructure.repository
 
-import fr.laforge.benoist.financialmanager.domain.model.Transaction
-import fr.laforge.benoist.financialmanager.domain.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import fr.laforge.benoist.financialmanager.infrastructure.repository.dao.FinancialInputDao
 import fr.laforge.benoist.financialmanager.infrastructure.repository.entity.fromModel

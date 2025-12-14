@@ -12,8 +12,8 @@ import fr.laforge.benoist.financialmanager.domain.util.exportToCsvFormat
 import fr.laforge.benoist.financialmanager.domain.util.getFirstDayOfMonth
 import fr.laforge.benoist.financialmanager.domain.util.getLastDayOfMonth
 import fr.laforge.benoist.financialmanager.domain.util.sum
-import fr.laforge.benoist.financialmanager.domain.model.Transaction
-import fr.laforge.benoist.financialmanager.domain.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.presentation.ui.component.DatePickerComponent
-import fr.laforge.benoist.financialmanager.domain.model.TransactionPeriod
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionPeriod
 import timber.log.Timber
 import java.time.LocalDateTime
 

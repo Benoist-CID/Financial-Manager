@@ -1,4 +1,4 @@
-package fr.laforge.benoist.financialmanager.domain.model
+package fr.laforge.benoist.financialmanager.domain.model.transaction
 
 import java.time.LocalDateTime
 

@@ -6,7 +6,7 @@ import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionUseCa
 import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractor
 import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractorImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCase
-import fr.laforge.benoist.financialmanager.domain.model.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

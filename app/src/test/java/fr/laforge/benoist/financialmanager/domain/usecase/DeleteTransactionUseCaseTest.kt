@@ -2,7 +2,7 @@
 import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionType
 import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionUseCaseImpl
-import fr.laforge.benoist.financialmanager.domain.model.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf

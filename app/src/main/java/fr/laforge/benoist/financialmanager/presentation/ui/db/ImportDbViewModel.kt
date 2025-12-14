@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import fr.laforge.benoist.financialmanager.domain.model.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import fr.laforge.benoist.financialmanager.domain.util.transactionFromCsv
 import kotlinx.coroutines.Dispatchers
