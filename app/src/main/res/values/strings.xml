@@ -44,4 +44,31 @@
     <string name="settings">Settings</string>
     <string name="savings_target">Savings target</string>
     <string name="transaction_details">Transaction Details</string>
+
+    <!-- Indicators -->
+    <string name="indicators">Indicators</string>
+    <string name="income">Income</string>
+    <string name="recurring_income">Recurring Income</string>
+    <string name="expenses">Expenses</string>
+    <string name="recurring_expenses">Recurring Expenses</string>
+    <string name="label_variable_expenses">Variable Expenses</string>
+    <string name="label_total_expenses">Total Expenses</string>
+    <string name="label_remaining_balance">Remaining Balance</string>
+
+    <string name="card_title_forecast">Projected End-of-Month Balance</string>
+    <string name="msg_forecast_warning">Warning: You might overspend.</string>
+    <string name="msg_forecast_good">You are on track to save money!</string>
+    <string name="text_forecast_basis">Based on current daily average</string>
+
+    <string name="label_lifestyle_load">Lifestyle Load (Fixed Costs)</string>
+
+    <string name="status_lifestyle_excellent">Excellent (High Flexibility)</string>
+    <string name="status_lifestyle_healthy">Healthy (Balanced)</string>
+    <string name="status_lifestyle_heavy">Heavy (Tight Budget)</string>
+    <string name="status_lifestyle_critical">Critical (Overloaded)</string>
+
+    <string name="desc_trend_up">Trending up</string>
+    <string name="desc_trend_down">Trending down</string>
+    <string name="section_result">Result</string>
+
 </resources>

@@ -16,8 +16,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.presentation.ui.component.ForecastCard
 import fr.laforge.benoist.financialmanager.presentation.ui.component.IndicatorBar
 import fr.laforge.benoist.financialmanager.presentation.ui.component.LifestyleRatioIndicator
@@ -32,6 +34,7 @@ fun IndicatorsScreen(
     val regularExpenses by vm.regularExpenses.collectAsState(initial = 0f)
     val projectedBalance by vm.projectedBalance.collectAsState()
     val lifestyleState by vm.lifestyleRatio.collectAsState()
+
     val totalIncome = recurringIncome
     val totalExpenses = recurringExpenses + regularExpenses
     val remainingBalance = totalIncome - totalExpenses
@@ -40,7 +43,7 @@ fun IndicatorsScreen(
     Scaffold(
         topBar = {
             Text(
-                text = "Financial Indicators",
+                text = stringResource(R.string.indicators),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(16.dp)
             )
@@ -53,15 +56,15 @@ fun IndicatorsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            // Section 1: Money In
+            // --- Section 1: Money In ---
             Text(
-                text = "Income",
+                text = stringResource(R.string.income),
                 style = MaterialTheme.typography.labelLarge,
                 color = Color.Gray
             )
 
             IndicatorBar(
-                label = "Recurring Income", // Updated label to be precise
+                label = stringResource(R.string.recurring_income),
                 amount = totalIncome,
                 totalReference = maxReference,
                 color = Color(0xFF4CAF50) // Green
@@ -69,29 +72,29 @@ fun IndicatorsScreen(
 
             Divider(modifier = Modifier.padding(vertical = 16.dp))
 
-            // Section 2: Money Out
+            // --- Section 2: Money Out ---
             Text(
-                text = "Expenses",
+                text = stringResource(R.string.expenses),
                 style = MaterialTheme.typography.labelLarge,
                 color = Color.Gray
             )
 
             IndicatorBar(
-                label = "Recurring (Bills, Subs)",
+                label = stringResource(R.string.recurring_expenses),
                 amount = recurringExpenses,
                 totalReference = maxReference,
                 color = Color(0xFFFF9800) // Orange
             )
 
             IndicatorBar(
-                label = "Variable Expenses",
+                label = stringResource(R.string.label_variable_expenses),
                 amount = regularExpenses,
                 totalReference = maxReference,
                 color = Color(0xFFF44336) // Red
             )
 
             IndicatorBar(
-                label = "Total Expenses",
+                label = stringResource(R.string.label_total_expenses),
                 amount = totalExpenses,
                 totalReference = maxReference,
                 color = Color(0xFFD32F2F) // Darker Red
@@ -99,9 +102,9 @@ fun IndicatorsScreen(
 
             Divider(modifier = Modifier.padding(vertical = 16.dp))
 
-            // Section 3: Result
+            // --- Section 3: Result ---
             Text(
-                text = "Result",
+                text = stringResource(R.string.section_result),
                 style = MaterialTheme.typography.labelLarge,
                 color = Color.Gray
             )
@@ -109,7 +112,7 @@ fun IndicatorsScreen(
             val balanceColor = if (remainingBalance >= 0) Color(0xFF2196F3) else Color.Red
 
             IndicatorBar(
-                label = "Remaining Balance",
+                label = stringResource(R.string.label_remaining_balance),
                 amount = remainingBalance,
                 totalReference = maxReference,
                 color = balanceColor
@@ -117,6 +120,7 @@ fun IndicatorsScreen(
 
             Divider(modifier = Modifier.padding(vertical = 16.dp))
 
+            // --- Section 4: Forecast ---
             ForecastCard(
                 projectedBalance = projectedBalance,
                 modifier = Modifier
@@ -124,6 +128,7 @@ fun IndicatorsScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // --- Section 5: Structural Health ---
             LifestyleRatioIndicator(state = lifestyleState)
 
             Spacer(modifier = Modifier.height(32.dp))

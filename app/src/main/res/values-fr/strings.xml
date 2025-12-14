@@ -44,4 +44,30 @@
     <string name="settings">Paramètres</string>
     <string name="savings_target">Objectif d\'épargne</string>
     <string name="transaction_details">Détails de la Transaction</string>
+
+    <!-- Indicators -->
+    <string name="indicators">Indicateurs</string>
+    <string name="income">Revenu</string>
+    <string name="recurring_income">Revenu récurrent</string>
+    <string name="expenses">Dépenses</string>
+    <string name="recurring_expenses">Récurrent (Factures, Abos)</string>
+    <string name="label_variable_expenses">Dépenses Variables</string>
+    <string name="label_total_expenses">Dépenses Totales</string>
+    <string name="label_remaining_balance">Solde Restant</string>
+
+    <string name="card_title_forecast">Solde projeté en fin de mois</string>
+    <string name="msg_forecast_warning">Attention : Risque de dépassement.</string>
+    <string name="msg_forecast_good">Vous êtes en bonne voie pour épargner !</string>
+    <string name="text_forecast_basis">Basé sur la moyenne journalière actuelle</string>
+
+    <string name="label_lifestyle_load">Poids des Charges Fixes</string>
+
+    <string name="status_lifestyle_excellent">Excellent (Flexibilité Max)</string>
+    <string name="status_lifestyle_healthy">Sain (Équilibré)</string>
+    <string name="status_lifestyle_heavy">Lourd (Budget Serré)</string>
+    <string name="status_lifestyle_critical">Critique (Surchargé)</string>
+
+    <string name="desc_trend_up">Tendance à la hausse</string>
+    <string name="desc_trend_down">Tendance à la baisse</string>
+    <string name="section_result">Résultat</string>
 </resources>
