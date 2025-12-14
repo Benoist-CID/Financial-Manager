@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.db.ImportDbScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.home.HomeScreen
+import fr.laforge.benoist.financialmanager.presentation.ui.indicators.IndicatorsScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.login.LoginScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.settings.SettingsScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.add.AddTransactionScreen
@@ -57,6 +58,10 @@ fun FinancialManagerNavHost(
 
         composable(FinancialManagerScreen.Settings.name) {
             SettingsScreen()
+        }
+
+        composable(FinancialManagerScreen.Indicators.name) {
+            IndicatorsScreen()
         }
     }
 }

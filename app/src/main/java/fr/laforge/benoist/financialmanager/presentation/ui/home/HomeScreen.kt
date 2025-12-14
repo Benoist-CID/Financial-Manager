@@ -78,7 +78,9 @@ fun HomeScreen(
                     recurringExpenses = -recurringExpenses,
                     income = income,
                     savingsTarget = savingsTarget
-                )
+                ) {
+                    navController.navigate(FinancialManagerScreen.Indicators.name)
+                }
 
                 SearchComponent(
                     query = uiState.query,

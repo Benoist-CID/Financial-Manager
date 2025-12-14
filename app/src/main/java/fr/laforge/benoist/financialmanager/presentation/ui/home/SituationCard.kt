@@ -1,6 +1,7 @@
 package fr.laforge.benoist.financialmanager.presentation.ui.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,7 +34,8 @@ fun SituationCard(
     income: Float,
     savingsTarget: Float,
     modifier: Modifier = Modifier,
-    date: LocalDateTime = LocalDateTime.now()
+    date: LocalDateTime = LocalDateTime.now(),
+    onClick: () -> Unit,
 ) {
     val remaining = income - allExpenses - savingsTarget
 
@@ -41,6 +43,7 @@ fun SituationCard(
         modifier = modifier
             .background(MaterialTheme.colorScheme.background)
             .fillMaxWidth()
+            .clickable { onClick() }
             .padding(top = 8.dp)
     ) {
         AnimatedCircle(
@@ -51,12 +54,12 @@ fun SituationCard(
                 colorResource(R.color.green_3),
                 colorResource(R.color.blue_4)
             ),
-            modifier = modifier
+            modifier = Modifier
                 .height(200.dp)
                 .fillMaxWidth()
         )
 
-        Column(modifier = modifier.align(Alignment.Center)) {
+        Column(modifier = Modifier.align(Alignment.Center)) {
             Text(
                 text = "${formatAmount(remaining)} €",
                 fontSize = 20.sp,
@@ -64,7 +67,7 @@ fun SituationCard(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Text(
                 text = "${formatAmount(remaining / date.getNumberOfRemainingDaysInMonth())}€ " + stringResource(
@@ -72,7 +75,7 @@ fun SituationCard(
                 ),
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
-                modifier = modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -81,5 +84,7 @@ fun SituationCard(
 @Preview(showBackground = true)
 @Composable
 fun SituationCardPreview() {
-    SituationCard(allExpenses = -2500F, regularExpenses = 2000.0F, recurringExpenses = 200F, savingsTarget = 500F, income = 1000F)
+    SituationCard(allExpenses = -2500F, regularExpenses = 2000.0F, recurringExpenses = 200F, savingsTarget = 500F, income = 1000F) {
+
+    }
 }

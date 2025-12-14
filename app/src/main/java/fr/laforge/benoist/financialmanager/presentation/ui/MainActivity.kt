@@ -44,5 +44,7 @@ enum class FinancialManagerScreen {
     TransactionDetails,
     UpdateTransaction,
     ImportDb,
-    Settings
+    Settings,
+    /** A screen continaing financial indicators **/
+    Indicators,
 }
