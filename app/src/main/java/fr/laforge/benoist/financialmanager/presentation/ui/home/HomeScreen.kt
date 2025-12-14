@@ -1,56 +1,36 @@
 package fr.laforge.benoist.financialmanager.presentation.ui.home
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material3.DismissDirection
-import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.domain.util.displayDate
 import fr.laforge.benoist.financialmanager.domain.util.toDate
 import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
-import fr.laforge.benoist.financialmanager.presentation.ui.component.DialogType
-import fr.laforge.benoist.financialmanager.presentation.ui.component.ShowDialog
+import fr.laforge.benoist.financialmanager.presentation.ui.component.SwipableTransactionItem
 import fr.laforge.benoist.financialmanager.presentation.ui.component.TopBar
-import fr.laforge.benoist.financialmanager.presentation.ui.component.TransactionRow
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDateTime
 
@@ -125,130 +105,20 @@ fun HomeScreen(
                 items(transactions.filter { transaction ->
                     transaction.description.contains(uiState.query)
                 }) { transaction ->
-                    val dismissState = rememberDismissState()
-                    val openAlertDialog = remember { mutableStateOf(false) }
-                    val openPeriodicAlertDialog = remember { mutableStateOf(false) }
-
-                    if (dismissState.isDismissed(direction = DismissDirection.EndToStart)) {
-                        if (vm.isPeriodicTransaction(transaction)) {
-                            openPeriodicAlertDialog.value = true
-                        } else {
-                            openAlertDialog.value = true
+                    SwipableTransactionItem(
+                        transaction = transaction,
+                        isPeriodic = vm.isPeriodicTransaction(transaction),
+                        onClick = {
+                            navController.navigate(
+                                FinancialManagerScreen.TransactionDetails.name + "/${transaction.uid}",
+                            )
+                        },
+                        onDelete = { shouldDeleteParent ->
+                            vm.deleteTransaction(
+                                transaction = transaction,
+                                shouldDeleteParent = shouldDeleteParent
+                            )
                         }
-                    }
-
-                    if (openPeriodicAlertDialog.value) {
-                        ShowDialog(
-                            onDismissRequest = {
-                                vm.viewModelScope.launch {
-                                    dismissState.snapTo(DismissValue.Default)
-                                }
-                                openPeriodicAlertDialog.value = false
-                            },
-                            onConfirmation = {
-                                vm.deleteTransaction(
-                                    transaction = transaction,
-                                    shouldDeleteParent = true
-                                )
-                                vm.viewModelScope.launch {
-                                    dismissState.snapTo(DismissValue.Default)
-                                }
-                                openPeriodicAlertDialog.value = false
-                            },
-                            onThirdButton = {
-                                vm.deleteTransaction(
-                                    transaction = transaction,
-                                    shouldDeleteParent = false
-                                )
-                                vm.viewModelScope.launch {
-                                    dismissState.snapTo(DismissValue.Default)
-                                }
-                                openPeriodicAlertDialog.value = false
-                            },
-                            dialogTitle = stringResource(R.string.periodic_transaction),
-                            dialogText = stringResource(R.string.periodic_transaction_description),
-                            icon = {
-                                Icon(Icons.Filled.Delete, contentDescription = null)
-                            },
-                            confirmButtonText = stringResource(R.string.all),
-                            dismissButtonText = stringResource(R.string.cancel),
-                            thirdButtonText = stringResource(R.string.just_this_one),
-                            dialogType = DialogType.ThreeButtons
-                        )
-                    }
-
-                    // Displays dialog
-                    if (openAlertDialog.value) {
-                        ShowDialog(
-                            onDismissRequest = {
-                                vm.viewModelScope.launch {
-                                    dismissState.snapTo(DismissValue.Default)
-                                }
-                                openAlertDialog.value = false
-                            },
-                            onConfirmation = {
-                                vm.deleteTransaction(
-                                    transaction = transaction,
-                                    shouldDeleteParent = false
-                                )
-                                vm.viewModelScope.launch {
-                                    dismissState.snapTo(DismissValue.Default)
-                                }
-                                openAlertDialog.value = false
-                            },
-                            dialogTitle = stringResource(R.string.do_you_want_to_delete),
-                            dialogText = stringResource(R.string.delete_warning_message),
-                            icon = {
-                                Icon(Icons.Filled.Delete, contentDescription = null)
-                            },
-                        )
-                    }
-
-                    SwipeToDismiss(
-                        state = dismissState,
-                        directions = setOf(
-                            DismissDirection.EndToStart,
-                        ),
-                        background = {
-                            // this background is visible when we swipe.
-                            // it contains the icon
-                            // background color
-                            val backgroundColor by animateColorAsState(
-                                when (dismissState.targetValue) {
-                                    DismissValue.DismissedToStart -> Color.Red.copy(alpha = 0.6f)
-                                    else -> Color.White
-                                },
-                                label = "",
-                            )
-                            // icon size
-                            val iconScale by animateFloatAsState(
-                                targetValue = if (dismissState.targetValue == DismissValue.DismissedToStart) 1.3f else 0.5f,
-                                label = "",
-                            )
-
-                            Box(
-                                Modifier
-                                    .fillMaxSize()
-                                    .background(color = backgroundColor)
-                                    .padding(end = 16.dp), // inner padding
-                                contentAlignment = Alignment.CenterEnd, // place the icon at the end (left)
-                            ) {
-                                Icon(
-                                    modifier = Modifier.scale(iconScale),
-                                    imageVector = Icons.Outlined.Delete,
-                                    contentDescription = "Delete",
-                                    tint = Color.White,
-                                )
-                            }
-                        },
-                        dismissContent = {
-                            // list item
-                            TransactionRow(transaction) { transaction ->
-                                navController.navigate(
-                                    FinancialManagerScreen.TransactionDetails.name + "/${transaction.uid}",
-                                )
-                            }
-                        },
                     )
                 }
             }
@@ -259,4 +129,5 @@ fun HomeScreen(
 @Preview
 @Composable
 fun HomeScreenPreview() {
+    // Need to implement
 }
