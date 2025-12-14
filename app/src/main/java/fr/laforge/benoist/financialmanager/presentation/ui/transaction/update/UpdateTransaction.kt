@@ -21,24 +21,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import fr.laforge.benoist.financialmanager.di.AppViewModelProvider
-import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
+import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.component.DialogType
 import fr.laforge.benoist.financialmanager.presentation.ui.component.ShowDialog
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.composables.TransactionAmountEditor
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.composables.TransactionCategorySelector
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.composables.TransactionDescriptionEditor
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.composables.TransactionTypeSelector
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UpdateTransaction(
     navController: NavController,
     modifier: Modifier = Modifier,
-    vm: UpdateTransactionViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    vm: UpdateTransactionViewModel = koinViewModel(),
 ) {
     val uiState = vm.uiState
     val openAlertDialog = remember { mutableStateOf(false) }

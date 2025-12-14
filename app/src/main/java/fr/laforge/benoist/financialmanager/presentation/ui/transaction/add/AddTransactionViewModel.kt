@@ -2,11 +2,11 @@ package fr.laforge.benoist.financialmanager.presentation.ui.transaction.add
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import fr.laforge.benoist.financialmanager.domain.usecase.CreateTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.model.Transaction
 import fr.laforge.benoist.financialmanager.domain.model.TransactionCategory
 import fr.laforge.benoist.financialmanager.domain.model.TransactionPeriod
 import fr.laforge.benoist.financialmanager.domain.model.TransactionType
+import fr.laforge.benoist.financialmanager.domain.usecase.CreateTransactionUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,12 +16,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 import java.time.LocalDateTime
 
-class AddTransactionViewModel : ViewModel(), KoinComponent {
+class AddTransactionViewModel(private val createTransactionUseCase: CreateTransactionUseCase) : ViewModel() {
     private val _uiState = MutableStateFlow(AddTransactionUiState())
     val uiState: StateFlow<AddTransactionUiState> = _uiState.asStateFlow()
 
@@ -29,8 +27,6 @@ class AddTransactionViewModel : ViewModel(), KoinComponent {
     var period: TransactionPeriod = TransactionPeriod.Monthly
     private var startDate: LocalDateTime = LocalDateTime.now()
     private var endDate: LocalDateTime = LocalDateTime.now()
-
-    private val createTransactionUseCase: CreateTransactionUseCase by inject()
 
     fun updateAmount(amount: String) {
         _uiState.update { currentState ->

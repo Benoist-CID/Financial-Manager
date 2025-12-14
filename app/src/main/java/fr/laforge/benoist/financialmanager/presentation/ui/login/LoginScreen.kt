@@ -28,18 +28,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import fr.laforge.benoist.financialmanager.di.AppViewModelProvider
-import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.R
+import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    vm: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    vm: LoginViewModel = koinViewModel(),
 ) {
     var displayBiometrics by remember {
         mutableStateOf(true)
