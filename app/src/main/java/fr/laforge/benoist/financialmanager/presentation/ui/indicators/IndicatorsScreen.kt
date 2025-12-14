@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import fr.laforge.benoist.financialmanager.presentation.ui.component.ForecastCard
 import fr.laforge.benoist.financialmanager.presentation.ui.component.IndicatorBar
 import org.koin.androidx.compose.koinViewModel
 
@@ -27,6 +28,7 @@ fun IndicatorsScreen(
     val recurringIncome by vm.recurringIncome.collectAsState(initial = 0f)
     val recurringExpenses by vm.recurringExpenses.collectAsState(initial = 0f)
     val regularExpenses by vm.regularExpenses.collectAsState(initial = 0f)
+    val projectedBalance by vm.projectedBalance.collectAsState()
 
     val totalIncome = recurringIncome
 
@@ -112,6 +114,13 @@ fun IndicatorsScreen(
                 amount = remainingBalance,
                 totalReference = maxReference,
                 color = balanceColor
+            )
+
+            Divider(modifier = Modifier.padding(vertical = 16.dp))
+
+            ForecastCard(
+                projectedBalance = projectedBalance,
+                modifier = Modifier
             )
         }
     }

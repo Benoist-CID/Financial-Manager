@@ -5,9 +5,12 @@ import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularExpensesUseCase
+import fr.laforge.benoist.financialmanager.domain.util.getNumberOfRemainingDaysInMonth
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import java.time.LocalDateTime
 
 class IndicatorsViewModel(
     getRecurringIncomeUseCase: GetRecurringIncomeUseCase,
@@ -52,4 +55,32 @@ class IndicatorsViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = 0f
         )
+
+    val projectedBalance: StateFlow<Float> = combine(
+        recurringIncome,
+        recurringExpenses,
+        regularExpenses
+    ) { income, recurring, regular ->
+
+        // A. Current Situation (Money actually left right now)
+        val currentBalance = income - recurring - regular
+
+        // B. Forecast Logic
+        val now = LocalDateTime.now()
+        val daysPassed = if (now.dayOfMonth == 0) 1 else now.dayOfMonth // Avoid division by zero
+
+        // 1. Calculate Average Daily Spend
+        val dailyAverage = regular / daysPassed
+
+        // 2. Calculate Projected Spend for the rest of the month
+        // We use your extension method here
+        val remainingDays = now.getNumberOfRemainingDaysInMonth()
+        val projectedFutureSpend = dailyAverage * remainingDays
+
+        // C. Final Forecast
+        // Note: Since 'remainingDays' includes today, and 'currentBalance' also accounts for today,
+        // this is a "safe/conservative" estimate. If you strictly want *future* days, use (remainingDays - 1).
+        currentBalance - projectedFutureSpend
+
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0f)
 }
