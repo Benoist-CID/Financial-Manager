@@ -11,11 +11,13 @@ junit = "4.13.2"
 junitVersion = "4.12"
 kluent = "1.73"
 koinAndroid = "3.5.6"
-koinTest = "3.1.2"
+koinTest = "3.5.6"
+kotlinxCoroutinesTest = "1.7.3"
 lifecycleRuntimeCompose = "2.7.0-rc01"
 material3 = "1.1.2"
 mockitoCore = "5.1.1"
 mockitoKotlin = "4.1.0"
+mockk = "1.13.8"
 navigationRuntimeKtx = "2.7.5"
 navigationCompose = "2.7.5"
 roomKtx = "2.6.0"
@@ -46,9 +48,11 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndr
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroid" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koinTest" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 navigation-runtime-ktx = { module = "androidx.navigation:navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }

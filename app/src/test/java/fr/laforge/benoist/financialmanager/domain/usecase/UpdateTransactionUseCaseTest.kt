@@ -7,6 +7,7 @@ import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
+import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
@@ -14,7 +15,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argThat
 import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.doThrow
-import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

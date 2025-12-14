@@ -9,10 +9,10 @@ import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCa
 import fr.laforge.benoist.financialmanager.domain.model.Transaction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.junit.Test
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.mock
-import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @ExperimentalCoroutinesApi

@@ -1,7 +1,7 @@
 package fr.laforge.benoist.financialmanager.domain.usecase
 
 import fr.laforge.benoist.financialmanager.domain.model.Transaction
-import kotlin.test.Test
+import org.junit.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
