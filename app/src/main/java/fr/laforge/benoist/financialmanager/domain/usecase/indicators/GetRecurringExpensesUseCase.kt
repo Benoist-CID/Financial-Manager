@@ -6,9 +6,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class GetRecurringExpensesUseCase(private val financialRepository: FinancialRepository) {
-    operator fun invoke(): Flow<Float> = financialRepository.getAllPeriodicTransactionsByType(TransactionType.Expense)
-        .map { transactions ->
-            // Sum all amounts in the list
-            transactions.map { it.amount }.sum()
-        }
+    operator fun invoke(): Flow<Float> =
+        financialRepository.getAllPeriodicTransactionsByType(TransactionType.Expense)
+            .map { transactions ->
+                // Sum all amounts in the list
+                transactions.map { it.amount }.sum()
+            }
 }

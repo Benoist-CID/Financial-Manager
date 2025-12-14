@@ -26,9 +26,7 @@ fun IndicatorsScreen(
 ) {
     val recurringIncome by vm.recurringIncome.collectAsState(initial = 0f)
     val recurringExpenses by vm.recurringExpenses.collectAsState(initial = 0f)
-
-    val regularExpenses = 0f
-
+    val regularExpenses by vm.regularExpenses.collectAsState(initial = 0f)
 
     val totalIncome = recurringIncome
 

@@ -8,48 +8,81 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 
-class GetRecurringExpensesUseCaseTest {
-    // 1. Create the Mock
-    private val financialRepository = mockk<FinancialRepository>()
+class GetRegularExpensesUseCaseTest {
 
-    // 2. Instantiate the UseCase with the mock
-    private val useCase = GetRecurringExpensesUseCase(financialRepository)
+    private val financialRepository = mockk<FinancialRepository>()
+    private val useCase = GetRegularExpensesUseCase(financialRepository)
 
     @Test
-    fun `invoke should return correct summed income`() = runTest {
+    fun `invoke should return only regular expenses (no parent, not periodic)`() = runTest {
         // --- Arrange ---
-        // Create dummy transactions
-        val transaction1 = Transaction(amount = 1000f, type = TransactionType.Expense)
-        val transaction2 = Transaction(amount = 500f, type = TransactionType.Expense)
-        val expectedSum = 1500f
 
-        // Mock the repository behavior to return a Flow of our list
+        // 1. A Valid Regular Expense (Manual entry like Groceries)
+        val groceries = Transaction(
+            amount = 150f,
+            type = TransactionType.Expense,
+            isPeriodic = false,
+            parent = 0 // Key criteria: No parent
+        )
+
+        // 2. A Generated Recurring Bill (Should be IGNORED)
+        // e.g., This month's Rent, generated from a parent ID 55
+        val rentInstance = Transaction(
+            amount = 800f,
+            type = TransactionType.Expense,
+            isPeriodic = false,
+            parent = 55 // Has parent -> Ignore
+        )
+
+        // 3. The Periodic Template itself (Should be IGNORED)
+        // Even if it appears in the date range (unlikely but possible)
+        val rentTemplate = Transaction(
+            amount = 800f,
+            type = TransactionType.Expense,
+            isPeriodic = true, // Is Periodic -> Ignore
+            parent = 0
+        )
+
+        // 4. An Income (Should be IGNORED)
+        val salary = Transaction(
+            amount = 2000f,
+            type = TransactionType.Income,
+            isPeriodic = false,
+            parent = 0
+        )
+
         every {
-            financialRepository.getAllPeriodicTransactionsByType(TransactionType.Expense)
-        } returns flowOf(listOf(transaction1, transaction2))
+            financialRepository.getAllInDateRange(any(), any())
+        } returns flowOf(listOf(groceries, rentInstance, rentTemplate, salary))
 
         // --- Act ---
-        // We use .first() to grab the emitted value from the Flow
         val result = useCase().first()
 
         // --- Assert ---
-        result `should be equal to` expectedSum
+        // Should only sum 'groceries' (150f)
+        result shouldBeEqualTo 150f
     }
 
     @Test
-    fun `invoke should return 0 when no transactions found`() = runTest {
+    fun `invoke should return 0 if only recurring expenses exist`() = runTest {
         // --- Arrange ---
+        val rentInstance = Transaction(
+            amount = 800f,
+            type = TransactionType.Expense,
+            parent = 55
+        )
+
         every {
-            financialRepository.getAllPeriodicTransactionsByType(TransactionType.Expense)
-        } returns flowOf(emptyList())
+            financialRepository.getAllInDateRange(any(), any())
+        } returns flowOf(listOf(rentInstance))
 
         // --- Act ---
         val result = useCase().first()
 
         // --- Assert ---
-        result `should be equal to`  0f
+        result shouldBeEqualTo 0f
     }
 }

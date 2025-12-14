@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularExpensesUseCase
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 class IndicatorsViewModel(
     getRecurringIncomeUseCase: GetRecurringIncomeUseCase,
     getRecurringExpensesUseCase: GetRecurringExpensesUseCase,
+    getRegularExpensesUseCase: GetRegularExpensesUseCase,
 ) : ViewModel() {
     /**
      * Exposes the recurring income as a hot state flow.
@@ -32,6 +34,19 @@ class IndicatorsViewModel(
      * rotations.
      */
     val recurringExpenses: StateFlow<Float> = getRecurringExpensesUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = 0f
+        )
+
+    /**
+     * Exposes the regular expenses as a hot state flow.
+     * * - started = WhileSubscribed(5000): Stops the upstream flow 5 seconds
+     * after the UI disappears (saves resources), but keeps it alive during
+     * rotations.
+     */
+    val regularExpenses: StateFlow<Float> = getRegularExpensesUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

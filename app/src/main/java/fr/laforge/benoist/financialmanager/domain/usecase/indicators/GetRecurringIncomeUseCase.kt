@@ -9,11 +9,10 @@ import kotlinx.coroutines.flow.map
  * Returns the recurring income
  */
 class GetRecurringIncomeUseCase(private val financialRepository: FinancialRepository) {
-    operator fun invoke(): Flow<Float> {
-        return financialRepository.getAllPeriodicTransactionsByType(TransactionType.Income)
+    operator fun invoke(): Flow<Float> =
+        financialRepository.getAllPeriodicTransactionsByType(TransactionType.Income)
             .map { transactions ->
                 // Sum all amounts in the list
                 transactions.map { it.amount }.sum()
             }
-    }
 }

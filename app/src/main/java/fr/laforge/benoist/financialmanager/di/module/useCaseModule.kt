@@ -14,6 +14,7 @@ import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCa
 import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCaseImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCaseImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.EnableNotificationAccessUseCase
@@ -61,6 +62,12 @@ val useCaseModule by lazy {
 
         factory {
             GetRecurringExpensesUseCase(
+                financialRepository = get()
+            )
+        }
+
+        factory {
+            GetRegularExpensesUseCase(
                 financialRepository = get()
             )
         }
