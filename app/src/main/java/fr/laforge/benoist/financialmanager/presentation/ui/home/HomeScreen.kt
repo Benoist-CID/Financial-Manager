@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import fr.laforge.benoist.financialmanager.domain.util.displayDate
 import fr.laforge.benoist.financialmanager.domain.util.toDate
 import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
+import fr.laforge.benoist.financialmanager.presentation.ui.component.SearchComponent
 import fr.laforge.benoist.financialmanager.presentation.ui.component.SwipableTransactionItem
 import fr.laforge.benoist.financialmanager.presentation.ui.component.TopBar
 import org.koin.androidx.compose.koinViewModel
@@ -79,22 +80,9 @@ fun HomeScreen(
                     savingsTarget = savingsTarget
                 )
 
-                TextField(
-                    value = uiState.query,
-                    onValueChange = { newVal -> vm.updateSearch(newVal) },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(32.dp),
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                    colors = TextFieldDefaults.colors(
-                        focusedTextColor = MaterialTheme.colorScheme.background,
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                    ),
-                    placeholder = { Text("Search") }
+                SearchComponent(
+                    query = uiState.query,
+                    onQueryChange = { newVal -> vm.updateSearch(newVal) }
                 )
             }
 
@@ -124,10 +112,4 @@ fun HomeScreen(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    // Need to implement
 }
