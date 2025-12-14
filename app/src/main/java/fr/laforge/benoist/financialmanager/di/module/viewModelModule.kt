@@ -61,7 +61,8 @@ val viewModelModule by lazy {
 
         viewModel {
             IndicatorsViewModel(
-                getRecurringIncomeUseCase = get()
+                getRecurringIncomeUseCase = get(),
+                getRecurringExpensesUseCase = get(),
             )
         }
     }

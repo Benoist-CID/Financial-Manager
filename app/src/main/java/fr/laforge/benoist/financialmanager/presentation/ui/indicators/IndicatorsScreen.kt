@@ -24,16 +24,12 @@ fun IndicatorsScreen(
     // Injected automatically by Koin
     vm: IndicatorsViewModel = koinViewModel(),
 ) {
-    // 1. Collect Data from ViewModel
-    // We only have recurringIncome implemented for now.
     val recurringIncome by vm.recurringIncome.collectAsState(initial = 0f)
+    val recurringExpenses by vm.recurringExpenses.collectAsState(initial = 0f)
 
-    // 2. Hardcode other values to 0 for now
     val regularExpenses = 0f
-    val recurringExpenses = 0f
 
-    // 3. Define Logic
-    // For this screen, we treat the recurring income as the total income
+
     val totalIncome = recurringIncome
 
     val totalExpenses = recurringExpenses + regularExpenses
