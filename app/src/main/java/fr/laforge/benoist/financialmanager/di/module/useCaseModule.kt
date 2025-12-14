@@ -12,6 +12,7 @@ import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractor
 import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractorImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCaseImpl
+import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCaseImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.EnableNotificationAccessUseCase
@@ -48,6 +49,12 @@ val useCaseModule by lazy {
                 checkIfTransactionIsPeriodicUseCase = get(),
                 deleteTransactionUseCase = get(),
                 updateTransactionUseCase = get(),
+            )
+        }
+
+        factory {
+            GetRecurringIncomeUseCase(
+                financialRepository = get()
             )
         }
     }

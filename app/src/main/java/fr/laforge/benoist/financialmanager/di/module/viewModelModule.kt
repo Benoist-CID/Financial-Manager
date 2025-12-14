@@ -3,6 +3,7 @@ package fr.laforge.benoist.financialmanager.di.module
 import fr.laforge.benoist.financialmanager.presentation.ui.MainActivityViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.db.ImportDbViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.home.HomeScreenViewModel
+import fr.laforge.benoist.financialmanager.presentation.ui.indicators.IndicatorsViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.login.LoginViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.settings.SettingsViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.add.AddTransactionViewModel
@@ -55,6 +56,12 @@ val viewModelModule by lazy {
                 savedStateHandle = get(),
                 financialRepository = get(),
                 transactionInteractor = get()
+            )
+        }
+
+        viewModel {
+            IndicatorsViewModel(
+                getRecurringIncomeUseCase = get()
             )
         }
     }

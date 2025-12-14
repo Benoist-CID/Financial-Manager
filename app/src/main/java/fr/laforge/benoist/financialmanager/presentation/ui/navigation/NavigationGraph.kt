@@ -61,7 +61,7 @@ fun FinancialManagerNavHost(
         }
 
         composable(FinancialManagerScreen.Indicators.name) {
-//            IndicatorsScreen()
+            IndicatorsScreen()
         }
     }
 }
