@@ -71,4 +71,6 @@
     <string name="desc_trend_down">Trending down</string>
     <string name="section_result">Result</string>
 
+    <string name="day">Day</string>
+
 </resources>

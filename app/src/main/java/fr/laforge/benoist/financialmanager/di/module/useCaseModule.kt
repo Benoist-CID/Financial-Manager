@@ -12,12 +12,14 @@ import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractor
 import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractorImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCaseImpl
+import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetDailyBalanceUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCaseImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.EnableNotificationAccessUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetRecurringExpenseTemplatesUseCase
 import fr.laforge.benoist.financialmanager.infrastructure.usecase.EnableNotificationAccessUseCaseImpl
 import org.koin.dsl.module
 
@@ -69,6 +71,20 @@ val useCaseModule by lazy {
         factory {
             GetRegularExpensesUseCase(
                 financialRepository = get()
+            )
+        }
+
+        factory {
+            GetRecurringExpenseTemplatesUseCase(
+                repository = get()
+            )
+        }
+
+        factory {
+            GetDailyBalanceUseCase(
+                repository = get(),
+                getRecurringIncome = get(),
+                getRecurringExpenses = get(),
             )
         }
     }

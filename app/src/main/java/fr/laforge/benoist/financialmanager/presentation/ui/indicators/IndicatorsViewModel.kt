@@ -2,8 +2,10 @@ package fr.laforge.benoist.financialmanager.presentation.ui.indicators
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.laforge.benoist.financialmanager.domain.model.indicator.DailyPoint
 import fr.laforge.benoist.financialmanager.domain.model.indicator.LifestyleState
 import fr.laforge.benoist.financialmanager.domain.model.indicator.LifestyleStatus
+import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetDailyBalanceUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularExpensesUseCase
@@ -18,6 +20,7 @@ class IndicatorsViewModel(
     getRecurringIncomeUseCase: GetRecurringIncomeUseCase,
     getRecurringExpensesUseCase: GetRecurringExpensesUseCase,
     getRegularExpensesUseCase: GetRegularExpensesUseCase,
+    getDailyBalanceUseCase: GetDailyBalanceUseCase,
 ) : ViewModel() {
     /**
      * Exposes the recurring income as a hot state flow.
@@ -99,4 +102,14 @@ class IndicatorsViewModel(
 
         LifestyleState(ratio, status)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), LifestyleState())
+
+    /**
+     * Exposes the daily balance graph as a hot state flow.
+     */
+    val dailyBalanceGraph: StateFlow<List<DailyPoint>> = getDailyBalanceUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = emptyList()
+        )
 }

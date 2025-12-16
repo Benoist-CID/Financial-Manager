@@ -3,6 +3,7 @@ package fr.laforge.benoist.financialmanager.presentation.ui.component
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +32,7 @@ fun IndicatorBar(
     amount: Float,
     totalReference: Float, // The value used to calculate the bar's width (usually Income)
     color: Color,
-    modifier: Modifier = Modifier
+    onClick: (() -> Unit)? = null,
 ) {
     // Safety check to avoid division by zero
     val percentage = if (totalReference > 0) (amount / totalReference).coerceIn(0f, 1f) else 0f
@@ -42,10 +44,20 @@ fun IndicatorBar(
         label = "ProgressBarAnimation"
     )
 
-    Column(
-        modifier = modifier
+    val modifier = if (onClick != null) {
+        Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp)) // Clip ripple to shape
+            .clickable(onClick = onClick)
+            .padding(vertical = 8.dp) // Padding inside the click area
+    } else {
+        Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
+    }
+
+    Column(
+        modifier = modifier
     ) {
         // Top Row: Label and Amount
         Row(

@@ -8,6 +8,7 @@ import fr.laforge.benoist.financialmanager.presentation.ui.login.LoginViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.settings.SettingsViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.add.AddTransactionViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.detail.TransactionDetailsViewModel
+import fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring.RecurringManagementViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.update.UpdateTransactionViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -32,7 +33,7 @@ val viewModelModule by lazy {
             HomeScreenViewModel(
                 repository = get(),
                 transactionInteractor = get(),
-                preferencesRepository = get()
+                preferencesRepository = get(),
             )
         }
 
@@ -47,7 +48,7 @@ val viewModelModule by lazy {
         viewModel {
             TransactionDetailsViewModel(
                 savedStateHandle = get(),
-                financialRepository = get()
+                financialRepository = get(),
             )
         }
 
@@ -55,7 +56,7 @@ val viewModelModule by lazy {
             UpdateTransactionViewModel(
                 savedStateHandle = get(),
                 financialRepository = get(),
-                transactionInteractor = get()
+                transactionInteractor = get(),
             )
         }
 
@@ -64,6 +65,14 @@ val viewModelModule by lazy {
                 getRecurringIncomeUseCase = get(),
                 getRecurringExpensesUseCase = get(),
                 getRegularExpensesUseCase = get(),
+                getDailyBalanceUseCase = get(),
+            )
+        }
+
+        viewModel {
+            RecurringManagementViewModel(
+                getRecurringExpenseTemplatesUseCase = get(),
+                deleteTransactionUseCase = get(),
             )
         }
     }

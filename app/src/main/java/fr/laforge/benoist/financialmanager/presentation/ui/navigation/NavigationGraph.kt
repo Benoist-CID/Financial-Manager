@@ -15,6 +15,7 @@ import fr.laforge.benoist.financialmanager.presentation.ui.login.LoginScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.settings.SettingsScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.add.AddTransactionScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.detail.TransactionDetails
+import fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring.RecurringExpensesScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.update.UpdateTransaction
 
 @Composable
@@ -61,7 +62,11 @@ fun FinancialManagerNavHost(
         }
 
         composable(FinancialManagerScreen.Indicators.name) {
-            IndicatorsScreen()
+            IndicatorsScreen(navController = navController)
+        }
+
+        composable(FinancialManagerScreen.RecurringExpenses.name) {
+            RecurringExpensesScreen(navController = navController)
         }
     }
 }

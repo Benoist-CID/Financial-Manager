@@ -70,4 +70,6 @@
     <string name="desc_trend_up">Tendance à la hausse</string>
     <string name="desc_trend_down">Tendance à la baisse</string>
     <string name="section_result">Résultat</string>
+
+    <string name="day">Jour</string>
 </resources>
