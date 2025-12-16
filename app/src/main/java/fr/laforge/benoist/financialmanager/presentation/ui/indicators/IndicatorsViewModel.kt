@@ -6,6 +6,7 @@ import fr.laforge.benoist.financialmanager.domain.model.indicator.DailyPoint
 import fr.laforge.benoist.financialmanager.domain.model.indicator.LifestyleState
 import fr.laforge.benoist.financialmanager.domain.model.indicator.LifestyleStatus
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetDailyBalanceUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetNonRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularExpensesUseCase
@@ -21,6 +22,7 @@ class IndicatorsViewModel(
     getRecurringExpensesUseCase: GetRecurringExpensesUseCase,
     getRegularExpensesUseCase: GetRegularExpensesUseCase,
     getDailyBalanceUseCase: GetDailyBalanceUseCase,
+    getNonRecurringIncomeUseCase: GetNonRecurringIncomeUseCase,
 ) : ViewModel() {
     /**
      * Exposes the recurring income as a hot state flow.
@@ -34,6 +36,12 @@ class IndicatorsViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = 0f
         )
+
+    /**
+     * Exposes the non-recurring income as a hot state flow.
+     */
+    val nonRecurringIncome = getNonRecurringIncomeUseCase()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0f)
 
     /**
      * Exposes the recurring expenses as a hot state flow.
@@ -63,28 +71,23 @@ class IndicatorsViewModel(
 
     val projectedBalance: StateFlow<Float> = combine(
         recurringIncome,
+        nonRecurringIncome, // <--- Added
         recurringExpenses,
         regularExpenses
-    ) { income, recurring, regular ->
+    ) { rIncome, nrIncome, rExpenses, varExpenses ->
 
-        // A. Current Situation (Money actually left right now)
-        val currentBalance = income - recurring - regular
+        val totalIncome = rIncome + nrIncome
+        val currentBalance = totalIncome - rExpenses - varExpenses
 
-        // B. Forecast Logic
+        // Calculate Average Spend Rate
         val now = LocalDateTime.now()
-        val daysPassed = if (now.dayOfMonth == 0) 1 else now.dayOfMonth // Avoid division by zero
-
-        // 1. Calculate Average Daily Spend
-        val dailyAverage = regular / daysPassed
-
-        // 2. Calculate Projected Spend for the rest of the month
-        // We use your extension method here
+        val daysPassed = if (now.dayOfMonth == 0) 1 else now.dayOfMonth
         val remainingDays = now.getNumberOfRemainingDaysInMonth()
+
+        val dailyAverage = varExpenses / daysPassed
         val projectedFutureSpend = dailyAverage * remainingDays
 
-        // C. Final Forecast
-        // Note: Since 'remainingDays' includes today, and 'currentBalance' also accounts for today,
-        // this is a "safe/conservative" estimate. If you strictly want *future* days, use (remainingDays - 1).
+        // Result: Where will we land?
         currentBalance - projectedFutureSpend
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0f)

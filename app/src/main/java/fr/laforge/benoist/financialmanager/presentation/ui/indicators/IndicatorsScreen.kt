@@ -39,13 +39,14 @@ fun IndicatorsScreen(
     vm: IndicatorsViewModel = koinViewModel(),
 ) {
     val recurringIncome by vm.recurringIncome.collectAsState(initial = 0f)
+    val nonRecurringIncome by vm.nonRecurringIncome.collectAsState()
     val recurringExpenses by vm.recurringExpenses.collectAsState(initial = 0f)
     val regularExpenses by vm.regularExpenses.collectAsState(initial = 0f)
     val projectedBalance by vm.projectedBalance.collectAsState()
     val lifestyleState by vm.lifestyleRatio.collectAsState()
     val graphData by vm.dailyBalanceGraph.collectAsState()
 
-    val totalIncome = recurringIncome
+    val totalIncome = recurringIncome + nonRecurringIncome
     val totalExpenses = recurringExpenses + regularExpenses
     val remainingBalance = totalIncome - totalExpenses
     val maxReference = if (totalIncome > 0) totalIncome else 1f
@@ -75,9 +76,27 @@ fun IndicatorsScreen(
 
             IndicatorBar(
                 label = stringResource(R.string.recurring_income),
-                amount = totalIncome,
+                amount = recurringIncome,
                 totalReference = maxReference,
                 color = Color(0xFF4CAF50) // Green
+            )
+
+            // B. Bonuses / Extra (Only show if relevant)
+            if (nonRecurringIncome > 0) {
+                IndicatorBar(
+                    label = "Extra Income", // Add to strings.xml: "Revenus Exceptionnels"
+                    amount = nonRecurringIncome,
+                    totalReference = maxReference,
+                    color = Color(0xFF00E676) // Bright Green to pop
+                )
+            }
+
+            // C. Total Income Capacity
+            IndicatorBar(
+                label = "Total Income", // Add to strings.xml: "Revenus Totaux"
+                amount = totalIncome,
+                totalReference = maxReference,
+                color = Color(0xFF1B5E20) // Dark Green (Summary)
             )
 
             Divider(modifier = Modifier.padding(vertical = 16.dp))

@@ -66,6 +66,7 @@ val viewModelModule by lazy {
                 getRecurringExpensesUseCase = get(),
                 getRegularExpensesUseCase = get(),
                 getDailyBalanceUseCase = get(),
+                getNonRecurringIncomeUseCase = get(),
             )
         }
 
