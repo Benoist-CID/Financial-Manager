@@ -1,11 +1,15 @@
 package fr.laforge.benoist.financialmanager.domain.usecase.notification
 
+import android.content.Context
+import fr.laforge.benoist.financialmanager.infrastructure.helper.NotificationHelperImpl
+import io.mockk.mockk
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.`should be equal to`
 import org.junit.Test
 
 class NotificationHelperTest {
-    private val notificationHelper = NotificationHelperImpl()
+    private val context: Context = mockk()
+    private val notificationHelper = NotificationHelperImpl(context)
 
     @Test
     fun `invoke should return correct Transaction when receiving a google wallet notification`() {
