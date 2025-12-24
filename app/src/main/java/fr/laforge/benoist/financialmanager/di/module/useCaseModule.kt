@@ -21,6 +21,7 @@ import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRemainin
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.EnableNotificationAccessUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetRecurringExpenseTemplatesUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetRecurringIncomeTransactionsUseCase
 import fr.laforge.benoist.financialmanager.infrastructure.usecase.EnableNotificationAccessUseCaseImpl
 import org.koin.dsl.module
 
@@ -77,6 +78,12 @@ val useCaseModule by lazy {
 
         factory {
             GetRecurringExpenseTemplatesUseCase(
+                repository = get()
+            )
+        }
+
+        factory {
+            GetRecurringIncomeTransactionsUseCase(
                 repository = get()
             )
         }

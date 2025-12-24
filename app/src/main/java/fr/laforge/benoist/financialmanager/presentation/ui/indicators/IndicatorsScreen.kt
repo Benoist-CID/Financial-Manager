@@ -117,7 +117,8 @@ fun IndicatorsScreen(
                 label = stringResource(R.string.recurring_income), // Salary
                 amount = recurringIncome,
                 totalReference = maxReference,
-                color = Color(0xFF4CAF50)
+                color = Color(0xFF4CAF50),
+                onClick = { navController.navigate(FinancialManagerScreen.RecurringIncomes.name) }
             )
             if (nonRecurringIncome > 0) {
                 IndicatorBar(

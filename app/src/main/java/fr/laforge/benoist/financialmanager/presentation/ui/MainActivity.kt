@@ -48,4 +48,5 @@ enum class FinancialManagerScreen {
     /** A screen continaing financial indicators **/
     Indicators,
     RecurringExpenses,
+    RecurringIncomes,
 }

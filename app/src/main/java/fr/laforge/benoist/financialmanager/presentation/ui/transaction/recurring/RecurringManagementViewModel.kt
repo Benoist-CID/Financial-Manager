@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetRecurringExpenseTemplatesUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetRecurringIncomeTransactionsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,23 +16,37 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class RecurringManagementViewModel(
-    private val getRecurringExpenseTemplatesUseCase: GetRecurringExpenseTemplatesUseCase,
+    getRecurringExpenseTemplatesUseCase: GetRecurringExpenseTemplatesUseCase,
+    getRecurringIncomeTransactionsUseCase: GetRecurringIncomeTransactionsUseCase,
     private val deleteTransactionUseCase: DeleteTransactionUseCase,
 ) : ViewModel() {
 
     // 1. Raw Data
-    private val _rawItems = getRecurringExpenseTemplatesUseCase().stateIn(
+    private val _rawExpenses = getRecurringExpenseTemplatesUseCase().stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
             emptyList()
         )
+    private val _rawIncomes = getRecurringIncomeTransactionsUseCase().stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        emptyList()
+    )
 
     // 2. Search State
     private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query.asStateFlow()
 
     // 3. Filtered List (Displayed in UI)
-    val recurringItems: StateFlow<List<Transaction>> = combine(_rawItems, _query) { items, query ->
+    val recurringExpensesItems: StateFlow<List<Transaction>> = combine(_rawExpenses, _query) { items, query ->
+        if (query.isBlank()) {
+            items
+        } else {
+            items.filter { it.description.contains(query, ignoreCase = true) }
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val recurringIncomesItems: StateFlow<List<Transaction>> = combine(_rawIncomes, _query) { items, query ->
         if (query.isBlank()) {
             items
         } else {
@@ -40,7 +55,11 @@ class RecurringManagementViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // 4. Total Calculation (Based on filtered list)
-    val totalMonthly: StateFlow<Float> = recurringItems.map { list ->
+    val totalExpensesMonthly: StateFlow<Float> = recurringExpensesItems.map { list ->
+        list.sumOf { it.amount.toDouble() }.toFloat()
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0f)
+
+    val totalIncomesMonthly: StateFlow<Float> = recurringIncomesItems.map { list ->
         list.sumOf { it.amount.toDouble() }.toFloat()
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0f)
 

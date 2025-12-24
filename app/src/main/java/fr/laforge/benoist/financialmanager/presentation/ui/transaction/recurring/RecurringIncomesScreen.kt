@@ -37,14 +37,14 @@ import org.koin.androidx.compose.koinViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecurringExpensesScreen(
+fun RecurringIncomesScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     vm: RecurringManagementViewModel = koinViewModel(),
 ) {
     // Collect Data
-    val transactions by vm.recurringExpensesItems.collectAsState()
-    val totalMonthly by vm.totalExpensesMonthly.collectAsState()
+    val transactions by vm.recurringIncomesItems.collectAsState()
+    val totalMonthly by vm.totalIncomesMonthly.collectAsState()
     val query by vm.query.collectAsState()
 
     Scaffold(
@@ -53,7 +53,7 @@ fun RecurringExpensesScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Recurring Expenses",
+                        text = "Recurring Income",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -141,3 +141,4 @@ fun RecurringExpensesScreen(
         }
     }
 }
+

@@ -74,6 +74,7 @@ val viewModelModule by lazy {
             RecurringManagementViewModel(
                 getRecurringExpenseTemplatesUseCase = get(),
                 deleteTransactionUseCase = get(),
+                getRecurringIncomeTransactionsUseCase = get(),
             )
         }
     }
