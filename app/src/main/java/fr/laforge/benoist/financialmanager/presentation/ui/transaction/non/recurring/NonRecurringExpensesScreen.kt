@@ -1,4 +1,4 @@
-package fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring
+package fr.laforge.benoist.financialmanager.presentation.ui.transaction.non.recurring
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,18 +16,18 @@ import org.koin.androidx.compose.koinViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecurringIncomesScreen(
+fun NonRecurringExpensesScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    vm: RecurringManagementViewModel = koinViewModel(),
+    vm: NonRecurringManagementViewModel = koinViewModel(),
 ) {
     // Collect Data
-    val transactions by vm.recurringIncomesItems.collectAsState()
-    val totalMonthly by vm.totalIncomesMonthly.collectAsState()
+    val transactions by vm.nonRecurringExpensesItems.collectAsState()
+    val totalMonthly by vm.totalExpensesMonthly.collectAsState()
     val query by vm.query.collectAsState()
 
     TransactionsListScreen(
-        title = stringResource(R.string.recurring_income),
+        title = stringResource(R.string.label_variable_expenses),
         transactions = transactions,
         totalMonthly = totalMonthly,
         query = query,

@@ -49,6 +49,7 @@
     <string name="indicators">Indicators</string>
     <string name="income">Income</string>
     <string name="recurring_income">Recurring Income</string>
+    <string name="variable_income">Variable Income</string>
     <string name="expenses">Expenses</string>
     <string name="recurring_expenses">Recurring Expenses</string>
     <string name="label_variable_expenses">Variable Expenses</string>

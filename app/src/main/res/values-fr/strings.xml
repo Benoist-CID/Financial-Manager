@@ -49,6 +49,7 @@
     <string name="indicators">Indicateurs</string>
     <string name="income">Revenu</string>
     <string name="recurring_income">Revenu récurrent</string>
+    <string name="variable_income">Revenu Variable</string>
     <string name="expenses">Dépenses</string>
     <string name="recurring_expenses">Récurrent (Factures, Abos)</string>
     <string name="label_variable_expenses">Dépenses Variables</string>

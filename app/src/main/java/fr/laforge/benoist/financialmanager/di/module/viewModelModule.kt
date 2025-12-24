@@ -8,6 +8,7 @@ import fr.laforge.benoist.financialmanager.presentation.ui.login.LoginViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.settings.SettingsViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.add.AddTransactionViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.detail.TransactionDetailsViewModel
+import fr.laforge.benoist.financialmanager.presentation.ui.transaction.non.recurring.NonRecurringManagementViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring.RecurringManagementViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.update.UpdateTransactionViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -75,6 +76,14 @@ val viewModelModule by lazy {
                 getRecurringExpenseTemplatesUseCase = get(),
                 deleteTransactionUseCase = get(),
                 getRecurringIncomeTransactionsUseCase = get(),
+            )
+        }
+
+        viewModel {
+            NonRecurringManagementViewModel(
+                getNonRecurringExpenseTransactionsUseCase = get(),
+                deleteTransactionUseCase = get(),
+                getNonRecurringIncomeTransactionsUseCase = get(),
             )
         }
     }
