@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import fr.laforge.benoist.financialmanager.presentation.util.getCategoryColor
@@ -68,56 +69,68 @@ fun TransactionRow(
 ) {
     val currencySign = if (transaction.type == TransactionType.Expense) "-" else ""
     val formattedAmount = formatAmount(transaction.amount)
+
     Row(
         modifier = modifier
             .height(68.dp)
             .background(MaterialTheme.colorScheme.background)
             .clearAndSetSemantics {
-                contentDescription =
-                    ""
-            }.clickable { onClicked(transaction) },
+                contentDescription = "${transaction.description}, ${transaction.amount} euro"
+            }
+            .clickable { onClicked(transaction) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         val typography = MaterialTheme.typography
+
+        // 1. Indicator
         AccountIndicator(
             color = transaction.category.getCategoryColor(),
             modifier = Modifier
         )
+
         Spacer(Modifier.width(12.dp))
-        Column(Modifier) {
-            Text(text = transaction.description, style = typography.bodyLarge)
+
+        // 2. Text Column (FIXED: Added weight and overflow handling)
+        Column(
+            modifier = Modifier.weight(1f) // Takes all remaining space between Icon and Amount
+        ) {
+            Text(
+                text = transaction.description,
+                style = typography.bodyLarge,
+                maxLines = 1, // Prevents expanding height
+                overflow = TextOverflow.Ellipsis // Adds "..." if too long
+            )
+
             CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
                 val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
                 val date = if (transaction.isPeriodic) {
+                    // Logic to show current month for periodic transactions
                     transaction.dateTime.withMonth(LocalDateTime.now().monthValue)
                 } else {
                     transaction.dateTime
                 }.format(formatter)
+
                 Text(text = date, style = typography.titleMedium)
             }
         }
-        Spacer(Modifier.weight(1f))
+
+        // 3. Amount Area (Pushed to the right by the Column's weight)
+        Spacer(Modifier.width(8.dp)) // Small buffer between text and amount
+
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.End
         ) {
             Text(
-                text = currencySign,
+                text = "$currencySign$formattedAmount €",
                 style = typography.displaySmall,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-            Text(
-                text = formattedAmount,
-                style = typography.displaySmall,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-            Text(
-                text = "€",
-                style = typography.displaySmall,
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier.align(Alignment.CenterVertically),
+                maxLines = 1
             )
         }
+
         Spacer(Modifier.width(16.dp))
 
+        // 4. Chevron Icon
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
             Icon(
                 imageVector = Icons.Filled.KeyboardArrowRight,
