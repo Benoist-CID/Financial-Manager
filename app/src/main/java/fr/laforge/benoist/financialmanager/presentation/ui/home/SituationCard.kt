@@ -33,11 +33,12 @@ fun SituationCard(
     recurringExpenses: Float,
     income: Float,
     savingsTarget: Float,
+    previousMonthBalance: Float,
     modifier: Modifier = Modifier,
     date: LocalDateTime = LocalDateTime.now(),
     onClick: () -> Unit,
 ) {
-    val remaining = income - allExpenses - savingsTarget
+    val remaining = income - allExpenses - savingsTarget + previousMonthBalance
 
     Box(
         modifier = modifier
@@ -84,7 +85,14 @@ fun SituationCard(
 @Preview(showBackground = true)
 @Composable
 fun SituationCardPreview() {
-    SituationCard(allExpenses = -2500F, regularExpenses = 2000.0F, recurringExpenses = 200F, savingsTarget = 500F, income = 1000F) {
+    SituationCard(
+        allExpenses = -2500F,
+        regularExpenses = 2000.0F,
+        recurringExpenses = 200F,
+        savingsTarget = 500F,
+        income = 1000F,
+        previousMonthBalance = -50F,
+    ) {
 
     }
 }

@@ -1,6 +1,7 @@
 package fr.laforge.benoist.financialmanager.infrastructure.repository
 
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionFilter
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import fr.laforge.benoist.financialmanager.infrastructure.repository.dao.FinancialInputDao
@@ -12,8 +13,22 @@ import java.time.LocalDateTime
 class AndroidFinancialRepository(private val financialDao: FinancialInputDao) :
     FinancialRepository {
     override fun createTransaction(transaction: Transaction): Long {
-        return financialDao.insertAll(fromModel(transaction = transaction))[0]
+        return financialDao.insertAll(listOf(fromModel(transaction = transaction)))[0]
     }
+
+    override fun getTransactions(filter: TransactionFilter): Flow<List<Transaction>> =
+        financialDao.getTransactions(
+            type = filter.type?.name,
+            startDate = filter.startDate,
+            endDate = filter.endDate,
+            search = filter.descriptionQuery,
+            isPeriodic = filter.isPeriodic,
+            parentId = filter.parentId?.toInt(),
+        ).map {
+            it.map { transactionEntity ->
+                transactionEntity.toModel()
+            }
+        }
 
     override fun getAll(): Flow<List<Transaction>> {
         return financialDao.getAll().map {
@@ -46,9 +61,10 @@ class AndroidFinancialRepository(private val financialDao: FinancialInputDao) :
         }
     }
 
-    override fun get(uid: Int): Flow<Transaction> = financialDao.getById(uid = uid).map {
-                transactionEntity -> transactionEntity.toModel()
-            }
+    override fun get(uid: Int): Flow<Transaction> =
+        financialDao.getById(uid = uid).map { transactionEntity ->
+            transactionEntity.toModel()
+        }
 
     override fun getAllExpenses(): Flow<List<Transaction>> {
         return financialDao.getByInputType(inputType = TransactionType.Expense).map {
@@ -67,11 +83,11 @@ class AndroidFinancialRepository(private val financialDao: FinancialInputDao) :
     }
 
     override fun deleteTransaction(transaction: Transaction) {
-        financialDao.delete(fromModel(transaction))
+        financialDao.delete(listOf(fromModel(transaction)))
     }
 
     override fun updateTransaction(transaction: Transaction) {
-        financialDao.update(fromModel(transaction))
+        financialDao.update(listOf(fromModel(transaction)))
     }
 
     override fun getAllPeriodicTransactions(): Flow<List<Transaction>> {
@@ -103,4 +119,10 @@ class AndroidFinancialRepository(private val financialDao: FinancialInputDao) :
             entities.toModel()
         }
     }
+
+    override fun getBalanceBeforeDate(date: LocalDateTime): Flow<Float> =
+        financialDao.getBalanceBefore(date)
+
+    override fun getTransactionsBeforeDate(date: LocalDateTime): Flow<Transaction> =
+        financialDao.getTransactionsBefore(date).map { it.toModel() }
 }

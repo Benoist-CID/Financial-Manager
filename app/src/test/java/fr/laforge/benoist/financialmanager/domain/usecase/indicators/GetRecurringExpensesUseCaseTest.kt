@@ -13,7 +13,7 @@ import org.junit.Test
 
 class GetRegularExpensesUseCaseTest {
 
-    private val financialRepository = mockk<FinancialRepository>()
+    private val financialRepository = mockk<FinancialRepository>(relaxed = true)
     private val useCase = GetRegularExpensesUseCase(financialRepository)
 
     @Test
@@ -55,7 +55,9 @@ class GetRegularExpensesUseCaseTest {
         )
 
         every {
-            financialRepository.getAllInDateRange(any(), any())
+            financialRepository.getTransactions(
+                filter = any()
+            )
         } returns flowOf(listOf(groceries, rentInstance, rentTemplate, salary))
 
         // --- Act ---
@@ -76,7 +78,7 @@ class GetRegularExpensesUseCaseTest {
         )
 
         every {
-            financialRepository.getAllInDateRange(any(), any())
+            financialRepository.getTransactions(any())
         } returns flowOf(listOf(rentInstance))
 
         // --- Act ---

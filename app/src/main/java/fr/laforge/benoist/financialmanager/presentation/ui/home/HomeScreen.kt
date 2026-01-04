@@ -46,7 +46,7 @@ fun HomeScreen(
     val allExpenses by vm.allCurrentMonthTransactionsAmount.collectAsState(initial = 0F)
     val recurringExpenses by vm.periodicAmount.collectAsState(initial = 0F)
     val regularExpenses by vm.regularExpenses.collectAsState(initial = 0F)
-    val transactions by vm.allTransactions.collectAsState(initial = emptyList())
+    val transactions by vm.uiListFlow.collectAsState(initial = emptyList())
     val savingsTarget by vm.savingsTarget.collectAsState(initial = 0F)
     val context = LocalContext.current
     val uiState by vm.uiState.collectAsState()
@@ -73,11 +73,12 @@ fun HomeScreen(
                 modifier = modifier.background(MaterialTheme.colorScheme.background)
             ) {
                 SituationCard(
-                    allExpenses = -allExpenses,
-                    regularExpenses = -regularExpenses,
-                    recurringExpenses = -recurringExpenses,
+                    allExpenses = allExpenses,
+                    regularExpenses = regularExpenses,
+                    recurringExpenses = recurringExpenses,
                     income = income,
-                    savingsTarget = savingsTarget
+                    savingsTarget = savingsTarget,
+                    previousMonthBalance = vm.startBalanceFlow.collectAsState(initial = 0F).value,
                 ) {
                     navController.navigate(FinancialManagerScreen.Indicators.name)
                 }
@@ -99,9 +100,11 @@ fun HomeScreen(
                         transaction = transaction,
                         isPeriodic = vm.isPeriodicTransaction(transaction),
                         onClick = {
-                            navController.navigate(
-                                FinancialManagerScreen.TransactionDetails.name + "/${transaction.uid}",
-                            )
+                            if (transaction.uid > -1) {
+                                navController.navigate(
+                                    FinancialManagerScreen.TransactionDetails.name + "/${transaction.uid}",
+                                )
+                            }
                         },
                         onDelete = { shouldDeleteParent ->
                             vm.deleteTransaction(

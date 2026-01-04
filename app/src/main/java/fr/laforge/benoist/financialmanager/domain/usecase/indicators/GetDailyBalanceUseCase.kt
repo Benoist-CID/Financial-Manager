@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import java.time.LocalDateTime
 
-
 class GetDailyBalanceUseCase(
     private val repository: FinancialRepository,
     private val getRecurringIncome: GetRecurringIncomeUseCase,
-    private val getRecurringExpenses: GetRecurringExpensesUseCase
+    private val getRecurringExpenses: GetRecurringExpensesUseCase,
+    private val getMonthStartingBalanceUseCase: GetMonthStartingBalanceUseCase,
 ) {
     /**
      * Returns a flow of DailyPoint for a given date.
@@ -23,14 +23,15 @@ class GetDailyBalanceUseCase(
     operator fun invoke(date: LocalDateTime = LocalDateTime.now()): Flow<List<DailyPoint>> = combine(
         getRecurringIncome(),
         getRecurringExpenses(),
+        getMonthStartingBalanceUseCase(date),
         repository.getAllInDateRange(
             startDate = date.withDayOfMonth(1).toLocalDate().atStartOfDay(),
             endDate = date.plusMonths(1).withDayOfMonth(1).toLocalDate().atStartOfDay()
         )
-    ) { income, recurringFixed, transactions ->
+    ) { income, recurringFixed, monthStartingBalance, transactions ->
 
         // 1. Starting Point (Fixed Budget)
-        val startBalance = income - recurringFixed
+        val startBalance = income - recurringFixed + monthStartingBalance
 
         // 2. Filter Regular Expenses ONLY (Same logic as your RegularExpensesUseCase)
         val regularExpenses = transactions.filter {

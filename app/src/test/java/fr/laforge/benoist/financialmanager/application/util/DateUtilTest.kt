@@ -42,4 +42,20 @@ class DateUtilTest {
             Pair(LocalDate.parse("2023-12-24"), LocalDate.parse("2024-01-23"))
         )
     }
+
+    @Test
+    fun `Tests getDateBoundaries with start day to 1`() {
+        // --- Arrange ---
+        var currentDate = LocalDate.parse("2023-01-04")
+        val startDay = 2
+
+        // --- Act ---
+
+        // Regular date
+        getDateBoundaries(startDay, currentDate).`should be equal to`(
+            Pair(LocalDate.parse("2023-01-01"), LocalDate.parse("2023-01-31"))
+        )
+
+        // --- Assert ---
+    }
 }

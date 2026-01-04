@@ -17,11 +17,14 @@ class GetDailyBalanceUseCaseTest {
     private val repository = mockk<FinancialRepository>()
     private val getRecurringIncome = mockk<GetRecurringIncomeUseCase>()
     private val getRecurringExpenses = mockk<GetRecurringExpensesUseCase>()
+    private val getMonthStartingBalanceUseCase = mockk<GetMonthStartingBalanceUseCase>()
+
 
     private val useCase = GetDailyBalanceUseCase(
         repository,
         getRecurringIncome,
-        getRecurringExpenses
+        getRecurringExpenses,
+        getMonthStartingBalanceUseCase,
     )
 
     // A fixed date: 15th of Jan 2025
@@ -32,6 +35,7 @@ class GetDailyBalanceUseCaseTest {
         // --- Arrange ---
         every { getRecurringIncome() } returns flowOf(3000f)
         every { getRecurringExpenses() } returns flowOf(1000f)
+        every { getMonthStartingBalanceUseCase(any()) } returns flowOf(-1000f)
         // Starting Disposable = 2000
 
         // Day 5: Spent 100
@@ -61,13 +65,13 @@ class GetDailyBalanceUseCaseTest {
         points shouldHaveSize 15 // Only up to the 15th
 
         // Day 1 (2000)
-        points.find { it.dayOfMonth == 1 }?.balance shouldBeEqualTo 2000f
+        points.find { it.dayOfMonth == 1 }?.balance shouldBeEqualTo 1000f
 
         // Day 5 (2000 - 100 = 1900)
-        points.find { it.dayOfMonth == 5 }?.balance shouldBeEqualTo 1900f
+        points.find { it.dayOfMonth == 5 }?.balance shouldBeEqualTo 900f
 
         // Day 10 (1900 - 50 = 1850)
-        points.find { it.dayOfMonth == 10 }?.balance shouldBeEqualTo 1850f
+        points.find { it.dayOfMonth == 10 }?.balance shouldBeEqualTo 850f
     }
 
     @Test

@@ -35,6 +35,11 @@ val viewModelModule by lazy {
                 repository = get(),
                 transactionInteractor = get(),
                 preferencesRepository = get(),
+                getMonthStartingBalanceUseCase = get(),
+                getNonRecurringIncomeUseCase = get(),
+                getRecurringIncomeUseCase = get(),
+                getRecurringExpensesUseCase = get(),
+                getNonRecurringExpensesUseCase = get(),
             )
         }
 
@@ -68,6 +73,7 @@ val viewModelModule by lazy {
                 getRegularExpensesUseCase = get(),
                 getDailyBalanceUseCase = get(),
                 getNonRecurringIncomeUseCase = get(),
+                getMonthStartingBalanceUseCase = get(),
             )
         }
 

@@ -6,6 +6,7 @@ import fr.laforge.benoist.financialmanager.domain.model.indicator.DailyPoint
 import fr.laforge.benoist.financialmanager.domain.model.indicator.LifestyleState
 import fr.laforge.benoist.financialmanager.domain.model.indicator.LifestyleStatus
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetDailyBalanceUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetMonthStartingBalanceUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetNonRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
@@ -23,6 +24,7 @@ class IndicatorsViewModel(
     getRegularExpensesUseCase: GetRegularExpensesUseCase,
     getDailyBalanceUseCase: GetDailyBalanceUseCase,
     getNonRecurringIncomeUseCase: GetNonRecurringIncomeUseCase,
+    getMonthStartingBalanceUseCase: GetMonthStartingBalanceUseCase,
 ) : ViewModel() {
     /**
      * Exposes the recurring income as a hot state flow.
@@ -69,15 +71,29 @@ class IndicatorsViewModel(
             initialValue = 0f
         )
 
+    /**
+     * Exposes the start of month balance.
+     * * - started = WhileSubscribed(5000): Stops the upstream flow 5 seconds
+     * after the UI disappears (saves resources), but keeps it alive during
+     * rotations.
+     */
+    val startBalanceFlow: StateFlow<Float> = getMonthStartingBalanceUseCase(LocalDateTime.now()).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = 0f
+    )
+
+
     val projectedBalance: StateFlow<Float> = combine(
         recurringIncome,
         nonRecurringIncome, // <--- Added
         recurringExpenses,
-        regularExpenses
-    ) { rIncome, nrIncome, rExpenses, varExpenses ->
+        regularExpenses,
+        startBalanceFlow,
+    ) { rIncome, nrIncome, rExpenses, varExpenses, startBalance ->
 
         val totalIncome = rIncome + nrIncome
-        val currentBalance = totalIncome - rExpenses - varExpenses
+        val currentBalance = totalIncome - rExpenses - varExpenses + startBalance
 
         // Calculate Average Spend Rate
         val now = LocalDateTime.now()

@@ -1,6 +1,7 @@
 package fr.laforge.benoist.financialmanager.domain.repository
 
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionFilter
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
@@ -12,8 +13,15 @@ interface FinancialRepository {
     fun createTransaction(transaction: Transaction): Long
 
     /**
+     * The single source of truth for lists.
+     * The implementation (Room) will apply the filters in the WHERE clause.
+     */
+    fun getTransactions(filter: TransactionFilter): Flow<List<Transaction>>
+
+    /**
      * Returns all FinancialInput
      */
+    @Deprecated("Use getTransactions(filter: TransactionFilter) instead")
     fun getAll(): Flow<List<Transaction>>
 
     /**
@@ -81,4 +89,16 @@ interface FinancialRepository {
         startDate: LocalDateTime,
         endDate: LocalDateTime
     ): List<Transaction>
+
+    /**
+    * Returns the sum of all transaction amounts strictly before the given date.
+    * This represents the "Balance History" up to that point.
+    *
+    * @param date Date to get the balance before
+    *
+    * @return Flow of the balance
+    */
+    fun getBalanceBeforeDate(date: LocalDateTime = LocalDateTime.now()): Flow<Float>
+
+    fun getTransactionsBeforeDate(date: LocalDateTime = LocalDateTime.now()): Flow<Transaction>
 }

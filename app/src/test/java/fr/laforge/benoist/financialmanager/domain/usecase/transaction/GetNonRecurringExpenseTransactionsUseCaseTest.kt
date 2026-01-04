@@ -1,18 +1,31 @@
 package fr.laforge.benoist.financialmanager.domain.usecase.transaction
 
+import android.content.Context
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionFilter
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
+import fr.laforge.benoist.financialmanager.infrastructure.repository.dao.FinancialInputDao
+import fr.laforge.benoist.financialmanager.infrastructure.repository.database.AppDatabase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
+import java.io.IOException
 import java.time.LocalDateTime
 
+@RunWith(AndroidJUnit4::class)
 class GetNonRecurringExpenseTransactionsUseCaseTest {
 
     private val repository = mockk<FinancialRepository>()
@@ -24,16 +37,22 @@ class GetNonRecurringExpenseTransactionsUseCaseTest {
     @Test
     fun `invoke should fetch data for specific month range`() = runTest {
         // --- Arrange ---
-        every { repository.getAllInDateRange(any(), any()) } returns flowOf(emptyList())
+        every { repository.getTransactions(filter = any()) } returns flowOf(emptyList())
 
         // --- Act ---
         useCase(date = fixedDate).first()
 
         // --- Assert ---
         verify {
-            repository.getAllInDateRange(
-                startDate = LocalDateTime.of(2025, 5, 1, 0, 0),
-                endDate = LocalDateTime.of(2025, 6, 1, 0, 0)
+            repository.getTransactions(
+                filter = TransactionFilter(
+                    type = TransactionType.Expense,
+                    startDate = LocalDateTime.of(2025, 5, 1, 0, 0),
+                    endDate = LocalDateTime.of(2025, 6, 1, 0, 0),
+                    descriptionQuery = "",
+                    isPeriodic = false,
+                    parentId = 0
+                )
             )
         }
     }
@@ -72,7 +91,7 @@ class GetNonRecurringExpenseTransactionsUseCaseTest {
         )
 
         every {
-            repository.getAllInDateRange(any(), any())
+            repository.getTransactions(filter = any())
         } returns flowOf(listOf(burger, rentTemplate, rentPayment))
 
         // --- Act ---

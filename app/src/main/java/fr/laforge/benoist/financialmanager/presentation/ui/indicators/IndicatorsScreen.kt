@@ -42,6 +42,7 @@ fun IndicatorsScreen(
     vm: IndicatorsViewModel = koinViewModel(),
 ) {
     // 1. Collect Data
+    val startOfMonthBalance by vm.startBalanceFlow.collectAsState()
     val recurringIncome by vm.recurringIncome.collectAsState()
     val nonRecurringIncome by vm.nonRecurringIncome.collectAsState()
     val recurringExpenses by vm.recurringExpenses.collectAsState()
@@ -53,7 +54,7 @@ fun IndicatorsScreen(
     // 2. Calcs
     val totalIncome = recurringIncome + nonRecurringIncome
     val totalExpenses = recurringExpenses + regularExpenses
-    val remainingBalance = totalIncome - totalExpenses
+    val remainingBalance = totalIncome - totalExpenses + startOfMonthBalance
     val maxReference = maxOf(totalIncome, totalExpenses).coerceAtLeast(1f)
 
     Scaffold(

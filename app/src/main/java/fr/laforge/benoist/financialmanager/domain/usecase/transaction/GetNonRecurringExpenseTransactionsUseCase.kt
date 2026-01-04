@@ -1,10 +1,12 @@
 package fr.laforge.benoist.financialmanager.domain.usecase.transaction
 
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionFilter
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import java.time.LocalDateTime
 
 /**
@@ -32,17 +34,12 @@ class GetNonRecurringExpenseTransactionsUseCase(private val repository: Financia
      * @return A [Flow] emitting the filtered and sorted list of [Transaction] objects.
      */
     operator fun invoke(date: LocalDateTime = LocalDateTime.now()): Flow<List<Transaction>> {
-        val startDate = date.withDayOfMonth(1).toLocalDate().atStartOfDay()
-        val endDate = date.plusMonths(1).withDayOfMonth(1).toLocalDate().atStartOfDay()
+        Timber.i("Fetching non-recurring expense transactions for the month of $date")
 
-        return repository.getAllInDateRange(startDate, endDate).map { transactions ->
-            transactions
-                .filter {
-                    it.type == TransactionType.Expense &&
-                            !it.isPeriodic &&
-                            it.parent == 0
-                }
-                .sortedByDescending { it.amount }
+        return repository.getTransactions(
+            filter = TransactionFilter.monthlyVariableExpenses(date)
+        ).map { transactions ->
+            transactions.sortedByDescending { it.amount }
         }
     }
 }
