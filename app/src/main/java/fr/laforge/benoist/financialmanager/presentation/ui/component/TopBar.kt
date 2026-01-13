@@ -52,15 +52,7 @@ fun TopBar(
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
-
-            IconButton(onClick = { navController.navigate(FinancialManagerScreen.AddInput.name) }) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "Add",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-
+            
             IconButton(onClick = { navController.navigate(FinancialManagerScreen.Settings.name) }) {
                 Icon(
                     imageVector = Icons.Filled.Settings,

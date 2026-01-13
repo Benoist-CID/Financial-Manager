@@ -3,14 +3,21 @@ package fr.laforge.benoist.financialmanager.presentation.ui.home
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -19,7 +26,11 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -52,6 +63,13 @@ fun HomeScreen(
     val uiState by vm.uiState.collectAsState()
     val income by vm.income.collectAsState(initial = 0F)
 
+    // 1. Create the state here to share it between Scaffold (FAB) and Content (List)
+    val listState = rememberLazyListState()
+
+    val isScrollingUp = listState.isScrollingUp()
+
+    val isExpanded = listState.firstVisibleItemIndex == 0 || isScrollingUp
+
     Scaffold(
         topBar = {
             TopBar(
@@ -60,13 +78,24 @@ fun HomeScreen(
                 onSave = { vm.saveDb(context) },
                 onLoad = { navController.navigate(FinancialManagerScreen.ImportDb.name) },
             )
-        }
-    ) {
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                text = { Text("Add Transaction") },
+                icon = { Icon(Icons.Default.Add, contentDescription = null) },
+                onClick = { navController.navigate(FinancialManagerScreen.AddInput.name) },
+                expanded = isExpanded, // <--- This controls the magic
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
+        },
+        floatingActionButtonPosition = FabPosition.End
+    ) { paddingValues ->
         Column(
             modifier
                 .padding(
-                    top = it.calculateTopPadding(),
-                    bottom = it.calculateBottomPadding(),
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding(),
                 ),
         ) {
             Column(
@@ -90,8 +119,15 @@ fun HomeScreen(
             }
 
             LazyColumn(
-                modifier = modifier
-                    .background(Color.Red)
+                state = listState,
+                modifier = modifier,
+                contentPadding = PaddingValues(
+                    top = 0.dp,
+                    // 88.dp = 56dp (FAB) + 16dp (Margin) + 16dp (Breathing room)
+                    bottom = paddingValues.calculateBottomPadding() + 88.dp,
+                    start = 0.dp,
+                    end = 0.dp
+                )
             ) {
                 items(transactions.filter { transaction ->
                     transaction.description.contains(uiState.query)
@@ -117,4 +153,23 @@ fun HomeScreen(
             }
         }
     }
+}
+
+@Composable
+private fun LazyListState.isScrollingUp(): Boolean {
+    var previousIndex by remember(this) { mutableIntStateOf(firstVisibleItemIndex) }
+    var previousScrollOffset by remember(this) { mutableIntStateOf(firstVisibleItemScrollOffset) }
+
+    return remember(this) {
+        derivedStateOf {
+            if (previousIndex != firstVisibleItemIndex) {
+                previousIndex > firstVisibleItemIndex
+            } else {
+                previousScrollOffset >= firstVisibleItemScrollOffset
+            }.also {
+                previousIndex = firstVisibleItemIndex
+                previousScrollOffset = firstVisibleItemScrollOffset
+            }
+        }
+    }.value
 }

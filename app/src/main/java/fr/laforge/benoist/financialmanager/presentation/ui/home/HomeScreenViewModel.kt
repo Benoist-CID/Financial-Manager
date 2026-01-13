@@ -5,23 +5,21 @@ import android.content.Intent
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import fr.laforge.benoist.financialmanager.domain.repository.PreferencesRepository
-import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionType
-import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractor
-import fr.laforge.benoist.financialmanager.domain.util.exportToCsvFormat
-import fr.laforge.benoist.financialmanager.domain.util.getFirstDayOfMonth
-import fr.laforge.benoist.financialmanager.domain.util.getLastDayOfMonth
-import fr.laforge.benoist.financialmanager.domain.util.sum
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionCategory
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionFilter
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
+import fr.laforge.benoist.financialmanager.domain.repository.PreferencesRepository
+import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionType
+import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractor
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetMonthStartingBalanceUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetNonRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularExpensesUseCase
+import fr.laforge.benoist.financialmanager.domain.util.exportToCsvFormat
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,6 +82,7 @@ class HomeScreenViewModel(
     fun deleteTransaction(
         transaction: Transaction,
         shouldDeleteParent: Boolean = false,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
     ) {
         val deleteTransactionType = if (shouldDeleteParent) {
             DeleteTransactionType.AllOccurrences
@@ -91,7 +90,7 @@ class HomeScreenViewModel(
             DeleteTransactionType.ThisOccurrenceOnly
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             transactionInteractor.deleteTransaction(
                 transaction = transaction,
                 deleteTransactionType = deleteTransactionType
@@ -99,9 +98,12 @@ class HomeScreenViewModel(
         }
     }
 
-    fun saveDb(context: Context) {
+    fun saveDb(
+        context: Context,
+        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    ) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(dispatcher) {
                 repository.getAll().first { transactions ->
                     val sb = StringBuilder()
                     transactions.forEach {
