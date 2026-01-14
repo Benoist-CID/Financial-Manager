@@ -98,38 +98,6 @@ class HomeScreenViewModel(
         }
     }
 
-    fun saveDb(
-        context: Context,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ) {
-        viewModelScope.launch {
-            withContext(dispatcher) {
-                repository.getAll().first { transactions ->
-                    val sb = StringBuilder()
-                    transactions.forEach {
-                        sb.append(it.exportToCsvFormat() + "\n")
-                    }
-
-                    val sharingIntent = Intent(Intent.ACTION_SEND)
-                    // type of the content to be shared
-                    sharingIntent.type = "text/plain"
-                    // Body of the content
-                    val shareBody = sb.toString()
-                    // subject of the content. you can share anything
-                    val shareSubject = "DB snapshot ${LocalDateTime.now()}"
-                    // passing body of the content
-                    sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
-
-                    // passing subject of the content
-                    sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject)
-                    context.startActivity(Intent.createChooser(sharingIntent, "Share using"))
-
-                    true
-                }
-            }
-        }
-    }
-
     fun updateSearch(newVal: String) {
         _uiState.update { currentState ->
             currentState.copy(query = newVal)

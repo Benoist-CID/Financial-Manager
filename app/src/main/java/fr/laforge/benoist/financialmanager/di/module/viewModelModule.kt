@@ -12,6 +12,7 @@ import fr.laforge.benoist.financialmanager.presentation.ui.transaction.non.recur
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring.RecurringManagementViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.update.UpdateTransactionViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewModelModule by lazy {
@@ -24,11 +25,7 @@ val viewModelModule by lazy {
         }
         viewModel { AddTransactionViewModel(createTransactionUseCase = get()) }
 
-        viewModel {
-            SettingsViewModel(
-                preferencesRepository = get()
-            )
-        }
+        viewModelOf(::SettingsViewModel)
 
         viewModel {
             HomeScreenViewModel(

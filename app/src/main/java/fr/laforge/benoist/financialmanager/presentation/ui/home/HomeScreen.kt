@@ -75,8 +75,6 @@ fun HomeScreen(
             TopBar(
                 navController = navController,
                 title = displayDate(LocalDateTime.now().toDate()),
-                onSave = { vm.saveDb(context) },
-                onLoad = { navController.navigate(FinancialManagerScreen.ImportDb.name) },
             )
         },
         floatingActionButton = {

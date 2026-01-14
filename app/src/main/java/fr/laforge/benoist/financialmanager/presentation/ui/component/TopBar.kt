@@ -27,8 +27,6 @@ import fr.laforge.benoist.financialmanager.R
 fun TopBar(
     navController: NavController,
     title: String = "",
-    onSave: () -> Unit,
-    onLoad: () -> Unit
 ) {
     TopAppBar(
         title = { Text(
@@ -37,22 +35,6 @@ fun TopBar(
             color = MaterialTheme.colorScheme.onPrimary) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
         actions = {
-            IconButton(onClick = { onSave() }) {
-                Icon(
-                    imageVector = Icons.Filled.KeyboardArrowDown,
-                    contentDescription = "Save",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-
-            IconButton(onClick = { onLoad() }) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.database),
-                    contentDescription = "Load",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-            
             IconButton(onClick = { navController.navigate(FinancialManagerScreen.Settings.name) }) {
                 Icon(
                     imageVector = Icons.Filled.Settings,
@@ -67,5 +49,5 @@ fun TopBar(
 @Preview
 @Composable
 fun TopBarPreview() {
-    TopBar(rememberNavController(), "TITLE", {}, {})
+    TopBar(rememberNavController(), "TITLE")
 }

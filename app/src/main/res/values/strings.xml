@@ -74,4 +74,11 @@
 
     <string name="day">Day</string>
 
+    <string name="budget">Budget</string>
+    <string name="database">Database</string>
+    <string name="export_db">Export database</string>
+    <string name="import_db">Import database</string>
+    <string name="export_db_description">Export database to a file</string>
+    <string name="import_db_description">Import database from a file (overwrites current data)</string>
+
 </resources>
