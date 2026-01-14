@@ -4,26 +4,20 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -32,9 +26,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import fr.laforge.benoist.financialmanager.domain.util.displayDate
@@ -59,7 +50,6 @@ fun HomeScreen(
     val regularExpenses by vm.regularExpenses.collectAsState(initial = 0F)
     val transactions by vm.uiListFlow.collectAsState(initial = emptyList())
     val savingsTarget by vm.savingsTarget.collectAsState(initial = 0F)
-    val context = LocalContext.current
     val uiState by vm.uiState.collectAsState()
     val income by vm.income.collectAsState(initial = 0F)
 
@@ -74,7 +64,8 @@ fun HomeScreen(
         topBar = {
             TopBar(
                 navController = navController,
-                title = displayDate(LocalDateTime.now().toDate()),
+                query = uiState.query,
+                onQueryChange = { newVal -> vm.updateSearch(newVal) }
             )
         },
         floatingActionButton = {
@@ -109,11 +100,6 @@ fun HomeScreen(
                 ) {
                     navController.navigate(FinancialManagerScreen.Indicators.name)
                 }
-
-                SearchComponent(
-                    query = uiState.query,
-                    onQueryChange = { newVal -> vm.updateSearch(newVal) }
-                )
             }
 
             LazyColumn(
