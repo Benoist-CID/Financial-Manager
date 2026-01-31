@@ -96,7 +96,6 @@ dependencies {
     testImplementation(libs.kluent)
     testImplementation(libs.koin.test)
     testImplementation(libs.junit.v412)
-    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.room.testing)

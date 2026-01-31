@@ -7,8 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import fr.laforge.benoist.financialmanager.domain.usecase.CreateRegularTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.EnableNotificationAccessUseCase
-import fr.laforge.benoist.financialmanager.presentation.ui.home.HomeScreenViewModel
-import fr.laforge.benoist.financialmanager.application.util.getDateBoundaries
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -32,9 +30,14 @@ class MainActivityViewModel(
         enableNotificationAccessUseCase()
 
         viewModelScope.launch(Dispatchers.IO) {
+            // 1. Get the current month (or the month the user is viewing)
+            val currentYearMonth = java.time.YearMonth.now() // Or YearMonth.from(currentDate)
+
+            val firstDayOfMonth = currentYearMonth.atDay(1)
+            val lastDayOfMonth = currentYearMonth.atEndOfMonth()
             createRegularTransactionsUseCase.execute(
-                startDate = getDateBoundaries(startDay = HomeScreenViewModel.START_DAY).first.atTime(0, 0),
-                endDate = getDateBoundaries(startDay = HomeScreenViewModel.START_DAY).second.atTime(0, 0)
+                startDate = firstDayOfMonth.atTime(0, 0),
+                endDate = lastDayOfMonth.atTime(23, 59, 59),
             )
         }
     }

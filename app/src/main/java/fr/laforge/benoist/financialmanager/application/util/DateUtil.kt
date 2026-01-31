@@ -3,6 +3,7 @@ package fr.laforge.benoist.financialmanager.application.util
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.YearMonth
 import java.time.ZoneId
 
 /**
@@ -25,52 +26,32 @@ const val NOVEMBER = 11
 const val DECEMBER = 12
 
 /**
- * Gets boundaries LocalDate given the startDay value (ex: startDay = 23, boundaries = yyyy-mm-23 -> yyyy-mm+1-22)
+ * Gets boundaries LocalDate given the startDay value.
+ * Handles end-of-month edge cases (e.g. startDay=31 in February -> Feb 28).
  */
 fun getDateBoundaries(startDay: Int, currentDate: LocalDate = LocalDate.now()): Pair<LocalDate, LocalDate> {
-    val startYear: Int
-    val startMonth: Int
-    val endYear: Int
-    val endMonth: Int
+    val currentYearMonth = YearMonth.from(currentDate)
 
-    if(currentDate.dayOfMonth >= startDay) {
-        if ((FEBRUARY ..NOVEMBER).contains(currentDate.monthValue)) {
-            startMonth = currentDate.monthValue
-            endMonth = currentDate.monthValue + 1
-            startYear = currentDate.year
-            endYear = currentDate.year
-        } else if (currentDate.monthValue == JANUARY) {
-            startMonth = currentDate.monthValue
-            endMonth = currentDate.monthValue + 1
-            startYear = currentDate.year
-            endYear = currentDate.year
-        } else {
-            startMonth = currentDate.monthValue
-            endMonth = JANUARY
-            startYear = currentDate.year
-            endYear = currentDate.year + 1
-        }
+    // 1. Determine if we are technically in the "current" cycle or the "previous" one.
+    // If startDay is 31, but this month only has 30 days, we clamp to 30 for the comparison.
+    val maxDayThisMonth = currentYearMonth.lengthOfMonth()
+    val cycleTriggerDay = startDay.coerceAtMost(maxDayThisMonth)
+
+    val startYearMonth = if (currentDate.dayOfMonth >= cycleTriggerDay) {
+        // We passed the start day, so the cycle started this month
+        currentYearMonth
     } else {
-        if ((FEBRUARY..NOVEMBER).contains(currentDate.monthValue)) {
-            startMonth = currentDate.monthValue - 1
-            endMonth = currentDate.monthValue
-            startYear = currentDate.year
-            endYear = currentDate.year
-        } else if (currentDate.monthValue == JANUARY) {
-            startMonth = DECEMBER
-            endMonth = currentDate.monthValue
-            startYear = currentDate.year - 1
-            endYear = currentDate.year
-        } else {
-            startMonth = currentDate.monthValue - 1
-            endMonth = currentDate.monthValue
-            startYear = currentDate.year
-            endYear = currentDate.year
-        }
+        // We haven't reached the start day yet, so the cycle started last month
+        currentYearMonth.minusMonths(1)
     }
 
-    val startDate = LocalDate.of(startYear, startMonth, startDay)
-    val endDate = LocalDate.of(endYear, endMonth, startDay)
+    val endYearMonth = startYearMonth.plusMonths(1)
+
+    // 2. Calculate the actual dates.
+    // We clamp the requested startDay to the valid number of days in that specific month.
+    // This prevents "Feb 30" crashes.
+    val startDate = startYearMonth.atDay(startDay.coerceAtMost(startYearMonth.lengthOfMonth()))
+    val endDate = endYearMonth.atDay(startDay.coerceAtMost(endYearMonth.lengthOfMonth()))
 
     return Pair(startDate, endDate)
 }
