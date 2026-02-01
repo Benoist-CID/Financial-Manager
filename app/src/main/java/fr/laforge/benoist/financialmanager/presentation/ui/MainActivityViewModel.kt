@@ -41,8 +41,4 @@ class MainActivityViewModel(
             )
         }
     }
-
-    override fun onStop(owner: LifecycleOwner) {
-        super.onStop(owner)
-    }
 }

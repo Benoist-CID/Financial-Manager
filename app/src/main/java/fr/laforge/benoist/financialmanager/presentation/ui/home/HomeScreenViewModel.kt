@@ -1,15 +1,11 @@
 package fr.laforge.benoist.financialmanager.presentation.ui.home
 
-import android.content.Context
-import android.content.Intent
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionCategory
-import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionFilter
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
-import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import fr.laforge.benoist.financialmanager.domain.repository.PreferencesRepository
 import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionType
 import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractor
@@ -18,24 +14,25 @@ import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetNonRecur
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularExpensesUseCase
-import fr.laforge.benoist.financialmanager.domain.util.exportToCsvFormat
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetMonthlyTransactionsUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
+import java.time.YearMonth
 
 
 class HomeScreenViewModel(
-    private val repository: FinancialRepository,
     private val transactionInteractor: TransactionInteractor,
     getMonthStartingBalanceUseCase: GetMonthStartingBalanceUseCase,
     preferencesRepository: PreferencesRepository,
@@ -43,23 +40,43 @@ class HomeScreenViewModel(
     getRecurringIncomeUseCase: GetRecurringIncomeUseCase,
     getRecurringExpensesUseCase: GetRecurringExpensesUseCase,
     getNonRecurringExpensesUseCase: GetRegularExpensesUseCase,
+    getMonthlyTransactionsUseCase: GetMonthlyTransactionsUseCase,
 ) : ViewModel(), DefaultLifecycleObserver {
     private val _uiState = MutableStateFlow(HomeScreenUiState())
     val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
 
     val periodicAmount: Flow<Float> = getRecurringExpensesUseCase()
+    private val _currentMonth = MutableStateFlow(YearMonth.now())
+    val currentMonth = _currentMonth.asStateFlow()
 
-    var allTransactions: Flow<List<Transaction>> = repository.getTransactions(
-        filter = TransactionFilter(
-            type = null,
-            startDate = null,
-            endDate = null,
-            descriptionQuery = null,
-            isPeriodic = false,
-            parentId = null
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
+
+    // 2. The Reactive List
+    // Whenever Month OR Search changes, the Use Case is re-executed automatically.
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val allTransactions: StateFlow<List<Transaction>> = combine(
+        _currentMonth,
+        _searchQuery
+    ) { month, query ->
+        Pair(month, query)
+    }.flatMapLatest { (month, query) ->
+        getMonthlyTransactionsUseCase(
+            month = month,
+            searchQuery = query
         )
-    ).map { transactions ->
-        transactions.sortedByDescending { it.dateTime }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
+    fun onMonthChanged(newMonth: YearMonth) {
+        _currentMonth.value = newMonth
+    }
+
+    fun onSearchQueryChanged(query: String) {
+        _searchQuery.value = query
     }
 
     val allCurrentMonthTransactionsAmount = combine(getNonRecurringExpensesUseCase(), getRecurringExpensesUseCase()) { nonRecurring, recurring ->
@@ -116,10 +133,5 @@ class HomeScreenViewModel(
         )
         // Return a list where the Balance is the very first item
         transactions + listOf(headerItem)
-    }
-
-    companion object {
-        // This must be moved in settings when it will be implemented
-        const val START_DAY = 29
     }
 }

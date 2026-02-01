@@ -27,18 +27,7 @@ val viewModelModule by lazy {
 
         viewModelOf(::SettingsViewModel)
 
-        viewModel {
-            HomeScreenViewModel(
-                repository = get(),
-                transactionInteractor = get(),
-                preferencesRepository = get(),
-                getMonthStartingBalanceUseCase = get(),
-                getNonRecurringIncomeUseCase = get(),
-                getRecurringIncomeUseCase = get(),
-                getRecurringExpensesUseCase = get(),
-                getNonRecurringExpensesUseCase = get(),
-            )
-        }
+        viewModelOf(::HomeScreenViewModel)
 
         viewModel {
             ImportDbViewModel(repository = get())
