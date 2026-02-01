@@ -13,6 +13,7 @@ import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractor
 import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractorImpl
 import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.UpdateTransactionUseCaseImpl
+import fr.laforge.benoist.financialmanager.domain.usecase.indicators.CalculateSituationProportionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetDailyBalanceUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetNonRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
@@ -121,5 +122,6 @@ val useCaseModule by lazy {
 
         factoryOf(::GetMonthStartingBalanceUseCase)
         factoryOf(::GetMonthlyTransactionsUseCase)
+        factoryOf(::CalculateSituationProportionsUseCase)
     }
 }

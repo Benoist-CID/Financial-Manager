@@ -3,6 +3,7 @@ package fr.laforge.benoist.financialmanager.presentation.ui.home.situation.card
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.domain.repository.PreferencesRepository
+import fr.laforge.benoist.financialmanager.domain.usecase.indicators.CalculateSituationProportionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetMonthStartingBalanceUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetNonRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
@@ -15,6 +16,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import java.time.LocalDateTime
 
+/**
+ * A ViewModel for the Situation Card.
+ */
 class SituationCardViewModel(
     preferencesRepository: PreferencesRepository,
     getRecurringExpensesUseCase: GetRecurringExpensesUseCase,
@@ -22,13 +26,17 @@ class SituationCardViewModel(
     getRecurringIncomeUseCase: GetRecurringIncomeUseCase,
     getNonRecurringIncomeUseCase: GetNonRecurringIncomeUseCase,
     getMonthStartingBalanceUseCase: GetMonthStartingBalanceUseCase,
+    calculateSituationProportionsUseCase: CalculateSituationProportionsUseCase,
 ) : ViewModel() {
     // Helper for date math (mockable if needed)
     private val now = LocalDateTime.now()
     private val currentMonth = java.time.YearMonth.from(now)
 
     // A flow for income
-    private val incomeFlow = combine(getNonRecurringIncomeUseCase(), getRecurringIncomeUseCase()) { nonRecurring, recurring ->
+    private val incomeFlow = combine(
+        getNonRecurringIncomeUseCase(),
+        getRecurringIncomeUseCase()
+    ) { nonRecurring, recurring ->
         nonRecurring + recurring
     }
 
@@ -65,32 +73,18 @@ class SituationCardViewModel(
             savingsTarget = savings,
             remainingBalance = remaining,
             dailyBudget = dailyBudget,
-            proportions = getProportions(income, expenses.recurring, expenses.regular, savings)
+            proportions = calculateSituationProportionsUseCase(
+                income = income,
+                recurringExpenses = expenses.recurring,
+                regularExpenses = expenses.regular,
+                savingsTarget = savings
+            )
         )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = SituationCardState()
     )
-
-    // Logic moved from the Composable/Utils
-    private fun getProportions(
-        income: Float,
-        recurringExpenses: Float,
-        regularExpenses: Float,
-        savingsTarget: Float
-    ): List<Float> {
-        // Your logic here. Example:
-        val total = income + recurringExpenses + regularExpenses + savingsTarget
-        if (total == 0f) return listOf(0f, 0f, 0f, 0f)
-
-        return listOf(
-            income / total,
-            recurringExpenses / total,
-            regularExpenses / total,
-            savingsTarget / total
-        )
-    }
 }
 
 private data class ExpenseBreakdown(
