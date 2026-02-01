@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.component.SwipableTransactionItem
 import fr.laforge.benoist.financialmanager.presentation.ui.component.TopBar
+import fr.laforge.benoist.financialmanager.presentation.ui.home.situation.card.SituationCard
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -41,13 +42,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     vm: HomeScreenViewModel = koinViewModel(),
 ) {
-    val allExpenses by vm.allCurrentMonthTransactionsAmount.collectAsState(initial = 0F)
-    val recurringExpenses by vm.periodicAmount.collectAsState(initial = 0F)
-    val regularExpenses by vm.regularExpenses.collectAsState(initial = 0F)
     val transactions by vm.uiListFlow.collectAsState(initial = emptyList())
-    val savingsTarget by vm.savingsTarget.collectAsState(initial = 0F)
     val uiState by vm.uiState.collectAsState()
-    val income by vm.income.collectAsState(initial = 0F)
 
     val listState = rememberLazyListState()
 
@@ -85,14 +81,7 @@ fun HomeScreen(
             Column(
                 modifier = modifier.background(MaterialTheme.colorScheme.background)
             ) {
-                SituationCard(
-                    allExpenses = allExpenses,
-                    regularExpenses = regularExpenses,
-                    recurringExpenses = recurringExpenses,
-                    income = income,
-                    savingsTarget = savingsTarget,
-                    previousMonthBalance = vm.startBalanceFlow.collectAsState(initial = 0F).value,
-                ) {
+                SituationCard {
                     navController.navigate(FinancialManagerScreen.Indicators.name)
                 }
             }

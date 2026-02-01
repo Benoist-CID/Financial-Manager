@@ -6,14 +6,11 @@ import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionCategory
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
-import fr.laforge.benoist.financialmanager.domain.repository.PreferencesRepository
 import fr.laforge.benoist.financialmanager.domain.usecase.DeleteTransactionType
 import fr.laforge.benoist.financialmanager.domain.usecase.TransactionInteractor
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetMonthStartingBalanceUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetNonRecurringIncomeUseCase
-import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
-import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetMonthlyTransactionsUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -35,22 +32,15 @@ import java.time.YearMonth
 class HomeScreenViewModel(
     private val transactionInteractor: TransactionInteractor,
     getMonthStartingBalanceUseCase: GetMonthStartingBalanceUseCase,
-    preferencesRepository: PreferencesRepository,
     getNonRecurringIncomeUseCase: GetNonRecurringIncomeUseCase,
     getRecurringIncomeUseCase: GetRecurringIncomeUseCase,
-    getRecurringExpensesUseCase: GetRecurringExpensesUseCase,
-    getNonRecurringExpensesUseCase: GetRegularExpensesUseCase,
     getMonthlyTransactionsUseCase: GetMonthlyTransactionsUseCase,
 ) : ViewModel(), DefaultLifecycleObserver {
     private val _uiState = MutableStateFlow(HomeScreenUiState())
     val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
-
-    val periodicAmount: Flow<Float> = getRecurringExpensesUseCase()
     private val _currentMonth = MutableStateFlow(YearMonth.now())
-    val currentMonth = _currentMonth.asStateFlow()
 
     private val _searchQuery = MutableStateFlow("")
-    val searchQuery = _searchQuery.asStateFlow()
 
     // 2. The Reactive List
     // Whenever Month OR Search changes, the Use Case is re-executed automatically.
@@ -71,25 +61,13 @@ class HomeScreenViewModel(
         initialValue = emptyList()
     )
 
-    fun onMonthChanged(newMonth: YearMonth) {
-        _currentMonth.value = newMonth
-    }
-
-    fun onSearchQueryChanged(query: String) {
-        _searchQuery.value = query
-    }
-
-    val allCurrentMonthTransactionsAmount = combine(getNonRecurringExpensesUseCase(), getRecurringExpensesUseCase()) { nonRecurring, recurring ->
+    val income: Flow<Float> = combine(
+        getNonRecurringIncomeUseCase(),
+        getRecurringIncomeUseCase()
+    ) { nonRecurring, recurring ->
         nonRecurring + recurring
     }
 
-    val income: Flow<Float> = combine(getNonRecurringIncomeUseCase(), getRecurringIncomeUseCase()) { nonRecurring, recurring ->
-        nonRecurring + recurring
-    }
-
-    val regularExpenses: Flow<Float> = getNonRecurringExpensesUseCase()
-
-    val savingsTarget = preferencesRepository.getSavingTarget()
 
     val startBalanceFlow = getMonthStartingBalanceUseCase(LocalDateTime.now())
 

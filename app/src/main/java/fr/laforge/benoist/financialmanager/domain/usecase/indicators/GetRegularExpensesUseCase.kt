@@ -18,8 +18,6 @@ class GetRegularExpensesUseCase(
      * @param currentMonth The month to calculate expenses for. Defaults to the current system month.
      */
     operator fun invoke(currentMonth: YearMonth = YearMonth.now()): Flow<Float> {
-
-        // Strict boundaries: Start of 1st day (00:00:00) to End of Last day (23:59:59)
         val startDate = currentMonth.atDay(1).atStartOfDay()
         val endDate = currentMonth.atEndOfMonth().atTime(23, 59, 59)
 

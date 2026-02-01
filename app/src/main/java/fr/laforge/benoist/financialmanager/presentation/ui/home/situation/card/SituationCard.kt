@@ -1,4 +1,4 @@
-package fr.laforge.benoist.financialmanager.presentation.ui.home
+package fr.laforge.benoist.financialmanager.presentation.ui.home.situation.card
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -19,26 +21,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.presentation.ui.component.AnimatedCircle
 import fr.laforge.benoist.financialmanager.presentation.ui.component.formatAmount
 import fr.laforge.benoist.financialmanager.domain.util.getNumberOfRemainingDaysInMonth
 import fr.laforge.benoist.financialmanager.domain.util.getProportions
+import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDateTime
 
 @Composable
 fun SituationCard(
-    allExpenses: Float,
-    regularExpenses: Float,
-    recurringExpenses: Float,
-    income: Float,
-    savingsTarget: Float,
-    previousMonthBalance: Float,
     modifier: Modifier = Modifier,
+    vm: SituationCardViewModel = koinViewModel(),
     date: LocalDateTime = LocalDateTime.now(),
     onClick: () -> Unit,
 ) {
-    val remaining = income - allExpenses - savingsTarget + previousMonthBalance
+    val state by vm.uiState.collectAsStateWithLifecycle()
 
     Box(
         modifier = modifier
@@ -48,11 +47,11 @@ fun SituationCard(
             .padding(top = 8.dp)
     ) {
         AnimatedCircle(
-            proportions = getProportions(income, recurringExpenses, regularExpenses, savingsTarget),
+            proportions = state.proportions, // Pre-calculated!
             colors = listOf(
-                colorResource(R.color.orange_3),
-                colorResource(R.color.red_3),
                 colorResource(R.color.green_3),
+                colorResource(R.color.red_3),
+                colorResource(R.color.orange_3),
                 colorResource(R.color.blue_4)
             ),
             modifier = Modifier
@@ -62,7 +61,7 @@ fun SituationCard(
 
         Column(modifier = Modifier.align(Alignment.Center)) {
             Text(
-                text = "${formatAmount(remaining)} €",
+                text = "${formatAmount(state.remainingBalance)} €",
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -71,9 +70,7 @@ fun SituationCard(
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "${formatAmount(remaining / date.getNumberOfRemainingDaysInMonth())}€ " + stringResource(
-                    id = R.string.per_day
-                ),
+                text = "${formatAmount(state.dailyBudget)}€ " + stringResource(id = R.string.per_day),
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -85,14 +82,7 @@ fun SituationCard(
 @Preview(showBackground = true)
 @Composable
 fun SituationCardPreview() {
-    SituationCard(
-        allExpenses = -2500F,
-        regularExpenses = 2000.0F,
-        recurringExpenses = 200F,
-        savingsTarget = 500F,
-        income = 1000F,
-        previousMonthBalance = -50F,
-    ) {
+    SituationCard {
 
     }
 }
