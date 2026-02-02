@@ -28,7 +28,6 @@ class SituationCardViewModel(
     getMonthStartingBalanceUseCase: GetMonthStartingBalanceUseCase,
     calculateSituationProportionsUseCase: CalculateSituationProportionsUseCase,
 ) : ViewModel() {
-    // Helper for date math (mockable if needed)
     private val now = LocalDateTime.now()
     private val currentMonth = java.time.YearMonth.from(now)
 

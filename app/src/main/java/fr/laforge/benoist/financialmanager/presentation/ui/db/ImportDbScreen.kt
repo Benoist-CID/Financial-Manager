@@ -1,6 +1,5 @@
 package fr.laforge.benoist.financialmanager.presentation.ui.db
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,31 +9,19 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import fr.laforge.benoist.financialmanager.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ImportDbScreen(
-    navController: NavController,
     modifier: Modifier = Modifier,
     vm: ImportDbViewModel = koinViewModel(),
 ) {
     Column {
-
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, "This is my text to send.")
-            type = "text/plain"
-        }
-        val shareIntent = Intent.createChooser(sendIntent, null)
-        val context = LocalContext.current
-
         Button(
             onClick = { vm.importDb() },
             modifier = modifier.fillMaxWidth()
@@ -60,5 +47,5 @@ fun ImportDbScreen(
 @Preview
 @Composable
 fun ImportDbScreenPreview() {
-    ImportDbScreen(navController = rememberNavController())
+    ImportDbScreen()
 }

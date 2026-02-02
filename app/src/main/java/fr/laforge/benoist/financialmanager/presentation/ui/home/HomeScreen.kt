@@ -64,7 +64,7 @@ fun HomeScreen(
                 text = { Text("Add Transaction") },
                 icon = { Icon(Icons.Default.Add, contentDescription = null) },
                 onClick = { navController.navigate(FinancialManagerScreen.AddInput.name) },
-                expanded = isExpanded, // <--- This controls the magic
+                expanded = isExpanded,
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             )
