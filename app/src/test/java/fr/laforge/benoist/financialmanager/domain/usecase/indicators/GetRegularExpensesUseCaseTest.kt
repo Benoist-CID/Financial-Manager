@@ -42,10 +42,10 @@ class GetRecurringExpensesUseCaseTest {
             parent = 5
         )
 
-        // Mock repository to return all these
+        // Mock repository to return only what matches the filter
         every {
-            financialRepository.getAllInDateRange(any(), any())
-        } returns flowOf(listOf(rentInstance, restaurant, salary))
+            financialRepository.getTransactions(any())
+        } returns flowOf(listOf(rentInstance))
 
         // --- Act ---
         val result = useCase().first()
@@ -58,11 +58,9 @@ class GetRecurringExpensesUseCaseTest {
     @Test
     fun `invoke should return 0 when no generated expenses exist`() = runTest {
         // --- Arrange ---
-        val regularExpense = Transaction(amount = 100f, type = TransactionType.Expense, parent = 0)
-
         every {
-            financialRepository.getAllInDateRange(any(), any())
-        } returns flowOf(listOf(regularExpense))
+            financialRepository.getTransactions(any())
+        } returns flowOf(emptyList())
 
         // --- Act ---
         val result = useCase().first()

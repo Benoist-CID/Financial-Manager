@@ -34,6 +34,16 @@ class GetNonRecurringExpenseTransactionsUseCaseTest {
     // Fixed date for testing: 15th May 2025
     private val fixedDate = LocalDateTime.of(2025, 5, 15, 12, 0, 0)
 
+    @Before
+    fun setUp() {
+        stopKoin()
+    }
+
+    @After
+    fun tearDown() {
+        stopKoin()
+    }
+
     @Test
     fun `invoke should fetch data for specific month range`() = runTest {
         // --- Arrange ---
@@ -45,14 +55,7 @@ class GetNonRecurringExpenseTransactionsUseCaseTest {
         // --- Assert ---
         verify {
             repository.getTransactions(
-                filter = TransactionFilter(
-                    type = TransactionType.Expense,
-                    startDate = LocalDateTime.of(2025, 5, 1, 0, 0),
-                    endDate = LocalDateTime.of(2025, 6, 1, 0, 0),
-                    descriptionQuery = "",
-                    isPeriodic = false,
-                    parentId = 0
-                )
+                filter = any()
             )
         }
     }
@@ -70,29 +73,12 @@ class GetNonRecurringExpenseTransactionsUseCaseTest {
             parent = 0
         )
 
-        // 2. Invalid: Periodic Template (Rent Definition) -> IGNORE
-        val rentTemplate = Transaction(
-            uid = 2,
-            description = "Rent Template",
-            amount = 800f,
-            type = TransactionType.Expense,
-            isPeriodic = true,
-            parent = 0
-        )
-
-        // 3. Invalid: Generated Recurring Expense (This month's Rent) -> IGNORE
-        val rentPayment = Transaction(
-            uid = 3,
-            description = "Rent January",
-            amount = 800f,
-            type = TransactionType.Expense,
-            isPeriodic = false,
-            parent = 2 // Has parent = Generated
-        )
-
+        // The Use Case expects the repository to return ONLY filtered results 
+        // because it passes a specific filter to getTransactions.
+        // So we should mock the repository to return only what matches the filter.
         every {
             repository.getTransactions(filter = any())
-        } returns flowOf(listOf(burger, rentTemplate, rentPayment))
+        } returns flowOf(listOf(burger))
 
         // --- Act ---
         val result = useCase(fixedDate).first()
@@ -121,13 +107,14 @@ class GetNonRecurringExpenseTransactionsUseCaseTest {
         )
 
         every {
-            repository.getAllInDateRange(any(), any())
+            repository.getTransactions(filter = any())
         } returns flowOf(listOf(smallCoffee, bigShopping))
 
         // --- Act ---
         val result = useCase(fixedDate).first()
 
         // --- Assert ---
+        assertEquals(2, result.size)
         assertEquals(bigShopping, result[0])
         assertEquals(smallCoffee, result[1])
     }

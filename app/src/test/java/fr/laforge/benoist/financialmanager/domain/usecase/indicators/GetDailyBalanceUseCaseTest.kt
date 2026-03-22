@@ -36,7 +36,7 @@ class GetDailyBalanceUseCaseTest {
         every { getRecurringIncome() } returns flowOf(3000f)
         every { getRecurringExpenses() } returns flowOf(1000f)
         every { getMonthStartingBalanceUseCase(any()) } returns flowOf(-1000f)
-        // Starting Disposable = 2000
+        // Starting Disposable = 3000 - 1000 + (-1000) = 1000
 
         // Day 5: Spent 100
         val exp1 = Transaction(
@@ -64,13 +64,13 @@ class GetDailyBalanceUseCaseTest {
         // --- Assert ---
         points shouldHaveSize 15 // Only up to the 15th
 
-        // Day 1 (2000)
+        // Day 1 (1000)
         points.find { it.dayOfMonth == 1 }?.balance shouldBeEqualTo 1000f
 
-        // Day 5 (2000 - 100 = 1900)
+        // Day 5 (1000 - 100 = 900)
         points.find { it.dayOfMonth == 5 }?.balance shouldBeEqualTo 900f
 
-        // Day 10 (1900 - 50 = 1850)
+        // Day 10 (900 - 50 = 850)
         points.find { it.dayOfMonth == 10 }?.balance shouldBeEqualTo 850f
     }
 
@@ -79,7 +79,8 @@ class GetDailyBalanceUseCaseTest {
         // --- Arrange ---
         every { getRecurringIncome() } returns flowOf(2000f)
         every { getRecurringExpenses() } returns flowOf(500f)
-        // Starting = 1500
+        every { getMonthStartingBalanceUseCase(any()) } returns flowOf(0f)
+        // Starting = 2000 - 500 + 0 = 1500
 
         val validExpense = Transaction(
             amount = 100f,
