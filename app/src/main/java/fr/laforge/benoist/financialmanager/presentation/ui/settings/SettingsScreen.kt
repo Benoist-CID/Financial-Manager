@@ -82,7 +82,7 @@ fun SettingsScreen(
             icon = Icons.Filled.KeyboardArrowDown, // Or Save
             titleId = R.string.export_db,
             descriptionId = R.string.export_db_description,
-            onClick = { vm.saveDb(context) }
+            onClick = { vm.saveDb() }
         )
 
         // 2. Import Button
