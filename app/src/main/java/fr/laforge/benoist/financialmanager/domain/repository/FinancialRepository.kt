@@ -19,12 +19,6 @@ interface FinancialRepository {
     fun getTransactions(filter: TransactionFilter): Flow<List<Transaction>>
 
     /**
-     * Returns all FinancialInput
-     */
-    @Deprecated("Use getTransactions(filter: TransactionFilter) instead")
-    fun getAll(): Flow<List<Transaction>>
-
-    /**
      * Returns all Transaction ins specified date range
      */
     fun getAllInDateRange(startDate: LocalDateTime, endDate: LocalDateTime): Flow<List<Transaction>>

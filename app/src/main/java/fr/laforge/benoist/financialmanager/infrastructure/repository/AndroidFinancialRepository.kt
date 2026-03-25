@@ -30,14 +30,6 @@ class AndroidFinancialRepository(private val financialDao: FinancialInputDao) :
             }
         }
 
-    override fun getAll(): Flow<List<Transaction>> {
-        return financialDao.getAll().map {
-            it.map { input ->
-                input.toModel()
-            }
-        }
-    }
-
     override fun getAllInDateRange(
         startDate: LocalDateTime,
         endDate: LocalDateTime

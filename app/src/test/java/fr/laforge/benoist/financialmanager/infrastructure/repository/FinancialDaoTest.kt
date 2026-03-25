@@ -68,7 +68,9 @@ class FinancialDaoTest {
         dao.insertAll(listOf(transaction))
 
         // --- Act ---
-        val transactions = dao.getAll().first()
+        val transactions = dao.getTransactions(
+            null, null, null, null, null, null
+        ).first()
 
         // --- Assert ---
         transactions.size `should be equal to` 1
