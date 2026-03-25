@@ -31,6 +31,8 @@ class GetRecurringExpenseTemplatesUseCase(private val repository: FinancialRepos
     operator fun invoke(): Flow<List<Transaction>> = repository.getTransactions(
         filter = TransactionFilter.monthlyRecurringExpenses()
     ).map { transactions ->
-        transactions.sortedByDescending { it.amount }
+        transactions
+            .filter { it.isPeriodic && it.type == TransactionType.Expense }
+            .sortedByDescending { it.amount }
     }
 }

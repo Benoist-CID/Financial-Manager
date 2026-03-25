@@ -47,7 +47,7 @@ class GetRecurringIncomeTransactionsUseCaseTest {
         )
 
         every { repository.getTransactions(any()) } returns flowOf(
-            listOf(salary)
+            listOf(salary, gift, rent)
         )
 
         // --- Act ---
@@ -97,6 +97,8 @@ class GetRecurringIncomeTransactionsUseCaseTest {
     @Test
     fun `invoke should return empty list if no periodic income exists`() = runTest {
         // --- Arrange ---
+        val expense = Transaction(amount = 50f, type = TransactionType.Expense, isPeriodic = true)
+
         every { repository.getTransactions(any()) } returns flowOf(emptyList())
 
         // --- Act ---
