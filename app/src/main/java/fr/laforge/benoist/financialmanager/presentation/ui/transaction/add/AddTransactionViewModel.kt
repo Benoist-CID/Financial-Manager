@@ -88,7 +88,7 @@ class AddTransactionViewModel(private val createTransactionUseCase: CreateTransa
                         category = _uiState.value.transactionCategory
                     )
 
-                val result = createTransactionUseCase.execute(transaction).first()
+                val result = createTransactionUseCase(transaction)
 
                 if (result) {
                     // TODO Display successfully created transaction message
