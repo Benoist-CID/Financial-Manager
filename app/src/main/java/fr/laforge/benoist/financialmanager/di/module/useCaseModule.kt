@@ -30,22 +30,30 @@ import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetNonRecu
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetNonRecurringIncomeTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetRecurringExpenseTemplatesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetRecurringIncomeTransactionsUseCase
+import fr.laforge.benoist.financialmanager.domain.util.Logger
+import fr.laforge.benoist.financialmanager.infrastructure.logging.TimberLogger
 import fr.laforge.benoist.financialmanager.infrastructure.usecase.EnableNotificationAccessUseCaseImpl
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val useCaseModule by lazy {
     module {
+        // Logging — single TimberLogger instance shared across all use cases
+        single<Logger> { TimberLogger() }
+
         factoryOf(::ExportTransactionsListUseCase)
         factoryOf(::GetAllTransactionsUseCase)
         factoryOf(::GetAllRecurringTransactionsUseCase)
         factory<CreateTransactionUseCase> { CreateTransactionUseCaseImpl(repository = get()) }
-        factory<CreateRegularTransactionsUseCase> { CreateRegularTransactionsUseCaseImpl(repository = get()) }
+        factory<CreateRegularTransactionsUseCase> {
+            CreateRegularTransactionsUseCaseImpl(repository = get(), logger = get())
+        }
         factory<EnableNotificationAccessUseCase> { EnableNotificationAccessUseCaseImpl(context = get()) }
         factory {
             CreateTransactionFromNotificationUseCase(
                 createTransactionUseCase = get(),
                 notificationHelper = get(),
+                logger = get(),
             )
         }
 
@@ -116,7 +124,8 @@ val useCaseModule by lazy {
 
         factory {
             GetNonRecurringExpenseTransactionsUseCase(
-                repository = get()
+                repository = get(),
+                logger = get()
             )
         }
 
