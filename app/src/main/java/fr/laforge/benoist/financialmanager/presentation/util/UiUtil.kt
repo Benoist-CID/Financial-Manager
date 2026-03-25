@@ -35,11 +35,7 @@ fun Transaction.getAmountColor(): Color {
 }
 
 fun Transaction.getAmountFontWeight(): FontWeight {
-    return if (type == TransactionType.Income) {
-        FontWeight.Bold
-    } else {
-        FontWeight.Bold
-    }
+    return FontWeight.Bold
 }
 
 @Composable
@@ -82,27 +78,9 @@ fun TransactionCategory.GetCategoryIcon(modifier: Modifier = Modifier) {
             TransactionCategory.Pet -> ImageVector.vectorResource(id = R.drawable.pet)
         }
 
-    val color = when(this) {
-        TransactionCategory.None -> colorResource(id = R.color.green_3)
-        TransactionCategory.Food -> colorResource(id = R.color.red_3)
-        TransactionCategory.Bank -> colorResource(id = R.color.grey_3)
-        TransactionCategory.EducationAndFamily -> colorResource(id = R.color.orange_3)
-        TransactionCategory.Saving -> colorResource(id = R.color.yellow_3)
-        TransactionCategory.Taxes -> colorResource(id = R.color.blue_5)
-        TransactionCategory.Juridic -> colorResource(id = R.color.green_3)
-        TransactionCategory.Accommodation -> colorResource(id = R.color.grey_4)
-        TransactionCategory.Leisure -> colorResource(id = R.color.purple_3)
-        TransactionCategory.Income -> colorResource(id = R.color.green_4)
-        TransactionCategory.Health -> Color.Red
-        TransactionCategory.Shopping -> colorResource(id = R.color.yellow_4)
-        TransactionCategory.Transport -> colorResource(id = R.color.pink_3)
-        TransactionCategory.Sport -> colorResource(id = R.color.blue_4)
-        TransactionCategory.Vehicle -> colorResource(id = R.color.blue_3)
-        TransactionCategory.Telecom -> colorResource(id = R.color.black)
-        TransactionCategory.Pet -> colorResource(id = R.color.brown_3)
-    }
+    val color = getCategoryColor()
 
-    return Column(
+    Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -142,8 +120,6 @@ fun TransactionCategory.getCategoryColor(): Color {
         TransactionCategory.Vehicle -> colorResource(id = R.color.blue_3)
         TransactionCategory.Telecom -> colorResource(id = R.color.black)
         TransactionCategory.Pet -> colorResource(id = R.color.brown_3)
-        else -> {
-            colorResource(id = R.color.white)}
     }
 }
 
