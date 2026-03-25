@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh auth:*)",
+      "Bash(gh repo:*)",
+      "Bash(gh label:*)",
+      "Bash(gh issue:*)",
+      "Bash(./gradlew :app:test --tests \"fr.laforge.benoist.financialmanager.usecase.CreateTransactionUseCaseTest\" --tests \"fr.laforge.benoist.financialmanager.usecase.CreateRegularTransactionsUseCaseTest\")",
+      "Bash(./gradlew :app:testDebugUnitTest --tests \"fr.laforge.benoist.financialmanager.usecase.CreateTransactionUseCaseTest\" --tests \"fr.laforge.benoist.financialmanager.usecase.CreateRegularTransactionsUseCaseTest\")",
+      "Bash(./gradlew :app:testDebugUnitTest)"
+    ]
+  }
+}

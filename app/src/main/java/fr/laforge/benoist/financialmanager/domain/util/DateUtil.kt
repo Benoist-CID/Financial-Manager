@@ -2,8 +2,10 @@ package fr.laforge.benoist.financialmanager.domain.util
 
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionPeriod
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.util.Date
 import java.util.Locale
 
@@ -11,6 +13,20 @@ fun displayDate(date: Date): String {
     val formatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
 
     return formatter.format(date)
+}
+
+/**
+ * Converts a LocalDateTime to milliseconds
+ */
+fun LocalDateTime.toMilliseconds(): Long {
+    return this.atZone(ZoneOffset.UTC).toInstant().toEpochMilli()
+}
+
+/**
+ * Converts milliseconds to LocalDateTime
+ */
+fun toLocalDateTime(milliseconds: Long): LocalDateTime {
+    return Instant.ofEpochMilli(milliseconds).atZone(ZoneOffset.UTC).toLocalDateTime()
 }
 
 /**
