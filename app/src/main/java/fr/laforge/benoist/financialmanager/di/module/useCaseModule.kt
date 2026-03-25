@@ -39,8 +39,8 @@ val useCaseModule by lazy {
         factoryOf(::ExportTransactionsListUseCase)
         factoryOf(::GetAllTransactionsUseCase)
         factoryOf(::GetAllRecurringTransactionsUseCase)
-        factory<CreateTransactionUseCase> { CreateTransactionUseCaseImpl() }
-        factory<CreateRegularTransactionsUseCase> { CreateRegularTransactionsUseCaseImpl() }
+        factory<CreateTransactionUseCase> { CreateTransactionUseCaseImpl(repository = get()) }
+        factory<CreateRegularTransactionsUseCase> { CreateRegularTransactionsUseCaseImpl(repository = get()) }
         factory<EnableNotificationAccessUseCase> { EnableNotificationAccessUseCaseImpl(context = get()) }
         factory {
             CreateTransactionFromNotificationUseCase(

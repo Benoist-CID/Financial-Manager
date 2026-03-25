@@ -3,11 +3,19 @@ package fr.laforge.benoist.financialmanager.domain.usecase
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import kotlinx.coroutines.flow.flow
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class CreateTransactionUseCaseImpl: CreateTransactionUseCase, KoinComponent {
-    private val repository: FinancialRepository by inject()
+/**
+ * Default implementation of [CreateTransactionUseCase].
+ *
+ * Persists a new transaction via the repository. When the transaction is periodic,
+ * a non-periodic child instance for the current period is automatically created
+ * alongside the template.
+ *
+ * @property repository The [FinancialRepository] used to persist transactions.
+ */
+class CreateTransactionUseCaseImpl(
+    private val repository: FinancialRepository
+) : CreateTransactionUseCase {
 
     override fun execute(
         transaction: Transaction
