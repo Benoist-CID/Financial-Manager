@@ -39,11 +39,13 @@ class UpdateTransactionUseCaseImpl(private val financialRepository: FinancialRep
      */
     private suspend fun updateParentTransaction(transaction: Transaction) {
         financialRepository.get(uid = transaction.parent).firstOrNull()?.let { parentTransaction ->
-            parentTransaction.type = transaction.type
-            parentTransaction.category = transaction.category
-            parentTransaction.amount = transaction.amount
-            parentTransaction.description = transaction.description
-            financialRepository.updateTransaction(parentTransaction)
+            val updatedParent = parentTransaction.copy(
+                type = transaction.type,
+                category = transaction.category,
+                amount = transaction.amount,
+                description = transaction.description
+            )
+            financialRepository.updateTransaction(updatedParent)
         }
     }
 }
