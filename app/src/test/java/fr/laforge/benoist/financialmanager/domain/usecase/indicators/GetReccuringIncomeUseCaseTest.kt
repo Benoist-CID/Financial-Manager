@@ -28,7 +28,7 @@ class GetReccuringIncomeUseCaseTest {
 
         // Mock the repository behavior to return a Flow of our list
         every {
-            financialRepository.getAllPeriodicTransactionsByType(TransactionType.Income)
+            financialRepository.getTransactions(any())
         } returns flowOf(listOf(transaction1, transaction2))
 
         // --- Act ---
@@ -43,7 +43,7 @@ class GetReccuringIncomeUseCaseTest {
     fun `invoke should return 0 when no transactions found`() = runTest {
         // --- Arrange ---
         every {
-            financialRepository.getAllPeriodicTransactionsByType(TransactionType.Income)
+            financialRepository.getTransactions(any())
         } returns flowOf(emptyList())
 
         // --- Act ---

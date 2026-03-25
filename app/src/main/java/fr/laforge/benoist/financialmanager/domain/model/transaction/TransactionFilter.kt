@@ -72,5 +72,10 @@ data class TransactionFilter(
             isPeriodic = true,
             parentId = 0
         )
+
+        /**
+         * Creates an empty filter to fetch all transactions.
+         */
+        fun all() = TransactionFilter()
     }
 }

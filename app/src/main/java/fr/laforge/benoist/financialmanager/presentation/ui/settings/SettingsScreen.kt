@@ -77,15 +77,23 @@ fun SettingsScreen(
 
         SettingsSectionTitle(titleId = R.string.database)
 
-        // 1. Export Button
+        // 1. Export all transactions
         SettingsActionItem(
-            icon = Icons.Filled.KeyboardArrowDown, // Or Save
+            icon = Icons.Filled.KeyboardArrowDown,
             titleId = R.string.export_db,
             descriptionId = R.string.export_db_description,
-            onClick = { vm.saveDb(context) }
+            onClick = { vm.saveDb() }
         )
 
-        // 2. Import Button
+        // 2. Export recurring transactions only
+        SettingsActionItem(
+            icon = Icons.Filled.KeyboardArrowDown,
+            titleId = R.string.export_recurring_db,
+            descriptionId = R.string.export_recurring_db_description,
+            onClick = { vm.saveRecurringDb() }
+        )
+
+        // 3. Import Button
         SettingsActionItem(
             icon = ImageVector.vectorResource(id = R.drawable.database),
             titleId = R.string.import_db,

@@ -1,22 +1,22 @@
 package fr.laforge.benoist.financialmanager.presentation.ui.settings
 
-import android.content.Context
-import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import fr.laforge.benoist.financialmanager.domain.repository.PreferencesRepository
-import fr.laforge.benoist.financialmanager.domain.util.exportToCsvFormat
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.ExportTransactionsListUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetAllRecurringTransactionsUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetAllTransactionsUseCase
+import fr.laforge.benoist.financialmanager.presentation.util.ExportService
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 
 class SettingsViewModel(
     private val preferencesRepository: PreferencesRepository,
-    private val repository: FinancialRepository,
+    private val getAllTransactionsUseCase: GetAllTransactionsUseCase,
+    private val getAllRecurringTransactionsUseCase: GetAllRecurringTransactionsUseCase,
+    private val exportTransactionsListUseCase: ExportTransactionsListUseCase,
+    private val exportService: ExportService,
 ) : ViewModel() {
     val savingsTarget = preferencesRepository.getSavingTarget()
 
@@ -27,39 +27,31 @@ class SettingsViewModel(
     }
 
     /**
-     * Saves the current database to a CSV file, and shares it with an intent.
-     *
-     * @param context The context of the activity.
-     * @param dispatcher The dispatcher to use for the coroutine.
+     * Exports all transactions to a CSV file and triggers the export service.
      */
-    fun saveDb(
-        context: Context,
-        dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ) {
+    fun saveDb() {
         viewModelScope.launch {
-            withContext(dispatcher) {
-                repository.getAll().first { transactions ->
-                    val sb = StringBuilder()
-                    transactions.forEach {
-                        sb.append(it.exportToCsvFormat() + "\n")
-                    }
+            val transactions = getAllTransactionsUseCase().first()
+            exportTransactionsListUseCase(transactions).onSuccess { csvContent ->
+                val subject = "DB snapshot ${LocalDateTime.now()}"
+                exportService.export(csvContent, subject)
+            }
+        }
+    }
 
-                    val sharingIntent = Intent(Intent.ACTION_SEND)
-                    // type of the content to be shared
-                    sharingIntent.type = "text/plain"
-                    // Body of the content
-                    val shareBody = sb.toString()
-                    // subject of the content. you can share anything
-                    val shareSubject = "DB snapshot ${LocalDateTime.now()}"
-                    // passing body of the content
-                    sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
-
-                    // passing subject of the content
-                    sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject)
-                    context.startActivity(Intent.createChooser(sharingIntent, "Share using"))
-
-                    true
-                }
+    /**
+     * Exports only the recurring transaction templates (both Expense and Income) to a CSV
+     * file and triggers the export service.
+     *
+     * This is useful for backing up fixed commitments (subscriptions, salaries, loans)
+     * without including the full transaction history.
+     */
+    fun saveRecurringDb() {
+        viewModelScope.launch {
+            val transactions = getAllRecurringTransactionsUseCase().first()
+            exportTransactionsListUseCase(transactions).onSuccess { csvContent ->
+                val subject = "Recurring transactions snapshot ${LocalDateTime.now()}"
+                exportService.export(csvContent, subject)
             }
         }
     }

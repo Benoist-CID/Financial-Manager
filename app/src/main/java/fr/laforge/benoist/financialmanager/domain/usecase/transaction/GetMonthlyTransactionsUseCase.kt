@@ -6,6 +6,7 @@ import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionT
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import java.time.YearMonth
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class GetMonthlyTransactionsUseCase(
     private val financialRepository: FinancialRepository
@@ -33,6 +34,9 @@ class GetMonthlyTransactionsUseCase(
         )
 
         // 3. specific sorting or post-processing could happen here if not in SQL
-        return financialRepository.getTransactions(filter)
+        return financialRepository.getTransactions(filter).map { transactions ->
+            // Sort in memory to guarantee order regardless of SQL implementation
+            transactions.sortedByDescending { it.dateTime }
+        }
     }
 }

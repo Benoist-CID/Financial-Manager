@@ -46,7 +46,7 @@ class GetRecurringExpenseTemplatesUseCaseTest {
             isPeriodic = true
         )
 
-        every { repository.getAll() } returns flowOf(
+        every { repository.getTransactions(any()) } returns flowOf(
             listOf(validExpense, oneShotExpense, salary)
         )
 
@@ -81,7 +81,7 @@ class GetRecurringExpenseTemplatesUseCaseTest {
         )
 
         // Return them in random order to prove sorting works
-        every { repository.getAll() } returns flowOf(
+        every { repository.getTransactions(any()) } returns flowOf(
             listOf(mediumExpense, smallExpense, largeExpense)
         )
 
@@ -103,7 +103,7 @@ class GetRecurringExpenseTemplatesUseCaseTest {
             isPeriodic = true
         )
 
-        every { repository.getAll() } returns flowOf(listOf(onlyIncome))
+        every { repository.getTransactions(any()) } returns flowOf(emptyList())
 
         // --- Act ---
         val result = useCase().first()

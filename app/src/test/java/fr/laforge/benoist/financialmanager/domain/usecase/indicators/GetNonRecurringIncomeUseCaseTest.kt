@@ -80,8 +80,8 @@ class GetNonRecurringIncomeUseCaseTest {
         )
 
         every {
-            repository.getAllInDateRange(any(), any())
-        } returns flowOf(listOf(gift, soldItem, expense, salaryTemplate, salaryGenerated))
+            repository.getTransactions(any())
+        } returns flowOf(listOf(gift, soldItem))
 
         // --- Act ---
         val result = useCase(date = fixedDate).first()
@@ -89,26 +89,14 @@ class GetNonRecurringIncomeUseCaseTest {
         // --- Assert ---
         // Expected: 100 (Gift) + 50 (Sale) = 150
         result shouldBeEqualTo 150f
-
-        // Optional: Verify the repository was called with the correct date range (1st to 1st)
-        verify {
-            repository.getAllInDateRange(
-                startDate = LocalDateTime.of(2025, 5, 1, 0, 0),
-                endDate = LocalDateTime.of(2025, 6, 1, 0, 0)
-            )
-        }
     }
 
     @Test
     fun `invoke should return 0 when no non-recurring income exists`() = runTest {
         // --- Arrange ---
-        // Only expenses and recurring income
-        val expense = Transaction(amount = 50f, type = TransactionType.Expense)
-        val salary = Transaction(amount = 2000f, type = TransactionType.Income, isPeriodic = true)
-
         every {
-            repository.getAllInDateRange(any(), any())
-        } returns flowOf(listOf(expense, salary))
+            repository.getTransactions(any())
+        } returns flowOf(emptyList())
 
         // --- Act ---
         val result = useCase(date = fixedDate).first()

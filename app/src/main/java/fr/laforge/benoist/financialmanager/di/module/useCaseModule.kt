@@ -22,6 +22,9 @@ import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularE
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRemainingBalanceUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.EnableNotificationAccessUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.ExportTransactionsListUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetAllRecurringTransactionsUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetAllTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetMonthlyTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetNonRecurringExpenseTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetNonRecurringIncomeTransactionsUseCase
@@ -33,6 +36,9 @@ import org.koin.dsl.module
 
 val useCaseModule by lazy {
     module {
+        factoryOf(::ExportTransactionsListUseCase)
+        factoryOf(::GetAllTransactionsUseCase)
+        factoryOf(::GetAllRecurringTransactionsUseCase)
         factory<CreateTransactionUseCase> { CreateTransactionUseCaseImpl() }
         factory<CreateRegularTransactionsUseCase> { CreateRegularTransactionsUseCaseImpl() }
         factory<EnableNotificationAccessUseCase> { EnableNotificationAccessUseCaseImpl(context = get()) }
