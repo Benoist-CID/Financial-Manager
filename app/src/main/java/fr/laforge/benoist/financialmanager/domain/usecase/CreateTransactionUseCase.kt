@@ -1,12 +1,13 @@
 package fr.laforge.benoist.financialmanager.domain.usecase
 
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
-import kotlinx.coroutines.flow.Flow
 
 interface CreateTransactionUseCase {
-    fun execute(
-        transaction: Transaction
-    ): Flow<Boolean>
-
-    operator fun invoke(transaction: Transaction): Boolean
+    /**
+     * Persists a new transaction in the repository.
+     *
+     * @param transaction The transaction to create.
+     * @return True if the transaction was successfully created.
+     */
+    suspend operator fun invoke(transaction: Transaction): Boolean
 }
