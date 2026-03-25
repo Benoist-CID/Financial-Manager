@@ -22,7 +22,7 @@ fun NonRecurringIncomeScreen(
     vm: NonRecurringManagementViewModel = koinViewModel(),
 ) {
     // Collect Data
-    val transactions by vm.nonRecurringIncomesItems.collectAsState()
+    val transactions by vm.incomeItems.collectAsState()
     val totalMonthly by vm.totalIncomesMonthly.collectAsState()
     val query by vm.query.collectAsState()
 
