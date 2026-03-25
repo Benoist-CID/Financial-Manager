@@ -11,7 +11,7 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.`should be equal to`
 import org.junit.Test
 
-class GetReccuringIncomeUseCaseTest {
+class GetRecurringIncomeUseCaseTest {
     // 1. Create the Mock
     private val financialRepository = mockk<FinancialRepository>()
 
