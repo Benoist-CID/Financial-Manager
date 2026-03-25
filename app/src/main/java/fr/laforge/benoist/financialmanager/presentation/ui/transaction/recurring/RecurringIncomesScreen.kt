@@ -22,7 +22,7 @@ fun RecurringIncomesScreen(
     vm: RecurringManagementViewModel = koinViewModel(),
 ) {
     // Collect Data
-    val transactions by vm.recurringIncomesItems.collectAsState()
+    val transactions by vm.incomeItems.collectAsState()
     val totalMonthly by vm.totalIncomesMonthly.collectAsState()
     val query by vm.query.collectAsState()
 
