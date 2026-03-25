@@ -23,6 +23,7 @@ import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRemainin
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.EnableNotificationAccessUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.ExportTransactionsListUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetAllRecurringTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetAllTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetMonthlyTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetNonRecurringExpenseTransactionsUseCase
@@ -37,6 +38,7 @@ val useCaseModule by lazy {
     module {
         factoryOf(::ExportTransactionsListUseCase)
         factoryOf(::GetAllTransactionsUseCase)
+        factoryOf(::GetAllRecurringTransactionsUseCase)
         factory<CreateTransactionUseCase> { CreateTransactionUseCaseImpl() }
         factory<CreateRegularTransactionsUseCase> { CreateRegularTransactionsUseCaseImpl() }
         factory<EnableNotificationAccessUseCase> { EnableNotificationAccessUseCaseImpl(context = get()) }

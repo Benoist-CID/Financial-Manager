@@ -77,7 +77,9 @@
     <string name="budget">Budget</string>
     <string name="database">Base de données</string>
     <string name="export_db">Exporter la base de données</string>
+    <string name="export_db_description">Exporter toutes les transactions vers un fichier</string>
+    <string name="export_recurring_db">Exporter les transactions récurrentes</string>
+    <string name="export_recurring_db_description">Exporter uniquement les modèles récurrents (factures, abonnements, salaires) vers un fichier</string>
     <string name="import_db">Importer la base de données</string>
-    <string name="export_db_description">Exporter la base de données vers un fichier</string>
     <string name="import_db_description">Importer depuis une sauvegarde (écrase les données actuelles)</string>
 </resources>
