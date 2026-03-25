@@ -3,13 +3,13 @@ package fr.laforge.benoist.financialmanager.domain.model.transaction
 import java.time.LocalDateTime
 
 data class Transaction(
-    var uid: Int = 0,
-    var dateTime: LocalDateTime = LocalDateTime.now(),
-    var amount: Float = 0F,
-    var description: String = "",
-    var type: TransactionType = TransactionType.Expense,
-    var isPeriodic: Boolean = false,
-    var period: TransactionPeriod = TransactionPeriod.None,
-    var parent: Int = 0,
-    var category: TransactionCategory = TransactionCategory.None
+    val uid: Int = 0,
+    val dateTime: LocalDateTime = LocalDateTime.now(),
+    val amount: Float = 0F,
+    val description: String = "",
+    val type: TransactionType = TransactionType.Expense,
+    val isPeriodic: Boolean = false,
+    val period: TransactionPeriod = TransactionPeriod.None,
+    val parent: Int = 0,
+    val category: TransactionCategory = TransactionCategory.None
 )
