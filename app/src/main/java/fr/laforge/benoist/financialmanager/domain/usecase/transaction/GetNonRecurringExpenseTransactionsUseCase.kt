@@ -4,9 +4,9 @@ import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionFilter
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
+import fr.laforge.benoist.financialmanager.domain.util.Logger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import java.time.LocalDateTime
 
 /**
@@ -16,8 +16,12 @@ import java.time.LocalDateTime
  * fixed monthly bills. It is used to analyze discretionary spending.
  *
  * @property repository The [FinancialRepository] source of truth.
+ * @property logger Domain [Logger] for diagnostic output. Defaults to [Logger.NoOp].
  */
-class GetNonRecurringExpenseTransactionsUseCase(private val repository: FinancialRepository) {
+class GetNonRecurringExpenseTransactionsUseCase(
+    private val repository: FinancialRepository,
+    private val logger: Logger = Logger.NoOp
+) {
 
     /**
      * Retrieves a stream of non-recurring expense transactions for the month of the given [date].
@@ -34,7 +38,7 @@ class GetNonRecurringExpenseTransactionsUseCase(private val repository: Financia
      * @return A [Flow] emitting the filtered and sorted list of [Transaction] objects.
      */
     operator fun invoke(date: LocalDateTime = LocalDateTime.now()): Flow<List<Transaction>> {
-        Timber.i("Fetching non-recurring expense transactions for the month of $date")
+        logger.info("Fetching non-recurring expense transactions for the month of $date")
 
         return repository.getTransactions(
             filter = TransactionFilter.monthlyVariableExpenses(date)

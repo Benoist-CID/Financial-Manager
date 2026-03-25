@@ -1,17 +1,30 @@
 package fr.laforge.benoist.financialmanager.domain.usecase.notification
 
 import fr.laforge.benoist.financialmanager.domain.usecase.CreateTransactionUseCase
-import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRemainingBalanceUseCase
+import fr.laforge.benoist.financialmanager.domain.util.Logger
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
+/**
+ * Use case that creates a [Transaction] from an incoming notification payload.
+ *
+ * Orchestrates notification validation, parsing, and persistence by delegating
+ * to [NotificationHelper] and [CreateTransactionUseCase]. Returns `true` when
+ * a transaction was successfully created, `false` for any non-fatal failure
+ * (unrecognised notification, parse error).
+ *
+ * @property createTransactionUseCase Persists the parsed transaction.
+ * @property notificationHelper Validates and parses the raw notification strings.
+ * @property dispatcher Coroutine dispatcher for the blocking parse/persist work.
+ *   Defaults to [Dispatchers.IO]; override in tests for determinism.
+ * @property logger Domain [Logger] for diagnostic output. Defaults to [Logger.NoOp].
+ */
 class CreateTransactionFromNotificationUseCase(
     private val createTransactionUseCase: CreateTransactionUseCase,
     private val notificationHelper: NotificationHelper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val logger: Logger = Logger.NoOp,
 ) {
     suspend operator fun invoke(notificationTitle: String, notificationMessage: String): Boolean =
         withContext(dispatcher) {
@@ -21,7 +34,7 @@ class CreateTransactionFromNotificationUseCase(
                 .getOrDefault(false)
 
             if (!isTransaction) {
-                Timber.e("Not a valid transaction")
+                logger.error("Not a valid transaction")
                 return@withContext false
             }
 
@@ -34,8 +47,10 @@ class CreateTransactionFromNotificationUseCase(
             // 3. Guard Clause: Check if parsing succeeded
             val transaction = transactionResult.getOrNull()
             if (transaction == null) {
-                // Log the actual error from the Result for debugging
-                Timber.e(transactionResult.exceptionOrNull(), "Failed to parse transaction")
+                logger.error(
+                    message = "Failed to parse transaction",
+                    throwable = transactionResult.exceptionOrNull()
+                )
                 return@withContext false
             }
 

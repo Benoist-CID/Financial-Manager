@@ -4,8 +4,8 @@ import fr.laforge.benoist.financialmanager.domain.util.isInRange
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionPeriod
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
+import fr.laforge.benoist.financialmanager.domain.util.Logger
 import kotlinx.coroutines.flow.first
-import timber.log.Timber
 import java.time.LocalDateTime
 
 /**
@@ -16,9 +16,12 @@ import java.time.LocalDateTime
  *
  * @property repository The [FinancialRepository] used to read templates and persist
  *   generated child transactions.
+ * @property logger Domain [Logger] for diagnostic output. Defaults to [Logger.NoOp]
+ *   so callers (including tests) are never forced to supply one.
  */
 class CreateRegularTransactionsUseCaseImpl(
-    private val repository: FinancialRepository
+    private val repository: FinancialRepository,
+    private val logger: Logger = Logger.NoOp
 ) : CreateRegularTransactionsUseCase {
 
     override suspend fun execute(
@@ -29,10 +32,9 @@ class CreateRegularTransactionsUseCaseImpl(
     ): Boolean {
         val transactions = repository.getAllPeriodicTransactions().first()
 
-        Timber.d("startDate: $startDate")
-        Timber.d("endDate: $endDate")
-
-        Timber.d("$transactions")
+        logger.debug("startDate: $startDate")
+        logger.debug("endDate: $endDate")
+        logger.debug("$transactions")
 
         transactions.forEach { transaction ->
 
@@ -42,10 +44,10 @@ class CreateRegularTransactionsUseCaseImpl(
                 endDate = endDate
             )
 
-            Timber.d("Children transactions: $childrenTransactions")
+            logger.debug("Children transactions: $childrenTransactions")
 
             if (childrenTransactions.isEmpty()) {
-                Timber.d("No children transactions, let's create them")
+                logger.debug("No children transactions, let's create them")
                 var date = LocalDateTime.of(
                     currentDate.year,
                     currentDate.monthValue,
@@ -55,20 +57,18 @@ class CreateRegularTransactionsUseCaseImpl(
                 )
 
                 if (!date.isInRange(startDate, endDate)) {
-                    Timber.d("Task is not in date range")
+                    logger.debug("Task is not in date range")
                     var month = currentDate.monthValue
                     var year = currentDate.year
                     if (date > endDate) {
-                        Timber.d("date > endDate")
-                        Timber.d("date:$date")
-                        Timber.d("endDate:$endDate")
+                        logger.debug("date > endDate — date:$date endDate:$endDate")
                         month -= 1
                         if (month == JANUARY - 1) {
                             month = DECEMBER
                             year -= 1
                         }
                     } else {
-                        Timber.d("date <= endDate")
+                        logger.debug("date <= endDate")
                         month += 1
                         if (month == DECEMBER + 1) {
                             month = JANUARY
@@ -85,7 +85,7 @@ class CreateRegularTransactionsUseCaseImpl(
                     )
                 }
 
-                Timber.d("Creating Transaction: ${
+                logger.debug("Creating Transaction: ${
                     transaction.copy(
                         uid = 0,
                         isPeriodic = false,
