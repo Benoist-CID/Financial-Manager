@@ -5,13 +5,21 @@ import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionP
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import kotlinx.coroutines.flow.first
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 import java.time.LocalDateTime
 
-class CreateRegularTransactionsUseCaseImpl : CreateRegularTransactionsUseCase, KoinComponent {
-    private val repository: FinancialRepository by inject()
+/**
+ * Default implementation of [CreateRegularTransactionsUseCase].
+ *
+ * For each periodic transaction template, generates the corresponding child instance
+ * within the given date window if one does not already exist.
+ *
+ * @property repository The [FinancialRepository] used to read templates and persist
+ *   generated child transactions.
+ */
+class CreateRegularTransactionsUseCaseImpl(
+    private val repository: FinancialRepository
+) : CreateRegularTransactionsUseCase {
 
     override suspend fun execute(
         startDate: LocalDateTime,
