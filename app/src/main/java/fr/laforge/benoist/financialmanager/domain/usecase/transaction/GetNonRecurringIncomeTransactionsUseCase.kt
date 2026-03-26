@@ -20,7 +20,7 @@ class GetNonRecurringIncomeTransactionsUseCase(private val repository: Financial
      *
      * The logic performs the following operations:
      * 1. **Time Range**: Fetches transactions only from the 1st of the month to the 1st of the next month.
-     * 2. **Filter Type**: Must be [TransactionType.Expense].
+     * 2. **Filter Type**: Must be [TransactionType.Income].
      * 3. **Filter Periodic**: Must NOT be a template ([Transaction.isPeriodic] == false).
      * 4. **Filter Source**: Must be a manual entry ([Transaction.parent] == 0).
      * (Items with a parent ID are generated instances of a recurring bill, so we exclude them).

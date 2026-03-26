@@ -6,6 +6,7 @@ import android.service.notification.StatusBarNotification
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRemainingBalanceUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.NotificationHelper
+import fr.laforge.benoist.financialmanager.infrastructure.notification.BalanceNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -21,6 +22,7 @@ class NotificationListener : NotificationListenerService() {
     private val createTransactionFromNotificationUseCase: CreateTransactionFromNotificationUseCase by inject()
     private val getRemainingBalanceUseCase: GetRemainingBalanceUseCase by inject()
     private val notificationHelper: NotificationHelper by inject()
+    private val balanceNotifier: BalanceNotifier by inject()
     private val notificationListenerHelper: NotificationListenerHelper by inject()
 
 
@@ -73,7 +75,7 @@ class NotificationListener : NotificationListenerService() {
 
                     val newBalance = getRemainingBalanceUseCase().first()
                     withContext(Dispatchers.Main) {
-                        notificationHelper.showBalanceUpdate(newBalance)
+                        balanceNotifier.showBalanceUpdate(newBalance)
                     }
                 }
             }

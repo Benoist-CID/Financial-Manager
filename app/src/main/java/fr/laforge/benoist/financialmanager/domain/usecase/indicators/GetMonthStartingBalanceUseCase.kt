@@ -21,7 +21,6 @@ class GetMonthStartingBalanceUseCase(
         // We want the sum of everything BEFORE the 1st of this month at 00:00
         val startOfMonth = month.withDayOfMonth(1)
             .withHour(0).withMinute(0).withSecond(0).withNano(0)
-        repository.getTransactionsBeforeDate(startOfMonth)
         return repository.getBalanceBeforeDate(startOfMonth)
     }
 }
