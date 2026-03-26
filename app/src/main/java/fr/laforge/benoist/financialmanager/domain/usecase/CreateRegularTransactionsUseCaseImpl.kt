@@ -3,6 +3,7 @@ package fr.laforge.benoist.financialmanager.domain.usecase
 import fr.laforge.benoist.financialmanager.domain.util.isInRange
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionPeriod
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
+import java.time.Month
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import fr.laforge.benoist.financialmanager.domain.util.Logger
 import kotlinx.coroutines.flow.first
@@ -63,15 +64,15 @@ class CreateRegularTransactionsUseCaseImpl(
                     if (date > endDate) {
                         logger.debug("date > endDate — date:$date endDate:$endDate")
                         month -= 1
-                        if (month == JANUARY - 1) {
-                            month = DECEMBER
+                        if (month == Month.JANUARY.value - 1) {
+                            month = Month.DECEMBER.value
                             year -= 1
                         }
                     } else {
                         logger.debug("date <= endDate")
                         month += 1
-                        if (month == DECEMBER + 1) {
-                            month = JANUARY
+                        if (month == Month.DECEMBER.value + 1) {
+                            month = Month.JANUARY.value
                             year += 1
                         }
                     }
@@ -110,8 +111,4 @@ class CreateRegularTransactionsUseCaseImpl(
         return true
     }
 
-    companion object {
-        const val JANUARY = 1
-        const val DECEMBER = 12
-    }
 }
