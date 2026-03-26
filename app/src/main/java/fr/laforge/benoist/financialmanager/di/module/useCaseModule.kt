@@ -29,6 +29,7 @@ import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetMonthly
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetNonRecurringExpenseTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetNonRecurringIncomeTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetTransactionByIdUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.ImportTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetRecurringExpenseTemplatesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetRecurringIncomeTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.util.Logger
@@ -45,6 +46,7 @@ val useCaseModule by lazy {
         factoryOf(::ExportTransactionsListUseCase)
         factoryOf(::GetAllTransactionsUseCase)
         factoryOf(::GetTransactionByIdUseCase)
+        factoryOf(::ImportTransactionsUseCase)
         factoryOf(::GetAllRecurringTransactionsUseCase)
         factory<CreateTransactionUseCase> { CreateTransactionUseCaseImpl(repository = get()) }
         factory<CreateRegularTransactionsUseCase> {
