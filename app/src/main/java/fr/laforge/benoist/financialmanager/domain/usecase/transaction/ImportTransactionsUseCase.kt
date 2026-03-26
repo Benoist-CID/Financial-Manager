@@ -23,11 +23,6 @@ class ImportTransactionsUseCase(
     private val createTransactionUseCase: CreateTransactionUseCase,
 ) {
 
-    companion object {
-        /** Delimiter separating individual transaction records within a CSV payload. */
-        private const val LINE_SEPARATOR = '\n'
-    }
-
     /**
      * Parses [csv] line-by-line and persists each valid transaction.
      *
@@ -50,5 +45,10 @@ class ImportTransactionsUseCase(
             }
         }
         return imported
+    }
+
+    companion object {
+        /** Delimiter separating individual transaction records within a CSV payload. */
+        private const val LINE_SEPARATOR = '\n'
     }
 }
