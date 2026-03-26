@@ -1,56 +1,50 @@
 package fr.laforge.benoist.financialmanager.presentation.ui.login
 
-import android.os.Looper
-import androidx.biometric.BiometricPrompt
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
-import timber.log.Timber
+import fr.laforge.benoist.financialmanager.domain.usecase.BiometricAuthenticator
 
-class LoginViewModel : ViewModel() {
+/**
+ * ViewModel for the login screen.
+ *
+ * Delegates all biometric authentication to [BiometricAuthenticator], keeping this
+ * class free of any Android biometric framework dependency and making it fully
+ * unit-testable without an Android runtime.
+ *
+ * @property biometricAuthenticator Domain port that abstracts the biometric prompt.
+ *
+ * @note No Android framework types (`BiometricPrompt`, `FragmentActivity`, etc.) are
+ * imported here by design — this enforces the Zero Framework Policy in the presentation
+ * layer and ensures the ViewModel remains independently testable.
+ */
+class LoginViewModel(
+    private val biometricAuthenticator: BiometricAuthenticator,
+) : ViewModel() {
+
     /**
-     * Displays a biometric authentication dialog
+     * Triggers a biometric authentication challenge.
+     *
+     * @param title              Primary heading shown in the system dialog.
+     * @param subTitle           Sub-heading shown below the title.
+     * @param description        Body text of the dialog.
+     * @param negativeButtonText Label for the negative/cancel button.
+     * @param onAuthenticationOk     Invoked when the user authenticates successfully.
+     * @param onAuthenticationFailed Invoked when authentication is denied or errors.
      */
-    fun displayBiometricAuthenticator(
-        activity: FragmentActivity,
+    fun authenticate(
         title: String,
         subTitle: String,
         description: String,
         negativeButtonText: String,
         onAuthenticationOk: () -> Unit,
-        onAuthenticationFailed: () -> Unit
+        onAuthenticationFailed: () -> Unit,
     ) {
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(title)
-            .setSubtitle(subTitle)
-            .setDescription(description)
-            .setNegativeButtonText(negativeButtonText)
-            .build()
-        val biometricPrompt = BiometricPrompt(activity, {
-            if (Looper.myLooper() == null) {
-                Looper.prepare()
-            }
-            it.run()
-        }, object : BiometricPrompt.AuthenticationCallback() {
-            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                super.onAuthenticationError(errorCode, errString)
-                Timber.e("Attempt to authenticate the user has failed $errorCode - $errString")
-                onAuthenticationFailed()
-            }
-
-            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                super.onAuthenticationSucceeded(result)
-                Timber.d("User authentication succeeded")
-                onAuthenticationOk()
-            }
-
-            override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-                Timber.e("Attempt to authenticate the user has failed")
-                onAuthenticationFailed()
-            }
-        }
+        biometricAuthenticator.authenticate(
+            title = title,
+            subTitle = subTitle,
+            description = description,
+            negativeButtonText = negativeButtonText,
+            onAuthenticationOk = onAuthenticationOk,
+            onAuthenticationFailed = onAuthenticationFailed,
         )
-
-        biometricPrompt.authenticate(promptInfo)
     }
 }
