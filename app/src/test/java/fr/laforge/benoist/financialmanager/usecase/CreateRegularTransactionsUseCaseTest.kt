@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.time.LocalDateTime
+import java.time.YearMonth
 
 class CreateRegularTransactionsUseCaseTest {
 
@@ -33,10 +34,18 @@ class CreateRegularTransactionsUseCaseTest {
         )
 
         // --- Assert ---
+        // Template 1 (day 20): within [start, end], lands on day 20 of the current month
+        val expectedDate1 = LocalDateTime.of(
+            CURRENT_DATE_1.year, CURRENT_DATE_1.month, TEMPLATE_DAY_1, 0, 0
+        )
+        // Template 2 (day 27): 27 > 24 (end-date day), so falls back to the previous month
+        val expectedDate2 = LocalDateTime.of(
+            START_DATE_1.year, START_DATE_1.month, TEMPLATE_DAY_2, 0, 0
+        )
         verify(exactly = 1) {
             repository.createTransaction(
                 Transaction(
-                    dateTime = LocalDateTime.parse("2023-12-20T00:00:00"),
+                    dateTime = expectedDate1,
                     amount = 1f,
                     description = "A periodic income",
                     type = TransactionType.Income,
@@ -49,7 +58,7 @@ class CreateRegularTransactionsUseCaseTest {
         verify(exactly = 1) {
             repository.createTransaction(
                 Transaction(
-                    dateTime = LocalDateTime.parse("2023-11-27T00:00:00"),
+                    dateTime = expectedDate2,
                     amount = 1f,
                     description = "A periodic income",
                     type = TransactionType.Income,
@@ -76,10 +85,18 @@ class CreateRegularTransactionsUseCaseTest {
         )
 
         // --- Assert ---
+        // Template 1 (day 20): within [Dec 24, Jan 24], lands on day 20 of January
+        val expectedDate1 = LocalDateTime.of(
+            CURRENT_DATE_2.year, CURRENT_DATE_2.month, TEMPLATE_DAY_1, 0, 0
+        )
+        // Template 2 (day 27): 27 > 24 (Jan 24 end-date day), falls back to December
+        val expectedDate2 = LocalDateTime.of(
+            START_DATE_2.year, START_DATE_2.month, TEMPLATE_DAY_2, 0, 0
+        )
         verify(exactly = 1) {
             repository.createTransaction(
                 Transaction(
-                    dateTime = LocalDateTime.parse("2024-01-20T00:00:00"),
+                    dateTime = expectedDate1,
                     amount = 1f,
                     description = "A periodic income",
                     type = TransactionType.Income,
@@ -92,7 +109,7 @@ class CreateRegularTransactionsUseCaseTest {
         verify(exactly = 1) {
             repository.createTransaction(
                 Transaction(
-                    dateTime = LocalDateTime.parse("2023-12-27T00:00:00"),
+                    dateTime = expectedDate2,
                     amount = 1f,
                     description = "A periodic income",
                     type = TransactionType.Income,
@@ -156,14 +173,33 @@ class CreateRegularTransactionsUseCaseTest {
     )
 
     companion object {
-        val CREATION_DATE: LocalDateTime = LocalDateTime.parse("2022-12-20T00:00:00")
-        val CREATION_DATE_2: LocalDateTime = LocalDateTime.parse("2022-11-27T00:00:00")
-        val CREATION_DATE_3: LocalDateTime = LocalDateTime.parse("2022-11-05T00:00:00")
-        val START_DATE_1: LocalDateTime = LocalDateTime.parse("2023-11-24T00:00:00")
-        val END_DATE_1: LocalDateTime = LocalDateTime.parse("2023-12-24T00:00:00")
-        val CURRENT_DATE_1: LocalDateTime = LocalDateTime.parse("2023-12-10T00:00:00")
-        val START_DATE_2: LocalDateTime = LocalDateTime.parse("2023-12-24T00:00:00")
-        val END_DATE_2: LocalDateTime = LocalDateTime.parse("2024-01-24T00:00:00")
-        val CURRENT_DATE_2: LocalDateTime = LocalDateTime.parse("2024-01-10T00:00:00")
+        // Day-of-month values for the three periodic transaction templates.
+        // Only the day matters — the use case extracts dayOfMonth from the template's dateTime.
+        private const val TEMPLATE_DAY_1 = 20
+        private const val TEMPLATE_DAY_2 = 27
+        private const val TEMPLATE_DAY_3 = 5
+
+        // Base month for test suite 1 (any month works; month-arithmetic stays relative)
+        private val CURRENT_MONTH = YearMonth.now()
+        private val PREV_MONTH = CURRENT_MONTH.minusMonths(1)
+
+        // Template creation dates — only the day-of-month is used by the use case.
+        val CREATION_DATE: LocalDateTime = PREV_MONTH.minusMonths(3).atDay(TEMPLATE_DAY_1).atStartOfDay()
+        val CREATION_DATE_2: LocalDateTime = PREV_MONTH.minusMonths(3).atDay(TEMPLATE_DAY_2).atStartOfDay()
+        val CREATION_DATE_3: LocalDateTime = PREV_MONTH.minusMonths(3).atDay(TEMPLATE_DAY_3).atStartOfDay()
+
+        // Test 1 — standard monthly range
+        val START_DATE_1: LocalDateTime = PREV_MONTH.atDay(24).atStartOfDay()
+        val END_DATE_1: LocalDateTime = CURRENT_MONTH.atDay(24).atStartOfDay()
+        val CURRENT_DATE_1: LocalDateTime = CURRENT_MONTH.atDay(10).atStartOfDay()
+
+        // Test 2 — forces the December→January year-boundary code path.
+        // CURRENT_DATE_2 is always January of the following year so month-1 == December.
+        private val NEXT_JANUARY = YearMonth.of(CURRENT_MONTH.year + 1, 1)
+        private val PREV_DECEMBER = YearMonth.of(CURRENT_MONTH.year, 12)
+
+        val START_DATE_2: LocalDateTime = PREV_DECEMBER.atDay(24).atStartOfDay()
+        val END_DATE_2: LocalDateTime = NEXT_JANUARY.atDay(24).atStartOfDay()
+        val CURRENT_DATE_2: LocalDateTime = NEXT_JANUARY.atDay(10).atStartOfDay()
     }
 }
