@@ -33,13 +33,15 @@ import androidx.navigation.compose.rememberNavController
 import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun LoginScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    vm: LoginViewModel = koinViewModel(),
 ) {
+    val activity = LocalContext.current as FragmentActivity
+    val vm: LoginViewModel = koinViewModel(parameters = { parametersOf(activity) })
     var displayBiometrics by remember {
         mutableStateOf(true)
     }
@@ -95,18 +97,17 @@ fun LoginScreen(
     }
 
     if (displayBiometrics) {
-        vm.displayBiometricAuthenticator(
-            activity = LocalContext.current as FragmentActivity,
+        vm.authenticate(
             title = stringResource(id = R.string.biometric_title),
             subTitle = "",
             description = stringResource(id = R.string.biometric_subtitle),
             negativeButtonText = stringResource(id = R.string.biometric_negative),
-            {
+            onAuthenticationOk = {
                 displayBiometrics = false
                 // Navigate to next screen
                 navController.navigate(route = FinancialManagerScreen.Home.name)
             },
-            {
+            onAuthenticationFailed = {
                 displayBiometrics = false
                 // Display error
             }
