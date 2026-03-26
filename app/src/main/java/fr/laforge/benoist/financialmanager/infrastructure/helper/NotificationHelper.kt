@@ -11,8 +11,20 @@ import androidx.core.app.NotificationManagerCompat
 import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.NotificationHelper
+import fr.laforge.benoist.financialmanager.infrastructure.notification.BalanceNotifier
 
-class NotificationHelperImpl(private val context: Context) : NotificationHelper {
+/**
+ * Concrete implementation of [NotificationHelper] (domain parsing port) and
+ * [BalanceNotifier] (infrastructure display port).
+ *
+ * Combining both in one class keeps the Android notification channel setup in a single
+ * place while respecting the interface separation: callers that only need parsing depend
+ * on [NotificationHelper]; callers that only need display depend on [BalanceNotifier].
+ *
+ * @property context Application [Context] required for notification channel creation
+ *   and permission checks.
+ */
+class NotificationHelperImpl(private val context: Context) : NotificationHelper, BalanceNotifier {
 
     override fun showBalanceUpdate(newBalance: Float) {
         // ⚠️ CRITICAL: Changed ID to force Android to register new Priority settings
