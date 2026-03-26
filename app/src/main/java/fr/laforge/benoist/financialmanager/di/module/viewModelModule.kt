@@ -13,6 +13,7 @@ import fr.laforge.benoist.financialmanager.presentation.ui.transaction.non.recur
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring.RecurringManagementViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.update.UpdateTransactionViewModel
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetTransactionByIdUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.ImportTransactionsUseCase
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
@@ -32,7 +33,7 @@ val viewModelModule by lazy {
         viewModelOf(::HomeScreenViewModel)
 
         viewModel {
-            ImportDbViewModel(repository = get())
+            ImportDbViewModel(importTransactionsUseCase = get())
         }
 
         viewModel {
