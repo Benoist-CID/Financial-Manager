@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.ImportTransactionsUseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,12 +20,15 @@ import timber.log.Timber
  * domain or data-layer logic.
  *
  * @property importTransactionsUseCase Domain use case that parses CSV and persists transactions.
+ * @property dispatcher Coroutine dispatcher used for IO work; defaults to [Dispatchers.IO].
+ *   Override in tests to keep execution synchronous.
  *
  * @note [FinancialRepository] is intentionally absent — data access is fully encapsulated
  * in the use case layer to honour the Clean Architecture dependency rule.
  */
 class ImportDbViewModel(
     private val importTransactionsUseCase: ImportTransactionsUseCase,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
 
     var toBeImported by mutableStateOf("")
@@ -48,7 +52,7 @@ class ImportDbViewModel(
      */
     fun importDb() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(dispatcher) {
                 importTransactionsUseCase(toBeImported)
             }
         }

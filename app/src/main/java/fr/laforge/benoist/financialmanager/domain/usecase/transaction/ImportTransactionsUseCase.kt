@@ -23,6 +23,11 @@ class ImportTransactionsUseCase(
     private val createTransactionUseCase: CreateTransactionUseCase,
 ) {
 
+    companion object {
+        /** Delimiter separating individual transaction records within a CSV payload. */
+        private const val LINE_SEPARATOR = '\n'
+    }
+
     /**
      * Parses [csv] line-by-line and persists each valid transaction.
      *
@@ -35,7 +40,7 @@ class ImportTransactionsUseCase(
      */
     suspend operator fun invoke(csv: String): Int {
         var imported = 0
-        csv.split('\n').forEach { line ->
+        csv.split(LINE_SEPARATOR).forEach { line ->
             try {
                 val transaction = transactionFromCsv(line)
                 createTransactionUseCase(transaction)
