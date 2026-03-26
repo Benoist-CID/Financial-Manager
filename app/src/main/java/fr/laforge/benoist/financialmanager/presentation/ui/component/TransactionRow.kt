@@ -14,7 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -58,7 +58,7 @@ private fun AccountIndicator(color: Color, modifier: Modifier = Modifier) {
 
 @Composable
 fun RallyDivider(modifier: Modifier = Modifier) {
-    Divider(color = MaterialTheme.colorScheme.background, thickness = 1.dp, modifier = modifier)
+    HorizontalDivider(color = MaterialTheme.colorScheme.background, thickness = 1.dp, modifier = modifier)
 }
 
 @Composable
@@ -168,7 +168,7 @@ fun FinancialInputRowPreview() {
     LazyColumn {
         items(transactions) { input ->
             TransactionRow(input)
-            Divider(color = Color.Black)
+            HorizontalDivider(color = Color.Black)
         }
     }
 }

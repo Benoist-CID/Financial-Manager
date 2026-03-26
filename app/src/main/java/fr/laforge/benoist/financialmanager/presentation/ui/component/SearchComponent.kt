@@ -19,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 
@@ -34,14 +33,14 @@ fun SearchComponent(
         onValueChange = onQueryChange,
         singleLine = true,
         textStyle = MaterialTheme.typography.bodyLarge.copy(
-            color = MaterialTheme.colorScheme.background
+            color = MaterialTheme.colorScheme.onSurface
         ),
-        cursorBrush = SolidColor(Color.Black), // Force cursor color
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
         decorationBox = { innerTextField ->
             // The Container (Pill Shape)
             Surface(
                 shape = RoundedCornerShape(50),
-                color = Color.White, // Force background to White
+                color = MaterialTheme.colorScheme.surface,
                 modifier = modifier
                     .fillMaxWidth()
                     .height(48.dp) // Your desired slim height
@@ -54,7 +53,7 @@ fun SearchComponent(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = null,
-                        tint = Color.Gray, // Visible on white
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(20.dp)
                     )
 
@@ -66,7 +65,7 @@ fun SearchComponent(
                             Text(
                                 text = "Search",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = Color.Gray.copy(alpha = 0.5f)
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                             )
                         }
                         innerTextField()

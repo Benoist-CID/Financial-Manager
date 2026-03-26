@@ -57,7 +57,7 @@ fun FinancialManagerNavHost(
         }
 
         composable(FinancialManagerScreen.ImportDb.name) {
-            ImportDbScreen()
+            ImportDbScreen(navController = navController)
         }
 
         composable(FinancialManagerScreen.Settings.name) {

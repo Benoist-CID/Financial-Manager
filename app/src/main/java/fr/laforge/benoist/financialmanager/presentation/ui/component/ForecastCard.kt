@@ -19,9 +19,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.ForecastNegativeBackground
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.ForecastNegativeContent
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.ForecastPositiveBackground
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.ForecastPositiveContent
 
 @Composable
 fun ForecastCard(
@@ -29,8 +32,8 @@ fun ForecastCard(
     modifier: Modifier = Modifier
 ) {
     val isPositive = projectedBalance >= 0
-    val containerColor = if (isPositive) Color(0xFFE8F5E9) else Color(0xFFFFEBEE) // Light Green or Red
-    val contentColor = if (isPositive) Color(0xFF2E7D32) else Color(0xFFC62828) // Dark Green or Red
+    val containerColor = if (isPositive) ForecastPositiveBackground else ForecastNegativeBackground
+    val contentColor = if (isPositive) ForecastPositiveContent else ForecastNegativeContent
     val icon = if (isPositive) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
 
     Card(

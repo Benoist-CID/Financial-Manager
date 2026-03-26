@@ -13,7 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,6 +33,11 @@ import androidx.navigation.NavController
 import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.component.BalanceHeroCard
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.ExpenseOrange
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.ExpenseRed
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.IncomeGreen
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.TotalExpenseRed
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.VariableIncomeGreen
 import fr.laforge.benoist.financialmanager.presentation.ui.component.ForecastCard
 import fr.laforge.benoist.financialmanager.presentation.ui.component.IndicatorBar
 import fr.laforge.benoist.financialmanager.presentation.ui.component.LifestyleRatioIndicator
@@ -111,7 +116,7 @@ fun IndicatorsScreen(
             )
 
             Spacer(modifier = Modifier.height(24.dp))
-            Divider(color = Color.Gray.copy(alpha = 0.2f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
             Spacer(modifier = Modifier.height(24.dp))
 
             // --- ZONE 3: THE ENGINE ROOM (Details) ---
@@ -124,7 +129,7 @@ fun IndicatorsScreen(
                 label = stringResource(R.string.recurring_income), // Salary
                 amount = recurringIncome,
                 totalReference = maxReference,
-                color = Color(0xFF4CAF50),
+                color = IncomeGreen,
                 onClick = { navController.navigate(FinancialManagerScreen.RecurringIncome.name) }
             )
             if (nonRecurringIncome > 0) {
@@ -132,12 +137,12 @@ fun IndicatorsScreen(
                     label = stringResource(R.string.variable_income), // Bonus
                     amount = nonRecurringIncome,
                     totalReference = maxReference,
-                    color = Color(0xFF00E676),
+                    color = VariableIncomeGreen,
                     onClick = { navController.navigate(FinancialManagerScreen.NonRecurringIncome.name) }
                 )
             }
             // Small Summary line for Income
-            TotalRow(label = "Total Income", amount = totalIncome, color = Color(0xFF4CAF50))
+            TotalRow(label = "Total Income", amount = totalIncome, color = IncomeGreen)
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -148,25 +153,25 @@ fun IndicatorsScreen(
                 label = stringResource(R.string.recurring_expenses),
                 amount = recurringExpenses,
                 totalReference = maxReference,
-                color = Color(0xFFFF9800),
+                color = ExpenseOrange,
                 onClick = { navController.navigate(FinancialManagerScreen.RecurringExpenses.name) }
             )
             IndicatorBar(
                 label = stringResource(R.string.label_variable_expenses),
                 amount = regularExpenses,
                 totalReference = maxReference,
-                color = Color(0xFFF44336),
+                color = ExpenseRed,
                 onClick = { navController.navigate(FinancialManagerScreen.NonRecurringExpenses.name) }
             )
             // Small Summary line for Expenses
             TotalRow(
                 label = stringResource(R.string.label_total_expenses),
                 amount = totalExpenses,
-                color = Color(0xFFD32F2F)
+                color = TotalExpenseRed
             )
 
             Spacer(modifier = Modifier.height(24.dp))
-            Divider(color = Color.Gray.copy(alpha = 0.2f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
             Spacer(modifier = Modifier.height(24.dp))
 
             // --- ZONE 4: STRATEGY ---
@@ -199,7 +204,7 @@ fun TotalRow(label: String, amount: Float, color: Color) {
             .padding(top = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = label, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+        Text(text = label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(
             text = "${formatAmount(amount)} €",
             style = MaterialTheme.typography.bodySmall,

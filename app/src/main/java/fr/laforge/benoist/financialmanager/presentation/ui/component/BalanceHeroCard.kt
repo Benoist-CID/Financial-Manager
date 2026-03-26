@@ -14,13 +14,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.laforge.benoist.financialmanager.R
 import fr.laforge.benoist.financialmanager.domain.model.indicator.DailyPoint
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.BalanceNegativeRed
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.BalancePositiveBlue
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.DarkSurface
 
 @Composable
 fun BalanceHeroCard(
@@ -29,13 +31,13 @@ fun BalanceHeroCard(
     modifier: Modifier = Modifier
 ) {
     val isPositive = balance >= 0
-    val color = if (isPositive) Color(0xFF2196F3) else Color(0xFFEF5350)
+    val color = if (isPositive) BalancePositiveBlue else BalanceNegativeRed
 
     Card(
         modifier = modifier
             .fillMaxWidth()
             .height(180.dp), // Compact but tall enough for the graph
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E)),
+        colors = CardDefaults.cardColors(containerColor = DarkSurface),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -60,7 +62,7 @@ fun BalanceHeroCard(
                 Text(
                     text = stringResource(R.string.label_remaining_balance).uppercase(),
                     style = MaterialTheme.typography.labelMedium,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     letterSpacing = 1.sp
                 )
 
@@ -70,7 +72,7 @@ fun BalanceHeroCard(
                     text = "${formatAmount(balance)} €",
                     style = MaterialTheme.typography.displaySmall, // Big and Bold
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
 
@@ -79,7 +81,7 @@ fun BalanceHeroCard(
                 Text(
                     text = "Day ${graphData.last().dayOfMonth}",
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color.Gray.copy(alpha = 0.5f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(16.dp)

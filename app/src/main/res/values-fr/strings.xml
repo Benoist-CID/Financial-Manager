@@ -36,6 +36,7 @@
 
     <!-- Update transaction screen -->
     <string name="update_transaction">Modifier la Transaction</string>
+    <string name="edit">Modifier</string>
 
     <!-- Search bar -->
     <string name="search">Rechercher</string>

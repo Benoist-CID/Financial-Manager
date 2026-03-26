@@ -1,6 +1,5 @@
 package fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring
 
-import android.annotation.SuppressLint
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,7 +12,6 @@ import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScree
 import fr.laforge.benoist.financialmanager.presentation.ui.component.TransactionsListScreen
 import org.koin.androidx.compose.koinViewModel
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecurringExpensesScreen(
