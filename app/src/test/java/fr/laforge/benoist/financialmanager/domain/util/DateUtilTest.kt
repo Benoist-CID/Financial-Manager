@@ -54,6 +54,13 @@ class DateUtilTest {
     }
 
     @Test
+    fun `Tests LocalDateTime next with None period returns same date`() {
+        val localDateTime = LocalDateTime.parse("2023-12-04T00:00:00")
+
+        localDateTime.next(period = TransactionPeriod.None).`should be equal to`(localDateTime)
+    }
+
+    @Test
     fun `Tests LocalDateTime getFirstDayOfMonth`() {
         val testDate = LocalDateTime.parse("2024-02-24T00:00:00")
         testDate.getFirstDayOfMonth().`should be equal to`(LocalDateTime.parse("2024-02-01T00:00:00"))
@@ -78,6 +85,22 @@ class DateUtilTest {
         val testDate = LocalDateTime.parse("2023-12-04T00:00:00")
 
         testDate.getNumberOfRemainingDaysInMonth().`should be equal to`(28)
+    }
+
+    @Test
+    fun `Tests LocalDateTime getNumberOfRemainingDaysInMonth returns 1 on last day`() {
+        val lastDayOfDec = LocalDateTime.parse("2023-12-31T00:00:00")
+
+        lastDayOfDec.getNumberOfRemainingDaysInMonth().`should be equal to`(1)
+    }
+
+    @Test
+    fun `Tests isInRange returns false on exact startDate boundary`() {
+        val startDate = LocalDateTime.parse("2023-12-22T00:00:00")
+        val endDate = LocalDateTime.parse("2024-01-23T00:00:00")
+
+        // Exactly on startDate is NOT in range (isAfter is strict)
+        startDate.isInRange(startDate, endDate).`should be false`()
     }
 
     @Test
