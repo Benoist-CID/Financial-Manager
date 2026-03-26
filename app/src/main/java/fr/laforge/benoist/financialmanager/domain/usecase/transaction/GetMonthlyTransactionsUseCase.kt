@@ -8,9 +8,28 @@ import java.time.YearMonth
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Retrieves all concrete transactions for a given [YearMonth], optionally filtered
+ * by a text search and/or a [TransactionType].
+ *
+ * Only non-periodic (real money movement) transactions are returned — periodic
+ * templates are excluded. Both manual entries and generated recurring instances
+ * are included ([TransactionFilter.parentId] == null).
+ *
+ * @property financialRepository The [FinancialRepository] source of truth.
+ */
 class GetMonthlyTransactionsUseCase(
     private val financialRepository: FinancialRepository
 ) {
+    /**
+     * @param month       The calendar month to query.
+     * @param searchQuery Optional text filter applied against [Transaction.description]
+     *   (case-insensitive substring match). Defaults to empty (no filter).
+     * @param filterType  Optional [TransactionType] to restrict results to income or
+     *   expense only. `null` returns both types.
+     * @return A [Flow] emitting the list of matching transactions sorted by
+     *   [Transaction.dateTime] descending (most recent first).
+     */
     operator fun invoke(
         month: YearMonth,
         searchQuery: String = "",

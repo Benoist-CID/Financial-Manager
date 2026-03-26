@@ -26,6 +26,14 @@ class CreateTransactionFromNotificationUseCase(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val logger: Logger = Logger.NoOp,
 ) {
+    /**
+     * Attempts to create a [Transaction] from the given notification strings.
+     *
+     * @param notificationTitle   The notification's title (typically the app or merchant name).
+     * @param notificationMessage The notification's body text, expected to contain a monetary amount.
+     * @return `true` if a transaction was successfully parsed and persisted;
+     *   `false` if the message was not a transaction or parsing failed.
+     */
     suspend operator fun invoke(notificationTitle: String, notificationMessage: String): Boolean =
         withContext(dispatcher) {
             // 1. Guard Clause: Check if it is a transaction
