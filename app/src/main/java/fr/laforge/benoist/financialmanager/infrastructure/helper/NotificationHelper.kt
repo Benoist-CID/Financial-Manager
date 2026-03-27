@@ -9,22 +9,29 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import fr.laforge.benoist.financialmanager.R
-import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
+import fr.laforge.benoist.financialmanager.domain.model.notification.ParsedNotification
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.NotificationHelper
 import fr.laforge.benoist.financialmanager.infrastructure.notification.BalanceNotifier
+import fr.laforge.benoist.financialmanager.infrastructure.notification.NotificationParserFactory
 
 /**
  * Concrete implementation of [NotificationHelper] (domain parsing port) and
  * [BalanceNotifier] (infrastructure display port).
  *
- * Combining both in one class keeps the Android notification channel setup in a single
- * place while respecting the interface separation: callers that only need parsing depend
- * on [NotificationHelper]; callers that only need display depend on [BalanceNotifier].
+ * Parsing is fully delegated to [factory], which selects the correct parser at runtime
+ * (Google Pay format, bank proprietary format, etc.) and returns a [ParsedNotification]
+ * that preserves the originating source for the deduplication pipeline.
  *
  * @property context Application [Context] required for notification channel creation
  *   and permission checks.
+ * @property factory Parser registry for all supported notification formats.
+ *   Defaults to a [NotificationParserFactory] with the standard set of parsers; can be
+ *   overridden in tests to inject a controlled factory.
  */
-class NotificationHelperImpl(private val context: Context) : NotificationHelper, BalanceNotifier {
+class NotificationHelperImpl(
+    private val context: Context,
+    private val factory: NotificationParserFactory = NotificationParserFactory(),
+) : NotificationHelper, BalanceNotifier {
 
     override fun showBalanceUpdate(newBalance: Float) {
         // ⚠️ CRITICAL: Changed ID to force Android to register new Priority settings
@@ -60,36 +67,11 @@ class NotificationHelperImpl(private val context: Context) : NotificationHelper,
         }
     }
 
-    override fun isTransaction(notificationMessage: String): Result<Boolean> {
-        return if (notificationMessage.contains(EURO_SYMBOL)) {
-            Result.success(true)
-        } else {
-            Result.success(false)
-        }
-    }
+    override fun isTransaction(notificationMessage: String): Result<Boolean> =
+        Result.success(factory.canParse(notificationMessage))
 
-    override fun parseNotificationMessage(notificationTitle: String, notificationMessage: String): Result<Transaction> {
-        val split = notificationMessage.split(EURO_SYMBOL)
-
-        if (split.size <= 1) {
-            return Result.failure(Exception("No amount found"))
-        }
-
-        val amount = split[0].trim().replace(',', '.').toFloat()
-
-        return if (amount < 0) {
-            Result.failure(Exception("Negative amount"))
-        } else {
-            Result.success(
-                Transaction(
-                    amount = amount,
-                    description = notificationTitle
-                )
-            )
-        }
-    }
-
-    companion object {
-        private const val EURO_SYMBOL = '€'
-    }
+    override fun parseToPending(
+        notificationTitle: String,
+        notificationMessage: String,
+    ): Result<ParsedNotification> = factory.parse(notificationTitle, notificationMessage)
 }
