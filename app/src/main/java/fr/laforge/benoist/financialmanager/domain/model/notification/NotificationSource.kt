@@ -12,4 +12,7 @@ enum class NotificationSource {
 
     /** Proprietary bank app: description before €, amount after €. */
     BANK,
+
+    /** User-defined format stored in [NotificationFormatRepository]. */
+    CUSTOM,
 }
