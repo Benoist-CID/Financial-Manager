@@ -97,9 +97,7 @@ fun HomeScreen(
                     end = 0.dp
                 )
             ) {
-                items(transactions.filter { transaction ->
-                    transaction.description.contains(uiState.query)
-                }) { transaction ->
+                items(transactions) { transaction ->
                     SwipableTransactionItem(
                         transaction = transaction,
                         isPeriodic = vm.isPeriodicTransaction(transaction),

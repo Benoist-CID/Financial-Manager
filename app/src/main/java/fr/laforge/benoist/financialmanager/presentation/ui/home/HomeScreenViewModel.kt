@@ -94,6 +94,7 @@ class HomeScreenViewModel(
     }
 
     fun updateSearch(newVal: String) {
+        _searchQuery.value = newVal
         _uiState.update { currentState ->
             currentState.copy(query = newVal)
         }
