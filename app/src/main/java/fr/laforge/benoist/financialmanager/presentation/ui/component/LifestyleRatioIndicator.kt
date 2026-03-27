@@ -19,11 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import fr.laforge.benoist.financialmanager.domain.model.indicator.LifestyleState
 import fr.laforge.benoist.financialmanager.domain.model.indicator.LifestyleStatus
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.LifestyleDanger
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.LifestyleExcellent
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.LifestyleHealthy
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.LifestyleHeavy
+import fr.laforge.benoist.financialmanager.presentation.ui.theme.ProgressTrackBackground
 
 @Composable
 fun LifestyleRatioIndicator(
@@ -32,10 +36,10 @@ fun LifestyleRatioIndicator(
 ) {
     // 1. Determine Color & Label based on the Enum
     val color = when (state.status) {
-        LifestyleStatus.Excellent -> Color(0xFF66BB6A) // Soft Green
-        LifestyleStatus.Healthy -> Color(0xFF9CCC65)   // Yellow-Green
-        LifestyleStatus.Heavy -> Color(0xFFFFCA28)     // Amber
-        LifestyleStatus.Danger -> Color(0xFFEF5350)    // Red
+        LifestyleStatus.Excellent -> LifestyleExcellent
+        LifestyleStatus.Healthy -> LifestyleHealthy
+        LifestyleStatus.Heavy -> LifestyleHeavy
+        LifestyleStatus.Danger -> LifestyleDanger
     }
 
     val label = when (state.status) {
@@ -55,7 +59,7 @@ fun LifestyleRatioIndicator(
             Text(
                 text = "Lifestyle Load (Fixed Costs)",
                 style = MaterialTheme.typography.labelMedium,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
                 text = "${(state.ratio * 100).toInt()}%",
@@ -79,7 +83,7 @@ fun LifestyleRatioIndicator(
                 .fillMaxWidth()
                 .height(16.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(Color(0xFF2C2C2C)) // Dark background for the track
+                .background(ProgressTrackBackground)
         ) {
             // A. Actual Progress Fill
             Box(
@@ -100,31 +104,32 @@ fun LifestyleRatioIndicator(
             modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("0%", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+            Text("0%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
             // Dynamic Legend Text derived from Enum
             Text(
                 text = "${(LifestyleStatus.Excellent.maxThreshold * 100).toInt()}%",
                 style = MaterialTheme.typography.labelSmall,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
                 text = "${(LifestyleStatus.Healthy.maxThreshold * 100).toInt()}%",
                 style = MaterialTheme.typography.labelSmall,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            Text("100%", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+            Text("100%", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
 
 @Composable
 fun BoxScope.MarkerLine(percent: Float) {
+    val markerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
     Canvas(modifier = Modifier.matchParentSize()) {
         val x = size.width * percent
         drawLine(
-            color = Color.Black.copy(alpha = 0.4f), // Semi-transparent black line
+            color = markerColor,
             start = Offset(x, 0f),
             end = Offset(x, size.height),
             strokeWidth = 2.dp.toPx()

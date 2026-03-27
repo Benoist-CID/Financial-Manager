@@ -7,7 +7,15 @@
       "Bash(gh issue:*)",
       "Bash(./gradlew :app:test --tests \"fr.laforge.benoist.financialmanager.usecase.CreateTransactionUseCaseTest\" --tests \"fr.laforge.benoist.financialmanager.usecase.CreateRegularTransactionsUseCaseTest\")",
       "Bash(./gradlew :app:testDebugUnitTest --tests \"fr.laforge.benoist.financialmanager.usecase.CreateTransactionUseCaseTest\" --tests \"fr.laforge.benoist.financialmanager.usecase.CreateRegularTransactionsUseCaseTest\")",
-      "Bash(./gradlew :app:testDebugUnitTest)"
+      "Bash(./gradlew :app:testDebugUnitTest)",
+      "Bash(./gradlew assembleDebug)",
+      "Bash(./gradlew test:*)",
+      "Bash(gh api:*)",
+      "Bash(./gradlew assembleDebug --info)",
+      "Bash(./gradlew compileDebugKotlin)",
+      "Bash(gh pr:*)",
+      "Bash(git fetch:*)",
+      "Bash(git pull:*)"
     ]
   }
 }

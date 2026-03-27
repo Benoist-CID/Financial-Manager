@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
@@ -50,9 +51,6 @@ fun LoginScreen(
     val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
 
     LaunchedEffect(lifecycleState) {
-        // Do something with your state
-        // You may want to use DisposableEffect or other alternatives
-        // instead of LaunchedEffect
         when (lifecycleState) {
             Lifecycle.State.DESTROYED -> {}
             Lifecycle.State.INITIALIZED -> {}
@@ -64,35 +62,33 @@ fun LoginScreen(
         }
     }
 
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Login",
-            modifier = modifier.padding(bottom = 16.dp),
-            fontSize = 25.sp
-        )
-        // Creating an Outlined Button and setting
-        // the shape attribute to CircleShape
-        // When the Button is clicked, a Toast
-        // message would be displayed
-        Button(
-            onClick = {
-                //displayBiometrics = true
-                navController.navigate(route = FinancialManagerScreen.Home.name)
-            },
-            modifier = modifier.size(60.dp),
-            shape = CircleShape,
-            contentPadding = PaddingValues(0.dp)
+    Scaffold { innerPadding ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            // Adding an Icon "Add" inside the Button
-            Icon(
-                modifier = modifier.size(40.dp),
-                painter = painterResource(id = R.drawable.fingerprint),
-                contentDescription = "content description"
+            Text(
+                text = "Login",
+                modifier = modifier.padding(bottom = 16.dp),
+                style = MaterialTheme.typography.headlineMedium
             )
+            Button(
+                onClick = {
+                    navController.navigate(route = FinancialManagerScreen.Home.name)
+                },
+                modifier = modifier.size(60.dp),
+                shape = CircleShape,
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Icon(
+                    modifier = modifier.size(40.dp),
+                    painter = painterResource(id = R.drawable.fingerprint),
+                    contentDescription = "content description"
+                )
+            }
         }
     }
 
@@ -104,12 +100,10 @@ fun LoginScreen(
             negativeButtonText = stringResource(id = R.string.biometric_negative),
             onAuthenticationOk = {
                 displayBiometrics = false
-                // Navigate to next screen
                 navController.navigate(route = FinancialManagerScreen.Home.name)
             },
             onAuthenticationFailed = {
                 displayBiometrics = false
-                // Display error
             }
         )
     }
