@@ -48,10 +48,10 @@ class BankNotificationParserTest {
     // --- parse: edge cases ---
 
     @Test
-    fun `parse succeeds and returns negative amount`() {
+    fun `parse returns absolute value when body contains negative amount`() {
         val result = parser.parse("ignored", "Starbucks€-12,50")
         result.isSuccess `should be` true
-        result.getOrNull()?.amount `should be equal to` -12.50f
+        result.getOrNull()?.amount `should be equal to` 12.50f
     }
 
     @Test

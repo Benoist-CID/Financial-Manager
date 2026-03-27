@@ -65,12 +65,10 @@ class UserDefinedNotificationParser(
                 IllegalArgumentException("Body does not match pattern '${format.pattern}': $body")
             )
 
-        val rawAmount = extracted.amountStr.replace(',', '.').toFloatOrNull()
+        val amount = extracted.amountStr.replace(',', '.').toFloatOrNull()?.let { kotlin.math.abs(it) }
             ?: return Result.failure(
                 IllegalArgumentException("Cannot parse amount '${extracted.amountStr}' in: $body")
             )
-
-        val amount = if (extracted.negate) -rawAmount else rawAmount
 
         val description = when (format.descriptionSource) {
             DescriptionSource.TITLE -> title

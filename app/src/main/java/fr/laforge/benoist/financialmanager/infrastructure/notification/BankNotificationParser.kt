@@ -31,7 +31,7 @@ class BankNotificationParser : NotificationParser {
 
         val description = parts[0].trim()
         val amountStr = parts[1].trim().replace(',', '.')
-        val amount = amountStr.toFloatOrNull()
+        val amount = amountStr.toFloatOrNull()?.let { kotlin.math.abs(it) }
             ?: return Result.failure(IllegalArgumentException("Cannot parse amount from: $body"))
 
         return Result.success(
