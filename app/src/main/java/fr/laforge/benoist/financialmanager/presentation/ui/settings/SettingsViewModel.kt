@@ -6,7 +6,11 @@ import fr.laforge.benoist.financialmanager.domain.repository.PreferencesReposito
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.ExportTransactionsListUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetAllRecurringTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetAllTransactionsUseCase
+import fr.laforge.benoist.financialmanager.infrastructure.service.AppVersionProvider
 import fr.laforge.benoist.financialmanager.presentation.util.ExportService
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -17,7 +21,14 @@ class SettingsViewModel(
     private val getAllRecurringTransactionsUseCase: GetAllRecurringTransactionsUseCase,
     private val exportTransactionsListUseCase: ExportTransactionsListUseCase,
     private val exportService: ExportService,
+    private val appVersionProvider: AppVersionProvider,
 ) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(SettingsUiState(versionName = appVersionProvider.getVersionName()))
+
+    /** Exposes the current [SettingsUiState] to the UI layer. */
+    val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
+
     val savingsTarget = preferencesRepository.getSavingTarget()
 
     fun setSavingsTarget(newVal: Float) {
