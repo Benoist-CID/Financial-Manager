@@ -12,9 +12,11 @@ import fr.laforge.benoist.financialmanager.presentation.ui.home.HomeScreenViewMo
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -73,6 +75,23 @@ class HomeScreenViewModelTest {
 
         // --- Assert ---
         vm.uiState.value.query shouldBeEqualTo "coffee"
+    }
+
+    @Test
+    fun `updateSearch propagates query to use case`() = runTest(testDispatcher) {
+        // --- Arrange ---
+        val vm = createViewModel()
+        // allTransactions uses WhileSubscribed — must have an active collector to start the flow
+        val collectJob = launch { vm.allTransactions.collect {} }
+        advanceUntilIdle()
+
+        // --- Act ---
+        vm.updateSearch("coffee")
+        advanceUntilIdle()
+
+        // --- Assert ---
+        verify { getMonthlyTransactionsUseCase(any(), "coffee", any()) }
+        collectJob.cancel()
     }
 
     @Test

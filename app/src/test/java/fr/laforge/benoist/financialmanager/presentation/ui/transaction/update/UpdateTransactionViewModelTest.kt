@@ -42,7 +42,6 @@ class UpdateTransactionViewModelTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         every { savedStateHandle.get<Int>("transactionId") } returns 42
-        every { savedStateHandle["transactionId"] } returns 42
         every { getTransactionByIdUseCase(42) } returns flowOf(existingTransaction)
     }
 
