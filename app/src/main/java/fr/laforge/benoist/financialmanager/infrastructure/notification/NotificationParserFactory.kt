@@ -11,26 +11,30 @@ import fr.laforge.benoist.financialmanager.domain.usecase.notification.Notificat
  * 1. Built-in parsers ([builtInParsers]) are tried first, in the order they are supplied.
  *    [GooglePayNotificationParser] precedes [BankNotificationParser] because its detection
  *    criterion (numeric text before `€`) is more specific.
- * 2. User-defined parsers ([userDefinedFormats]) are tried afterwards, in insertion order.
+ * 2. User-defined parsers, obtained by calling [userFormatsProvider] on every invocation,
+ *    are tried afterwards in insertion order.
  *
- * Keeping user parsers as a separate list (rather than merging into [builtInParsers]) makes
- * it straightforward to update them at runtime without replacing the whole factory.
+ * Using a **provider lambda** rather than a static list ensures that formats added or deleted
+ * by the user in Settings are picked up by the next incoming notification without restarting
+ * the app or rebuilding the factory singleton.
  *
- * @property builtInParsers  Ordered list of hard-coded parsers. Defaults to Google Pay + Bank.
- * @property userDefinedFormats  User-created [NotificationFormat] entries converted to parsers on demand.
+ * @property builtInParsers     Ordered list of hard-coded parsers. Defaults to Google Pay + Bank.
+ * @property userFormatsProvider Lambda that returns the current list of [NotificationFormat]
+ *   entries each time [canParse] or [parse] is called. Defaults to `{ emptyList() }`.
  */
 class NotificationParserFactory(
     private val builtInParsers: List<NotificationParser> = listOf(
         GooglePayNotificationParser(),
         BankNotificationParser(),
     ),
-    private val userDefinedFormats: List<NotificationFormat> = emptyList(),
+    private val userFormatsProvider: () -> List<NotificationFormat> = { emptyList() },
 ) {
     /**
      * All parsers evaluated in priority order: built-ins first, then user-defined.
+     * Re-evaluated on every call so that newly added user formats are included immediately.
      */
     private val allParsers: List<NotificationParser>
-        get() = builtInParsers + userDefinedFormats.map { UserDefinedNotificationParser(it) }
+        get() = builtInParsers + userFormatsProvider().map { UserDefinedNotificationParser(it) }
 
     /**
      * Returns `true` if at least one registered parser can handle [body].
