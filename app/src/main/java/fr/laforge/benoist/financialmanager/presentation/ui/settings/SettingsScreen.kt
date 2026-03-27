@@ -27,9 +27,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -50,10 +50,8 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     vm: SettingsViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
     val savingsTarget by vm.savingsTarget.collectAsState(initial = 0F)
-    val versionName = context.packageManager
-        .getPackageInfo(context.packageName, 0).versionName
+    val uiState by vm.uiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -138,7 +136,7 @@ fun SettingsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 12.dp),
-                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = stringResource(id = R.string.app_version),
@@ -147,7 +145,7 @@ fun SettingsScreen(
                     modifier = Modifier.weight(1f)
                 )
                 Text(
-                    text = versionName ?: "-",
+                    text = uiState.versionName,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.End

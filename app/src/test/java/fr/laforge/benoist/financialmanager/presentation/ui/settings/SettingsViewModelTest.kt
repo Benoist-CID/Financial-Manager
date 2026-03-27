@@ -5,6 +5,7 @@ import fr.laforge.benoist.financialmanager.domain.repository.PreferencesReposito
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.ExportTransactionsListUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetAllRecurringTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetAllTransactionsUseCase
+import fr.laforge.benoist.financialmanager.infrastructure.service.AppVersionProvider
 import fr.laforge.benoist.financialmanager.presentation.util.ExportService
 import io.mockk.coVerify
 import io.mockk.every
@@ -18,6 +19,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -32,11 +34,13 @@ class SettingsViewModelTest {
     private val getAllRecurringTransactionsUseCase = mockk<GetAllRecurringTransactionsUseCase>()
     private val exportTransactionsListUseCase = mockk<ExportTransactionsListUseCase>(relaxed = true)
     private val exportService = mockk<ExportService>(relaxed = true)
+    private val appVersionProvider = mockk<AppVersionProvider>()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         every { preferencesRepository.getSavingTarget() } returns flowOf(0f)
+        every { appVersionProvider.getVersionName() } returns "1.0"
     }
 
     @After
@@ -50,7 +54,34 @@ class SettingsViewModelTest {
         getAllRecurringTransactionsUseCase = getAllRecurringTransactionsUseCase,
         exportTransactionsListUseCase = exportTransactionsListUseCase,
         exportService = exportService,
+        appVersionProvider = appVersionProvider,
     )
+
+    // --- uiState.versionName ---
+
+    @Test
+    fun `uiState exposes version name from AppVersionProvider`() {
+        // --- Arrange ---
+        every { appVersionProvider.getVersionName() } returns "2.5"
+
+        // --- Act ---
+        val vm = createViewModel()
+
+        // --- Assert ---
+        vm.uiState.value.versionName shouldBeEqualTo "2.5"
+    }
+
+    @Test
+    fun `uiState exposes fallback when AppVersionProvider returns empty`() {
+        // --- Arrange ---
+        every { appVersionProvider.getVersionName() } returns ""
+
+        // --- Act ---
+        val vm = createViewModel()
+
+        // --- Assert ---
+        vm.uiState.value.versionName shouldBeEqualTo ""
+    }
 
     // --- setSavingsTarget ---
 
