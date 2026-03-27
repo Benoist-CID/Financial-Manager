@@ -7,6 +7,7 @@ import fr.laforge.benoist.financialmanager.infrastructure.auth.BiometricAuthenti
 import fr.laforge.benoist.financialmanager.infrastructure.helper.NotificationHelperImpl
 import fr.laforge.benoist.financialmanager.infrastructure.notification.BalanceNotifier
 import fr.laforge.benoist.financialmanager.infrastructure.service.AndroidExportService
+import fr.laforge.benoist.financialmanager.infrastructure.service.AppVersionProvider
 import fr.laforge.benoist.financialmanager.infrastructure.service.NotificationListenerHelper
 import fr.laforge.benoist.financialmanager.presentation.util.ExportService
 import org.koin.core.parameter.parametersOf
@@ -36,5 +37,7 @@ val helperModule by lazy {
         single {
             NotificationListenerHelper()
         }
+
+        single { AppVersionProvider(context = get()) }
     }
 }

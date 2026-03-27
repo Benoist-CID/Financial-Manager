@@ -84,4 +84,8 @@
     <string name="import_db">Import database</string>
     <string name="import_db_description">Import database from a file (overwrites current data)</string>
 
+    <!-- About -->
+    <string name="about">About</string>
+    <string name="app_version">Version</string>
+
 </resources>

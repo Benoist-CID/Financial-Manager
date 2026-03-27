@@ -1,6 +1,9 @@
 package fr.laforge.benoist.financialmanager.presentation.ui.settings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,8 +27,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,8 +50,8 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     vm: SettingsViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
     val savingsTarget by vm.savingsTarget.collectAsState(initial = 0F)
+    val uiState by vm.uiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -73,7 +77,7 @@ fun SettingsScreen(
             )
         }
     ) { innerPadding ->
-        Column(modifier = modifier.padding(innerPadding)) {
+        Column(modifier = modifier.padding(innerPadding).verticalScroll(rememberScrollState())) {
             SettingsSectionTitle(titleId = R.string.budget)
 
             OutlinedTextField(
@@ -123,6 +127,30 @@ fun SettingsScreen(
             )
 
             Spacer(modifier = Modifier.height(32.dp))
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
+
+            SettingsSectionTitle(titleId = R.string.about)
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.app_version),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.weight(1f)
+                )
+                Text(
+                    text = uiState.versionName,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.End
+                )
+            }
         }
     }
 }
