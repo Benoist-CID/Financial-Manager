@@ -32,6 +32,7 @@ import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScree
 import fr.laforge.benoist.financialmanager.presentation.ui.component.SwipableTransactionItem
 import fr.laforge.benoist.financialmanager.presentation.ui.component.TopBar
 import fr.laforge.benoist.financialmanager.presentation.ui.home.situation.card.SituationCard
+import fr.laforge.benoist.financialmanager.presentation.ui.pending.PendingTransactionsViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -41,9 +42,12 @@ fun HomeScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     vm: HomeScreenViewModel = koinViewModel(),
+    pendingVm: PendingTransactionsViewModel = koinViewModel(),
 ) {
     val transactions by vm.uiListFlow.collectAsState(initial = emptyList())
     val uiState by vm.uiState.collectAsState()
+    val pendingUiState by pendingVm.uiState.collectAsState()
+    val pendingCount = pendingUiState.transactions.size
 
     val listState = rememberLazyListState()
 
@@ -56,7 +60,8 @@ fun HomeScreen(
             TopBar(
                 navController = navController,
                 query = uiState.query,
-                onQueryChange = { newVal -> vm.updateSearch(newVal) }
+                onQueryChange = { newVal -> vm.updateSearch(newVal) },
+                pendingCount = pendingCount,
             )
         },
         floatingActionButton = {

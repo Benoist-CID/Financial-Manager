@@ -51,4 +51,6 @@ enum class FinancialManagerScreen {
     RecurringIncome,
     NonRecurringExpenses,
     NonRecurringIncome,
+    /** Screen listing pending (unconfirmed) transactions detected from notifications. */
+    PendingTransactions,
 }
