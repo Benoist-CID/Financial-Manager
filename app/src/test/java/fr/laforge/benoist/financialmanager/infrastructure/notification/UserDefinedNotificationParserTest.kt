@@ -117,14 +117,35 @@ class UserDefinedNotificationParserTest {
         parsed.description `should be equal to` "BankApp"
     }
 
-    // ----- parse — edge cases -----
+    // ----- parse — sign prefix (-{amount}) -----
 
     @Test
-    fun `parse returns failure for negative amount`() {
-        val parser = parser("{amount} €")
-        val result = parser.parse("T", "-5 €")
-        result.isFailure `should be` true
+    fun `parse negates amount when pattern has sign prefix before {amount}`() {
+        val parser = parser("-{amount}€, {description}")
+        val result = parser.parse("T", "-10,50€, Amazon")
+
+        result.isSuccess `should be` true
+        val parsed = result.getOrNull()!!
+        parsed.amount shouldBeEqualTo -10.5f
+        parsed.description `should be equal to` "Amazon"
     }
+
+    @Test
+    fun `canParse returns false when body lacks the leading minus required by sign prefix`() {
+        val parser = parser("-{amount}€")
+        parser.canParse("10,50€") `should be` false
+    }
+
+    @Test
+    fun `parse accepts naturally negative amount in body without sign prefix`() {
+        val parser = parser("{amount}€")
+        val result = parser.parse("T", "-5,00€")
+
+        result.isSuccess `should be` true
+        result.getOrNull()!!.amount shouldBeEqualTo -5.0f
+    }
+
+    // ----- parse — edge cases -----
 
     @Test
     fun `parse returns failure when body does not match pattern`() {
