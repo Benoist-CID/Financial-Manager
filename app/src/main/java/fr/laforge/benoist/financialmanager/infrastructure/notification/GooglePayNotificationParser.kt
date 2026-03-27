@@ -26,8 +26,6 @@ class GooglePayNotificationParser : NotificationParser {
         val amount = amountStr.toFloatOrNull()
             ?: return Result.failure(IllegalArgumentException("Cannot parse amount from: $body"))
 
-        if (amount < 0) return Result.failure(IllegalArgumentException("Negative amount: $amount"))
-
         return Result.success(
             ParsedNotification(
                 amount = amount,
