@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -124,6 +125,19 @@ fun SettingsScreen(
                 descriptionId = R.string.import_db_description,
                 isDestructive = false,
                 onClick = { navController.navigate(FinancialManagerScreen.ImportDb.name) }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
+
+            SettingsSectionTitle(titleId = R.string.notifications)
+
+            SettingsActionItem(
+                icon = Icons.Filled.Notifications,
+                titleId = R.string.notification_formats,
+                descriptionId = R.string.notification_formats_description,
+                onClick = { navController.navigate(FinancialManagerScreen.NotificationFormats.name) }
             )
 
             Spacer(modifier = Modifier.height(32.dp))

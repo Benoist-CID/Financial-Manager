@@ -88,4 +88,16 @@
     <string name="about">About</string>
     <string name="app_version">Version</string>
 
+    <!-- Notification formats settings -->
+    <string name="notifications">Notifications</string>
+    <string name="notification_formats">Notification formats</string>
+    <string name="notification_formats_description">Configure patterns used to detect transactions from notifications</string>
+    <string name="add_notification_format">Add format</string>
+    <string name="delete_notification_format">Delete format</string>
+    <string name="no_notification_formats">No notification formats yet</string>
+    <string name="notification_format_description">Description</string>
+    <string name="notification_format_pattern">Pattern</string>
+    <string name="notification_format_pattern_hint">Use {amount} (required) and {description} as placeholders</string>
+    <string name="back">Back</string>
+
 </resources>

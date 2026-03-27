@@ -20,6 +20,7 @@ import fr.laforge.benoist.financialmanager.presentation.ui.transaction.non.recur
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring.RecurringExpensesScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring.RecurringIncomesScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.pending.PendingTransactionsScreen
+import fr.laforge.benoist.financialmanager.presentation.ui.settings.notificationformat.NotificationFormatScreen
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.update.UpdateTransaction
 
 @Composable
@@ -87,6 +88,10 @@ fun FinancialManagerNavHost(
 
         composable(FinancialManagerScreen.PendingTransactions.name) {
             PendingTransactionsScreen(navController = navController)
+        }
+
+        composable(FinancialManagerScreen.NotificationFormats.name) {
+            NotificationFormatScreen(navController = navController)
         }
     }
 }
