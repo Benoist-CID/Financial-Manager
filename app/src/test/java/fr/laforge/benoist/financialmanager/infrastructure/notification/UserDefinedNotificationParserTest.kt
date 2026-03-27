@@ -1,5 +1,6 @@
 package fr.laforge.benoist.financialmanager.infrastructure.notification
 
+import fr.laforge.benoist.financialmanager.domain.model.notification.DescriptionSource
 import fr.laforge.benoist.financialmanager.domain.model.notification.NotificationFormat
 import fr.laforge.benoist.financialmanager.domain.model.notification.NotificationSource
 import org.amshove.kluent.`should be`
@@ -41,7 +42,7 @@ class UserDefinedNotificationParserTest {
         parser.canParse("") `should be` false
     }
 
-    // ----- parse — happy path -----
+    // ----- parse — BODY source (default) -----
 
     @Test
     fun `parse extracts amount and description separated by literal`() {
@@ -63,7 +64,7 @@ class UserDefinedNotificationParserTest {
     }
 
     @Test
-    fun `parse uses title as description when pattern has no {description}`() {
+    fun `parse uses title as description when pattern has no {description} and source is BODY`() {
         val parser = parser("Payment {amount}EUR")
         val result = parser.parse("My Bank", "Payment 15EUR")
 
@@ -80,6 +81,40 @@ class UserDefinedNotificationParserTest {
         val parsed = result.getOrNull()!!
         parsed.amount shouldBeEqualTo 32.0f
         parsed.description `should be equal to` "Supermarket"
+    }
+
+    // ----- parse — TITLE source -----
+
+    @Test
+    fun `parse uses notification title as description when descriptionSource is TITLE`() {
+        val parser = parser("{amount} €", source = DescriptionSource.TITLE)
+        val result = parser.parse("Amazon", "10,00 €")
+
+        result.isSuccess `should be` true
+        val parsed = result.getOrNull()!!
+        parsed.amount shouldBeEqualTo 10.0f
+        parsed.description `should be equal to` "Amazon"
+    }
+
+    @Test
+    fun `parse ignores {description} placeholder in body when descriptionSource is TITLE`() {
+        // Even though {description} is in the pattern, the title must win
+        val parser = parser("{amount} € {description}", source = DescriptionSource.TITLE)
+        val result = parser.parse("My App", "5,00 € Shop Name")
+
+        result.isSuccess `should be` true
+        result.getOrNull()!!.description `should be equal to` "My App"
+    }
+
+    @Test
+    fun `parse with TITLE source still extracts amount correctly from body`() {
+        val parser = parser("Debited {amount} from account", source = DescriptionSource.TITLE)
+        val result = parser.parse("BankApp", "Debited 99,99 from account")
+
+        result.isSuccess `should be` true
+        val parsed = result.getOrNull()!!
+        parsed.amount shouldBeEqualTo 99.99f
+        parsed.description `should be equal to` "BankApp"
     }
 
     // ----- parse — edge cases -----
@@ -100,6 +135,12 @@ class UserDefinedNotificationParserTest {
 
     // ----- helper -----
 
-    private fun parser(pattern: String) =
-        UserDefinedNotificationParser(NotificationFormat(description = "Test", pattern = pattern))
+    private fun parser(pattern: String, source: DescriptionSource = DescriptionSource.BODY) =
+        UserDefinedNotificationParser(
+            NotificationFormat(
+                description = "Test",
+                pattern = pattern,
+                descriptionSource = source,
+            )
+        )
 }

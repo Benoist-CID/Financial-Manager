@@ -1,5 +1,6 @@
 package fr.laforge.benoist.financialmanager.infrastructure.notification
 
+import fr.laforge.benoist.financialmanager.domain.model.notification.DescriptionSource
 import fr.laforge.benoist.financialmanager.domain.model.notification.NotificationFormat
 import fr.laforge.benoist.financialmanager.domain.model.notification.NotificationSource
 import fr.laforge.benoist.financialmanager.domain.model.notification.ParsedNotification
@@ -13,9 +14,16 @@ import fr.laforge.benoist.financialmanager.domain.usecase.notification.Notificat
  * - `{amount}` — the substring at this position is parsed as a [Float].
  *   Commas are normalised to dots before parsing.
  * - `{description}` — the substring at this position is used as the transaction description.
- *   Optional: if absent, [title] is used instead.
+ *   Relevant only when [NotificationFormat.descriptionSource] is [DescriptionSource.BODY].
+ *   If the placeholder is absent and source is [DescriptionSource.BODY], the title is used.
  * - All other text is treated as a **literal separator** that must be present in [body]
  *   for the parser to match.
+ *
+ * ## Description source ([NotificationFormat.descriptionSource])
+ * - [DescriptionSource.BODY]: description is extracted from [body] via `{description}`,
+ *   or from [title] as a fallback when the placeholder is absent.
+ * - [DescriptionSource.TITLE]: [title] is always used as the description;
+ *   any `{description}` placeholder in the pattern is ignored.
  *
  * ## Detection ([canParse])
  * Returns `true` when all literal separators derived from the pattern are found in [body]
@@ -58,10 +66,15 @@ class UserDefinedNotificationParser(
             return Result.failure(IllegalArgumentException("Negative amount: $amount"))
         }
 
+        val description = when (format.descriptionSource) {
+            DescriptionSource.TITLE -> title
+            DescriptionSource.BODY -> extracted.description ?: title
+        }
+
         return Result.success(
             ParsedNotification(
                 amount = amount,
-                description = extracted.description ?: title,
+                description = description,
                 source = NotificationSource.CUSTOM,
             )
         )
