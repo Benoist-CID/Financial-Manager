@@ -2,6 +2,8 @@ package fr.laforge.benoist.financialmanager.presentation.ui.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -77,7 +79,7 @@ fun SettingsScreen(
             )
         }
     ) { innerPadding ->
-        Column(modifier = modifier.padding(innerPadding)) {
+        Column(modifier = modifier.padding(innerPadding).verticalScroll(rememberScrollState())) {
             SettingsSectionTitle(titleId = R.string.budget)
 
             OutlinedTextField(
