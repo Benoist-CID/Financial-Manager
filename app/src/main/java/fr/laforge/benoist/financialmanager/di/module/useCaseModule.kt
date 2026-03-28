@@ -20,10 +20,13 @@ import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurrin
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRecurringIncomeUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRegularExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.indicators.GetRemainingBalanceUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.notification.AddNotificationFormatUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.ConfirmPendingTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.CreateTransactionFromNotificationUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.notification.DeleteNotificationFormatUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.DismissPendingTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.EnableNotificationAccessUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.notification.GetAllNotificationFormatsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.ProcessIncomingNotificationUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.ExportTransactionsListUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetAllRecurringTransactionsUseCase
@@ -59,6 +62,9 @@ val useCaseModule by lazy {
         factory { ProcessIncomingNotificationUseCase(repository = get()) }
         factory { ConfirmPendingTransactionUseCase(pendingRepository = get(), createTransactionUseCase = get()) }
         factory { DismissPendingTransactionUseCase(repository = get()) }
+        factory { AddNotificationFormatUseCase(repository = get()) }
+        factory { DeleteNotificationFormatUseCase(repository = get()) }
+        factory { GetAllNotificationFormatsUseCase(repository = get()) }
         factory {
             CreateTransactionFromNotificationUseCase(
                 processIncomingNotificationUseCase = get(),

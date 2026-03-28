@@ -28,7 +28,7 @@ val helperModule by lazy {
         // and BalanceNotifier (infrastructure display port). Registering the same singleton
         // under both interfaces avoids constructing two instances with separate state.
         single<NotificationHelper> {
-            NotificationHelperImpl(context = get())
+            NotificationHelperImpl(context = get(), formatRepository = get())
         }
         single<BalanceNotifier> {
             get<NotificationHelper>() as NotificationHelperImpl
