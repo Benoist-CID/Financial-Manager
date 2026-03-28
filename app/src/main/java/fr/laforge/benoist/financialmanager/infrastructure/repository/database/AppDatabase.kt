@@ -16,7 +16,7 @@ import fr.laforge.benoist.financialmanager.infrastructure.repository.entity.Pend
 import fr.laforge.benoist.financialmanager.infrastructure.repository.entity.TransactionEntity
 
 @Database(
-    version = 4,
+    version = 5,
     entities = [
         TransactionEntity::class,
         PendingTransactionEntity::class,
@@ -64,6 +64,18 @@ abstract class AppDatabase : RoomDatabase() {
                         `pattern` TEXT NOT NULL
                     )
                     """.trimIndent()
+                )
+            }
+        }
+
+        /**
+         * Adds the `description_source` column to `notification_format` introduced in
+         * schema version 5. Existing rows default to `'BODY'` to preserve previous behaviour.
+         */
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE `notification_format` ADD COLUMN `description_source` TEXT NOT NULL DEFAULT 'BODY'"
                 )
             }
         }

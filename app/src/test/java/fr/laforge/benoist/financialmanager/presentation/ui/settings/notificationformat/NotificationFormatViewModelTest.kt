@@ -1,5 +1,6 @@
 package fr.laforge.benoist.financialmanager.presentation.ui.settings.notificationformat
 
+import fr.laforge.benoist.financialmanager.domain.model.notification.DescriptionSource
 import fr.laforge.benoist.financialmanager.domain.model.notification.NotificationFormat
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.AddNotificationFormatUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.DeleteNotificationFormatUseCase
@@ -94,13 +95,43 @@ class NotificationFormatViewModelTest {
         val vm = buildVm()
 
         // --- Act ---
-        vm.addFormat(description = "My Bank", pattern = "Spent {amount} at {description}")
+        vm.addFormat(
+            description = "My Bank",
+            pattern = "Spent {amount} at {description}",
+            descriptionSource = DescriptionSource.BODY,
+        )
         advanceUntilIdle()
 
         // --- Assert ---
         coVerify(exactly = 1) {
             addNotificationFormatUseCase(
-                match { it.description == "My Bank" && it.pattern == "Spent {amount} at {description}" }
+                match {
+                    it.description == "My Bank" &&
+                        it.pattern == "Spent {amount} at {description}" &&
+                        it.descriptionSource == DescriptionSource.BODY
+                }
+            )
+        }
+    }
+
+    @Test
+    fun `addFormat passes TITLE source to AddNotificationFormatUseCase`() = runTest(testDispatcher) {
+        // --- Arrange ---
+        coJustRun { addNotificationFormatUseCase(any()) }
+        val vm = buildVm()
+
+        // --- Act ---
+        vm.addFormat(
+            description = "Bank SMS",
+            pattern = "Debited {amount} from account",
+            descriptionSource = DescriptionSource.TITLE,
+        )
+        advanceUntilIdle()
+
+        // --- Assert ---
+        coVerify(exactly = 1) {
+            addNotificationFormatUseCase(
+                match { it.descriptionSource == DescriptionSource.TITLE }
             )
         }
     }
