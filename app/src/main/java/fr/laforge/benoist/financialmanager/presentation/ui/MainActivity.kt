@@ -53,4 +53,6 @@ enum class FinancialManagerScreen {
     NonRecurringIncome,
     /** Screen listing pending (unconfirmed) transactions detected from notifications. */
     PendingTransactions,
+    /** Settings screen for managing user-defined notification format patterns. */
+    NotificationFormats,
 }

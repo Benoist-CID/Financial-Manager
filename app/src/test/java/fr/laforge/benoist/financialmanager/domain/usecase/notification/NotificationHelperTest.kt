@@ -2,9 +2,11 @@ package fr.laforge.benoist.financialmanager.domain.usecase.notification
 
 import android.content.Context
 import fr.laforge.benoist.financialmanager.domain.model.notification.NotificationSource
+import fr.laforge.benoist.financialmanager.domain.repository.NotificationFormatRepository
 import fr.laforge.benoist.financialmanager.infrastructure.helper.NotificationHelperImpl
-import fr.laforge.benoist.financialmanager.infrastructure.notification.NotificationParserFactory
+import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import org.amshove.kluent.`should be`
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.shouldBeEqualTo
@@ -12,7 +14,13 @@ import org.junit.Test
 
 class NotificationHelperTest {
     private val context: Context = mockk()
-    private val notificationHelper = NotificationHelperImpl(context, NotificationParserFactory())
+    private val formatRepository: NotificationFormatRepository = mockk {
+        every { getAll() } returns flowOf(emptyList())
+    }
+    private val notificationHelper = NotificationHelperImpl(
+        context = context,
+        formatRepository = formatRepository,
+    )
 
     // --- isTransaction ---
 

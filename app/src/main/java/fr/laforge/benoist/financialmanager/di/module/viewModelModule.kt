@@ -12,6 +12,7 @@ import fr.laforge.benoist.financialmanager.presentation.ui.transaction.detail.Tr
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.non.recurring.NonRecurringManagementViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring.RecurringManagementViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.pending.PendingTransactionsViewModel
+import fr.laforge.benoist.financialmanager.presentation.ui.settings.notificationformat.NotificationFormatViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.update.UpdateTransactionViewModel
 import androidx.fragment.app.FragmentActivity
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetTransactionByIdUseCase
@@ -94,6 +95,14 @@ val viewModelModule by lazy {
                 repository = get(),
                 confirmPendingTransactionUseCase = get(),
                 dismissPendingTransactionUseCase = get(),
+            )
+        }
+
+        viewModel {
+            NotificationFormatViewModel(
+                getAllNotificationFormatsUseCase = get(),
+                addNotificationFormatUseCase = get(),
+                deleteNotificationFormatUseCase = get(),
             )
         }
     }
