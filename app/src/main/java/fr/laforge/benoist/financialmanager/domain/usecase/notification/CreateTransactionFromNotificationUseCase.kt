@@ -1,43 +1,43 @@
 package fr.laforge.benoist.financialmanager.domain.usecase.notification
 
-import fr.laforge.benoist.financialmanager.domain.usecase.CreateTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.util.Logger
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Use case that creates a [Transaction] from an incoming notification payload.
+ * Use case that stages an incoming notification as a
+ * [fr.laforge.benoist.financialmanager.domain.model.notification.PendingTransaction]
+ * for later user confirmation or dismissal.
  *
- * Orchestrates notification validation, parsing, and persistence by delegating
- * to [NotificationHelper] and [CreateTransactionUseCase]. Returns `true` when
- * a transaction was successfully created, `false` for any non-fatal failure
- * (unrecognised notification, parse error).
+ * Orchestrates notification detection, parsing, and deduplication by delegating to
+ * [NotificationHelper] and [ProcessIncomingNotificationUseCase].
+ * Returns `true` when the notification was successfully staged, `false` for any non-fatal
+ * failure (unrecognised notification, parse error).
  *
- * @property createTransactionUseCase Persists the parsed transaction.
- * @property notificationHelper Validates and parses the raw notification strings.
- * @property dispatcher Coroutine dispatcher for the blocking parse/persist work.
+ * @property processIncomingNotificationUseCase Stages the parsed notification with deduplication.
+ * @property notificationHelper Detects and parses raw notification strings.
+ * @property dispatcher Coroutine dispatcher for the parse/persist work.
  *   Defaults to [Dispatchers.IO]; override in tests for determinism.
  * @property logger Domain [Logger] for diagnostic output. Defaults to [Logger.NoOp].
  */
 class CreateTransactionFromNotificationUseCase(
-    private val createTransactionUseCase: CreateTransactionUseCase,
+    private val processIncomingNotificationUseCase: ProcessIncomingNotificationUseCase,
     private val notificationHelper: NotificationHelper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val logger: Logger = Logger.NoOp,
 ) {
     /**
-     * Attempts to create a [Transaction] from the given notification strings.
+     * Attempts to stage a pending transaction from the given notification strings.
      *
      * @param notificationTitle   The notification's title (typically the app or merchant name).
      * @param notificationMessage The notification's body text, expected to contain a monetary amount.
-     * @return `true` if a transaction was successfully parsed and persisted;
+     * @return `true` if a pending transaction was successfully staged;
      *   `false` if the message was not a transaction or parsing failed.
      */
     suspend operator fun invoke(notificationTitle: String, notificationMessage: String): Boolean =
         withContext(dispatcher) {
-            // 1. Guard Clause: Check if it is a transaction
-            // .getOrDefault(false) is cleaner than comparing == Result.success(true)
+            // 1. Guard: decide whether this notification contains a transaction
             val isTransaction = notificationHelper.isTransaction(notificationMessage)
                 .getOrDefault(false)
 
@@ -46,24 +46,23 @@ class CreateTransactionFromNotificationUseCase(
                 return@withContext false
             }
 
-            // 2. Parse the message
-            val transactionResult = notificationHelper.parseNotificationMessage(
+            // 2. Parse into a ParsedNotification (preserves source for deduplication)
+            val parsedResult = notificationHelper.parseToPending(
                 notificationTitle = notificationTitle,
-                notificationMessage = notificationMessage
+                notificationMessage = notificationMessage,
             )
 
-            // 3. Guard Clause: Check if parsing succeeded
-            val transaction = transactionResult.getOrNull()
-            if (transaction == null) {
+            val parsed = parsedResult.getOrNull()
+            if (parsed == null) {
                 logger.error(
-                    message = "Failed to parse transaction",
-                    throwable = transactionResult.exceptionOrNull()
+                    message = "Failed to parse notification",
+                    throwable = parsedResult.exceptionOrNull(),
                 )
                 return@withContext false
             }
 
-            // 4. Happy Path: Create transaction and return success
-            createTransactionUseCase(transaction)
+            // 3. Stage the parsed notification (deduplication handled inside)
+            processIncomingNotificationUseCase(parsed)
             true
         }
 }

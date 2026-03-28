@@ -55,7 +55,7 @@ val useCaseModule by lazy {
         factory<EnableNotificationAccessUseCase> { EnableNotificationAccessUseCaseImpl(context = get()) }
         factory {
             CreateTransactionFromNotificationUseCase(
-                createTransactionUseCase = get(),
+                processIncomingNotificationUseCase = get(),
                 notificationHelper = get(),
                 logger = get(),
             )
