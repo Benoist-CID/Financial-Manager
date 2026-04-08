@@ -4,7 +4,9 @@ import androidx.room.Room
 import fr.laforge.benoist.financialmanager.domain.repository.FinancialRepository
 import fr.laforge.benoist.financialmanager.domain.repository.NotificationFormatRepository
 import fr.laforge.benoist.financialmanager.domain.repository.PendingTransactionRepository
+import fr.laforge.benoist.financialmanager.domain.repository.SyncSettingsRepository
 import fr.laforge.benoist.financialmanager.infrastructure.repository.AndroidFinancialRepository
+import fr.laforge.benoist.financialmanager.infrastructure.repository.DataStoreSyncSettingsRepository
 import fr.laforge.benoist.financialmanager.infrastructure.repository.RoomNotificationFormatRepository
 import fr.laforge.benoist.financialmanager.infrastructure.repository.RoomPendingTransactionRepository
 import fr.laforge.benoist.financialmanager.infrastructure.repository.database.AppDatabase
@@ -20,7 +22,7 @@ val repositoryModule by lazy {
                 AppDatabase::class.java,
                 "database-name",
             )
-                .addMigrations(AppDatabase.MIGRATION_2_3, AppDatabase.MIGRATION_3_4)
+                .addMigrations(AppDatabase.MIGRATION_2_3, AppDatabase.MIGRATION_3_4, AppDatabase.MIGRATION_4_5, AppDatabase.MIGRATION_5_6, AppDatabase.MIGRATION_6_7)
                 .build()
         }
 
@@ -31,5 +33,6 @@ val repositoryModule by lazy {
         single<FinancialRepository> { AndroidFinancialRepository(get()) }
         single<PendingTransactionRepository> { RoomPendingTransactionRepository(dao = get()) }
         single<NotificationFormatRepository> { RoomNotificationFormatRepository(dao = get()) }
+        single<SyncSettingsRepository> { DataStoreSyncSettingsRepository(context = get()) }
     }
 }

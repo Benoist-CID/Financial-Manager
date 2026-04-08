@@ -18,6 +18,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -30,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import fr.laforge.benoist.financialmanager.presentation.util.getCategoryColor
+import fr.laforge.benoist.financialmanager.domain.model.sync.SyncStatus
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionCategory
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionType
@@ -110,7 +113,13 @@ fun TransactionRow(
                     transaction.dateTime
                 }.format(formatter)
 
-                Text(text = date, style = typography.titleMedium)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = date, style = typography.titleMedium)
+                    if (transaction.syncStatus != SyncStatus.PENDING) {
+                        Spacer(Modifier.width(6.dp))
+                        SyncStatusChip(syncStatus = transaction.syncStatus)
+                    }
+                }
             }
         }
 
@@ -142,6 +151,37 @@ fun TransactionRow(
         }
     }
     RallyDivider()
+}
+
+/**
+ * Small chip that indicates the bank-sync state of a transaction.
+ *
+ * Only shown when [syncStatus] is not [SyncStatus.PENDING] (the default).
+ * - [SyncStatus.IN_SYNC] → green "Synced" chip
+ * - [SyncStatus.NEW_FROM_BANK] → blue "Bank" chip
+ *
+ * @param syncStatus The sync state to display.
+ * @param modifier   Optional [Modifier].
+ */
+@Composable
+fun SyncStatusChip(syncStatus: SyncStatus, modifier: Modifier = Modifier) {
+    val (label, containerColor) = when (syncStatus) {
+        SyncStatus.IN_SYNC -> "Synced" to Color(0xFF2E7D32)
+        SyncStatus.NEW_FROM_BANK -> "Bank" to Color(0xFF1565C0)
+        SyncStatus.PENDING -> return // never shown
+    }
+    SuggestionChip(
+        modifier = modifier,
+        onClick = {},
+        label = {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall,
+                color = Color.White,
+            )
+        },
+        colors = SuggestionChipDefaults.suggestionChipColors(containerColor = containerColor),
+    )
 }
 
 @Preview(
