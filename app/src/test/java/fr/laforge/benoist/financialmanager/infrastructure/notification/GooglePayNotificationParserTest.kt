@@ -47,9 +47,10 @@ class GooglePayNotificationParserTest {
     // --- parse: edge cases ---
 
     @Test
-    fun `parse returns failure for negative amount`() {
+    fun `parse returns absolute value when body contains negative amount`() {
         val result = parser.parse("VENDOR", "-10,00 € refund")
-        result.isFailure `should be` true
+        result.isSuccess `should be` true
+        result.getOrNull()?.amount `should be equal to` 10.00f
     }
 
     @Test

@@ -2,6 +2,7 @@ package fr.laforge.benoist.financialmanager.presentation.ui.settings.notificatio
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.laforge.benoist.financialmanager.domain.model.notification.DescriptionSource
 import fr.laforge.benoist.financialmanager.domain.model.notification.NotificationFormat
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.AddNotificationFormatUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.DeleteNotificationFormatUseCase
@@ -44,20 +45,29 @@ class NotificationFormatViewModel(
         )
 
     /**
-     * Persists a new notification format with the given [description] and [pattern].
+     * Persists a new notification format with the given fields.
      *
      * Delegates validation (e.g. presence of `{amount}`) to [AddNotificationFormatUseCase].
      * If validation fails the exception is silently swallowed here; the UI should
      * pre-validate before calling this method.
      *
-     * @param description Human-readable label for the format.
-     * @param pattern      Placeholder-based template string, e.g. `"Spent {amount} at {description}"`.
+     * @param description       Human-readable label for the format.
+     * @param pattern           Placeholder-based template string, e.g. `"Spent {amount} at {description}"`.
+     * @param descriptionSource Where the transaction description should be read from.
      */
-    fun addFormat(description: String, pattern: String) {
+    fun addFormat(
+        description: String,
+        pattern: String,
+        descriptionSource: DescriptionSource = DescriptionSource.BODY,
+    ) {
         viewModelScope.launch {
             runCatching {
                 addNotificationFormatUseCase(
-                    NotificationFormat(description = description, pattern = pattern),
+                    NotificationFormat(
+                        description = description,
+                        pattern = pattern,
+                        descriptionSource = descriptionSource,
+                    ),
                 )
             }
         }

@@ -23,10 +23,8 @@ class GooglePayNotificationParser : NotificationParser {
 
     override fun parse(title: String, body: String): Result<ParsedNotification> {
         val amountStr = body.substringBefore(EURO_SYMBOL).trim().replace(',', '.')
-        val amount = amountStr.toFloatOrNull()
+        val amount = amountStr.toFloatOrNull()?.let { kotlin.math.abs(it) }
             ?: return Result.failure(IllegalArgumentException("Cannot parse amount from: $body"))
-
-        if (amount < 0) return Result.failure(IllegalArgumentException("Negative amount: $amount"))
 
         return Result.success(
             ParsedNotification(

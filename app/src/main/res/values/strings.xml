@@ -98,6 +98,10 @@
     <string name="notification_format_description">Description</string>
     <string name="notification_format_pattern">Pattern</string>
     <string name="notification_format_pattern_hint">Use {amount} (required) and {description} as placeholders</string>
+    <string name="description_source_prompt">Description comes from</string>
+    <string name="description_source_body">Notification message (body)</string>
+    <string name="description_source_title">Notification title</string>
+    <string name="description_source_label">Description from: %s</string>
     <string name="back">Back</string>
 
     <!-- Bank Sync -->

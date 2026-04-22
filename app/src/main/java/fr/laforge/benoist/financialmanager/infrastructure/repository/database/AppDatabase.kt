@@ -96,6 +96,27 @@ abstract class AppDatabase : RoomDatabase() {
          * [SyncStatusConverter] was added to `@TypeConverters` after some v5 builds had
          * already been deployed.
          */
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                val cursor = db.query("PRAGMA table_info(TransactionEntity)")
+                val nameIndex = cursor.getColumnIndex("name")
+                var hasSyncStatus = false
+                while (cursor.moveToNext()) {
+                    if (cursor.getString(nameIndex) == "sync_status") {
+                        hasSyncStatus = true
+                        break
+                    }
+                }
+                cursor.close()
+
+                if (!hasSyncStatus) {
+                    db.execSQL(
+                        "ALTER TABLE `TransactionEntity` ADD COLUMN `sync_status` TEXT NOT NULL DEFAULT 'PENDING'"
+                    )
+                }
+            }
+        }
+
         /**
          * Recreates the `notification_format` table to remove the `description_source` column
          * that was added in an intermediate development build and later dropped from the entity.
@@ -130,27 +151,6 @@ abstract class AppDatabase : RoomDatabase() {
                     """.trimIndent()
                 )
                 db.execSQL("DROP TABLE `notification_format_old`")
-            }
-        }
-
-        val MIGRATION_5_6 = object : Migration(5, 6) {
-            override fun migrate(db: SupportSQLiteDatabase) {
-                val cursor = db.query("PRAGMA table_info(TransactionEntity)")
-                val nameIndex = cursor.getColumnIndex("name")
-                var hasSyncStatus = false
-                while (cursor.moveToNext()) {
-                    if (cursor.getString(nameIndex) == "sync_status") {
-                        hasSyncStatus = true
-                        break
-                    }
-                }
-                cursor.close()
-
-                if (!hasSyncStatus) {
-                    db.execSQL(
-                        "ALTER TABLE `TransactionEntity` ADD COLUMN `sync_status` TEXT NOT NULL DEFAULT 'PENDING'"
-                    )
-                }
             }
         }
     }
