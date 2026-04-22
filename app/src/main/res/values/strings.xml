@@ -7,6 +7,10 @@
     <string name="biometric_subtitle">Use fingerprint to connect</string>
     <string name="biometric_negative">Cancel</string>
 
+    <!-- Upcoming expenses card -->
+    <string name="upcoming_expenses_title">Upcoming this month</string>
+    <string name="upcoming_expenses_empty">No upcoming expenses for the rest of the month.</string>
+
     <!-- Home screen -->
     <string name="add_input">Add Input</string>
     <string name="create_input">Create Input</string>

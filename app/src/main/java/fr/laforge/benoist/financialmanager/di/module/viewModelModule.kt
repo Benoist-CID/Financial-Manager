@@ -13,6 +13,7 @@ import fr.laforge.benoist.financialmanager.presentation.ui.transaction.non.recur
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring.RecurringManagementViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.pending.PendingTransactionsViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.settings.notificationformat.NotificationFormatViewModel
+import fr.laforge.benoist.financialmanager.presentation.ui.home.upcoming.UpcomingExpensesViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.sync.SyncReviewViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.update.UpdateTransactionViewModel
 import androidx.fragment.app.FragmentActivity
@@ -90,6 +91,7 @@ val viewModelModule by lazy {
         }
         
         viewModelOf(::SituationCardViewModel)
+        viewModelOf(::UpcomingExpensesViewModel)
 
         viewModel {
             PendingTransactionsViewModel(

@@ -32,6 +32,8 @@ import fr.laforge.benoist.financialmanager.presentation.ui.FinancialManagerScree
 import fr.laforge.benoist.financialmanager.presentation.ui.component.SwipableTransactionItem
 import fr.laforge.benoist.financialmanager.presentation.ui.component.TopBar
 import fr.laforge.benoist.financialmanager.presentation.ui.home.situation.card.SituationCard
+import fr.laforge.benoist.financialmanager.presentation.ui.home.upcoming.UpcomingExpensesCard
+import fr.laforge.benoist.financialmanager.presentation.ui.home.upcoming.UpcomingExpensesViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.pending.PendingTransactionsViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -43,6 +45,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     vm: HomeScreenViewModel = koinViewModel(),
     pendingVm: PendingTransactionsViewModel = koinViewModel(),
+    upcomingVm: UpcomingExpensesViewModel = koinViewModel(),
 ) {
     val transactions by vm.uiListFlow.collectAsState(initial = emptyList())
     val uiState by vm.uiState.collectAsState()
@@ -89,6 +92,7 @@ fun HomeScreen(
                 SituationCard {
                     navController.navigate(FinancialManagerScreen.Indicators.name)
                 }
+                UpcomingExpensesCard(vm = upcomingVm)
             }
 
             LazyColumn(
