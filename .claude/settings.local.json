@@ -15,7 +15,8 @@
       "Bash(./gradlew compileDebugKotlin)",
       "Bash(gh pr:*)",
       "Bash(git fetch:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(xargs grep:*)"
     ]
   }
 }

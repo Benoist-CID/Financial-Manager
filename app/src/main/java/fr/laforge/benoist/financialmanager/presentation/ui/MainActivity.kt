@@ -55,4 +55,6 @@ enum class FinancialManagerScreen {
     PendingTransactions,
     /** Settings screen for managing user-defined notification format patterns. */
     NotificationFormats,
+    /** Screen for reviewing bank-sync match candidates and confirming or skipping them. */
+    SyncReview,
 }

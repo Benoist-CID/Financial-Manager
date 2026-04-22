@@ -6,11 +6,14 @@ import fr.laforge.benoist.financialmanager.domain.model.notification.PendingTran
 import fr.laforge.benoist.financialmanager.domain.repository.PendingTransactionRepository
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.ConfirmPendingTransactionUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.notification.DismissPendingTransactionUseCase
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * ViewModel for the Pending Transactions screen.
@@ -21,11 +24,14 @@ import kotlinx.coroutines.launch
  * @property repository Source of truth for pending transactions.
  * @property confirmPendingTransactionUseCase Promotes a pending entry to the transaction history.
  * @property dismissPendingTransactionUseCase Marks a pending entry as a false positive.
+ * @property dispatcher Coroutine dispatcher used for IO work; defaults to [Dispatchers.IO].
+ *   Override in tests to keep execution synchronous.
  */
 class PendingTransactionsViewModel(
     private val repository: PendingTransactionRepository,
     private val confirmPendingTransactionUseCase: ConfirmPendingTransactionUseCase,
     private val dismissPendingTransactionUseCase: DismissPendingTransactionUseCase,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
 
     /**
@@ -45,7 +51,9 @@ class PendingTransactionsViewModel(
      */
     fun confirm(pendingTransaction: PendingTransaction) {
         viewModelScope.launch {
-            confirmPendingTransactionUseCase(pendingTransaction)
+            withContext(dispatcher) {
+                confirmPendingTransactionUseCase(pendingTransaction)
+            }
         }
     }
 
@@ -54,7 +62,9 @@ class PendingTransactionsViewModel(
      */
     fun dismiss(pendingTransaction: PendingTransaction) {
         viewModelScope.launch {
-            dismissPendingTransactionUseCase(pendingTransaction)
+            withContext(dispatcher) {
+                dismissPendingTransactionUseCase(pendingTransaction)
+            }
         }
     }
 }

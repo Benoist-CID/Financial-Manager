@@ -7,6 +7,10 @@
     <string name="biometric_subtitle">Use fingerprint to connect</string>
     <string name="biometric_negative">Cancel</string>
 
+    <!-- Upcoming expenses card -->
+    <string name="upcoming_expenses_title">Upcoming this month</string>
+    <string name="upcoming_expenses_empty">No upcoming expenses for the rest of the month.</string>
+
     <!-- Home screen -->
     <string name="add_input">Add Input</string>
     <string name="create_input">Create Input</string>
@@ -103,5 +107,23 @@
     <string name="description_source_title">Notification title</string>
     <string name="description_source_label">Description from: %s</string>
     <string name="back">Back</string>
+
+    <!-- Bank Sync -->
+    <string name="bank_sync">Bank Sync</string>
+    <string name="sync_review_title">Bank Sync Review</string>
+    <string name="sync_settings_description">Reconcile your transactions with your bank account</string>
+    <string name="sync_idle_message">Import a CSV export from your bank to start reconciliation.</string>
+    <string name="sync_pick_csv_button">Import CSV</string>
+    <string name="sync_no_matches">All caught up — no pending matches found.</string>
+    <string name="sync_error_prefix">Sync failed: %1$s</string>
+    <string name="sync_retry_button">Retry</string>
+    <string name="sync_app_transaction">App transaction</string>
+    <string name="sync_bank_transaction">Bank transaction</string>
+    <string name="sync_confirm">Confirm</string>
+    <string name="sync_skip">Skip</string>
+    <string name="sync_import_as_new">Import as new</string>
+    <string name="sync_confidence_high">High confidence</string>
+    <string name="sync_confidence_medium">Medium confidence</string>
+    <string name="sync_confidence_low">Low confidence</string>
 
 </resources>

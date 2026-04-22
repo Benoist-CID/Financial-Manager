@@ -57,6 +57,7 @@ class PendingTransactionsViewModelTest {
         repository = repository,
         confirmPendingTransactionUseCase = confirmPendingTransactionUseCase,
         dismissPendingTransactionUseCase = dismissPendingTransactionUseCase,
+        dispatcher = testDispatcher,
     )
 
     // --- Happy path ---

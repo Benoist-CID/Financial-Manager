@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -138,6 +139,19 @@ fun SettingsScreen(
                 titleId = R.string.notification_formats,
                 descriptionId = R.string.notification_formats_description,
                 onClick = { navController.navigate(FinancialManagerScreen.NotificationFormats.name) }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
+
+            SettingsSectionTitle(titleId = R.string.bank_sync)
+
+            SettingsActionItem(
+                icon = Icons.Filled.Refresh,
+                titleId = R.string.sync_review_title,
+                descriptionId = R.string.sync_settings_description,
+                onClick = { navController.navigate(FinancialManagerScreen.SyncReview.name) }
             )
 
             Spacer(modifier = Modifier.height(32.dp))

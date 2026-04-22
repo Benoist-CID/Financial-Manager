@@ -35,9 +35,18 @@ import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetMonthly
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetNonRecurringExpenseTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetNonRecurringIncomeTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetTransactionByIdUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetUpcomingExpensesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.ImportTransactionsUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetRecurringExpenseTemplatesUseCase
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetRecurringIncomeTransactionsUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.sync.ApplySyncMatchUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.sync.CreateTransactionFromBankUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.sync.ParseCsvBankTransactionsUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.sync.RecurringTransactionMatcher
+import fr.laforge.benoist.financialmanager.domain.usecase.sync.RunSyncUseCase
+import fr.laforge.benoist.financialmanager.domain.usecase.sync.RunSyncUseCaseImpl
+import fr.laforge.benoist.financialmanager.domain.usecase.sync.StandardTransactionMatcher
+import fr.laforge.benoist.financialmanager.infrastructure.csv.BanquePopulaireCsvParser
 import fr.laforge.benoist.financialmanager.domain.util.Logger
 import fr.laforge.benoist.financialmanager.infrastructure.logging.TimberLogger
 import fr.laforge.benoist.financialmanager.infrastructure.usecase.EnableNotificationAccessUseCaseImpl
@@ -153,6 +162,22 @@ val useCaseModule by lazy {
 
         factoryOf(::GetMonthStartingBalanceUseCase)
         factoryOf(::GetMonthlyTransactionsUseCase)
+        factoryOf(::GetUpcomingExpensesUseCase)
         factoryOf(::CalculateSituationProportionsUseCase)
+
+        // --- Sync ---
+        factoryOf(::StandardTransactionMatcher)
+        factoryOf(::RecurringTransactionMatcher)
+        factory<ParseCsvBankTransactionsUseCase> { BanquePopulaireCsvParser() }
+        factory<RunSyncUseCase> {
+            RunSyncUseCaseImpl(
+                financialRepository = get(),
+                standardMatcher = get(),
+                recurringMatcher = get(),
+                syncSettingsRepository = get(),
+            )
+        }
+        factoryOf(::ApplySyncMatchUseCase)
+        factoryOf(::CreateTransactionFromBankUseCase)
     }
 }

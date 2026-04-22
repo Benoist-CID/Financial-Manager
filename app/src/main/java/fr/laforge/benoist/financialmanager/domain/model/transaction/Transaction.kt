@@ -1,5 +1,6 @@
 package fr.laforge.benoist.financialmanager.domain.model.transaction
 
+import fr.laforge.benoist.financialmanager.domain.model.sync.SyncStatus
 import java.time.LocalDateTime
 
 /**
@@ -21,7 +22,11 @@ import java.time.LocalDateTime
  * @property period    The recurrence interval; meaningful only when [isPeriodic] is `true`.
  * @property parent    Foreign key to the template's [uid] for generated child instances.
  *                     0 for manual entries and templates.
- * @property category  The budget category this transaction belongs to.
+ * @property category    The budget category this transaction belongs to.
+ * @property syncStatus  The reconciliation state of this transaction against the bank account
+ *                       statement. Defaults to [SyncStatus.PENDING] for all new transactions.
+ *                       [SyncStatus.IN_SYNC] once matched to a bank entry;
+ *                       [SyncStatus.NEW_FROM_BANK] when auto-created by the sync process.
  */
 data class Transaction(
     val uid: Int = 0,
@@ -32,5 +37,6 @@ data class Transaction(
     val isPeriodic: Boolean = false,
     val period: TransactionPeriod = TransactionPeriod.None,
     val parent: Int = 0,
-    val category: TransactionCategory = TransactionCategory.None
+    val category: TransactionCategory = TransactionCategory.None,
+    val syncStatus: SyncStatus = SyncStatus.PENDING,
 )

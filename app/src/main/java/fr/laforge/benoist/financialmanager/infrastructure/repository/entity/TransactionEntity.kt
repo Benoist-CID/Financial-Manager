@@ -3,6 +3,7 @@ package fr.laforge.benoist.financialmanager.infrastructure.repository.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import fr.laforge.benoist.financialmanager.domain.model.sync.SyncStatus
 import fr.laforge.benoist.financialmanager.domain.model.transaction.Transaction
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionCategory
 import fr.laforge.benoist.financialmanager.domain.model.transaction.TransactionPeriod
@@ -19,7 +20,8 @@ data class TransactionEntity(
     @ColumnInfo(name="is_periodic") var isPeriodic: Boolean,
     @ColumnInfo(name="period") var period: TransactionPeriod,
     @ColumnInfo(name="parent") var parentId: Int = 0,
-    @ColumnInfo(name="category", defaultValue = "None") var category: TransactionCategory = TransactionCategory.None
+    @ColumnInfo(name="category", defaultValue = "None") var category: TransactionCategory = TransactionCategory.None,
+    @ColumnInfo(name="sync_status", defaultValue = "PENDING") var syncStatus: SyncStatus = SyncStatus.PENDING,
 ) {
     fun toModel(): Transaction {
         return Transaction(
@@ -31,7 +33,8 @@ data class TransactionEntity(
             isPeriodic = isPeriodic,
             period = period,
             parent = parentId,
-            category = category
+            category = category,
+            syncStatus = syncStatus,
         )
     }
 }
@@ -46,6 +49,7 @@ fun fromModel(transaction: Transaction): TransactionEntity {
         isPeriodic = transaction.isPeriodic,
         period = transaction.period,
         parentId = transaction.parent,
-        category = transaction.category
+        category = transaction.category,
+        syncStatus = transaction.syncStatus,
     )
 }

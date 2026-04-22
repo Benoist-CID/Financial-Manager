@@ -13,6 +13,8 @@ import fr.laforge.benoist.financialmanager.presentation.ui.transaction.non.recur
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.recurring.RecurringManagementViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.pending.PendingTransactionsViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.settings.notificationformat.NotificationFormatViewModel
+import fr.laforge.benoist.financialmanager.presentation.ui.home.upcoming.UpcomingExpensesViewModel
+import fr.laforge.benoist.financialmanager.presentation.ui.sync.SyncReviewViewModel
 import fr.laforge.benoist.financialmanager.presentation.ui.transaction.update.UpdateTransactionViewModel
 import androidx.fragment.app.FragmentActivity
 import fr.laforge.benoist.financialmanager.domain.usecase.transaction.GetTransactionByIdUseCase
@@ -89,6 +91,7 @@ val viewModelModule by lazy {
         }
         
         viewModelOf(::SituationCardViewModel)
+        viewModelOf(::UpcomingExpensesViewModel)
 
         viewModel {
             PendingTransactionsViewModel(
@@ -103,6 +106,15 @@ val viewModelModule by lazy {
                 getAllNotificationFormatsUseCase = get(),
                 addNotificationFormatUseCase = get(),
                 deleteNotificationFormatUseCase = get(),
+            )
+        }
+
+        viewModel {
+            SyncReviewViewModel(
+                runSyncUseCase = get(),
+                applySyncMatchUseCase = get(),
+                createTransactionFromBankUseCase = get(),
+                parseCsvBankTransactionsUseCase = get(),
             )
         }
     }
